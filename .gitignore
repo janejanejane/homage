@@ -3,6 +3,7 @@ platforms/
 plugins/
 resources/
 scss/
+www/lib
 *.swp
 *.swo
 *.log

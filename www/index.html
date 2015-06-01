@@ -14,6 +14,11 @@
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/firebase/firebase.js"></script>
+    <script src="lib/angularfire/dist/angularfire.min.js"></script>
+    <script src="lib/lodash/lodash.min.js"></script>
+    <script src="lib/restangular/dist/restangular.min.js"></script>
+    <script src="lib/moment/min/moment.min.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
@@ -36,6 +41,7 @@
             Click Me!
             <i class="icon ion-happy-outline"></i>
           </button>
+          <div class="row row-center" ng-show="shout">{{shout}}</div>
         </div>
       </ion-content>
     </ion-pane>
