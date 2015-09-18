@@ -17,15 +17,12 @@ angular.module('homage', [
     });
 
     $scope.displayResponse = function() {
-      // console.log('responsedata', $scope.responsedata.responses);
       index = Math.floor(Math.random() * $scope.responsedata.responses.length);
       $scope.shout = $scope.responsedata.responses[index];
     };
 
     $scope.buttonClick = function() {
       $scope.counter++;
-      // console.log('i am clicked', $scope.counter);
-      // console.log('today is', $scope.today);
       var data = {
         userId: 1,
         count: $scope.counter,
@@ -41,94 +38,47 @@ angular.module('homage', [
   .factory('HomageFactory', function($firebaseArray, $firebaseObject, $http, FIREBASE_URL, Restangular) {
     var ref = new Firebase(FIREBASE_URL),
         clickers = $firebaseArray(ref.child('clickers')),
-        users = [],
+        dates = [],
         todayLogged = null;
     Restangular.baseUrl = FIREBASE_URL;
 
-    clickers.$loaded(function(){
-      angular.forEach(clickers, function(user) {
-        if(user.hasOwnProperty(moment().format('MM-DD-YYYY'))) {
-          todayLogged = user.$id;
-        }
-
-        console.log(user);
-        users.push(user);
-      })
-    });
-
     return {
-      hasDateToday: function() {
-        return todayLogged;
+      hasDateToday: function() {  
+        var record = clickers.filter(function(value) { 
+          return value.hasOwnProperty(moment().format('MM-DD-YYYY')) 
+        });
+        return (!record.length) ? null : record[0].$id; 
       },
       getAllResponses: function() {
         return $http.get('/data/responses.data.json');
       },
       setClickCount: function(click) {
-        var // userKey = 'user-' + click.userId,
-            // record = clickers.$getRecord(click.dbId),
-            // thisClick = {},
-            // clickersList = [],
-            dateToday = null;
+        var dateToday = null;
 
-        // if(record.hasOwnProperty(click.date)) {
         if(click.dbId) {
-          dateToday = $firebaseArray(ref.child('clickers').child(click.dbId).child(click.date));
-
+          dateToday = clickers.$getRecord(click.dbId);
+          console.log(dateToday);
           dateToday.$loaded(function(){
             angular.forEach(dateToday, function(user) {
               console.log(user);
             })
-          });
 
-          if(dateToday.userId === click.userId) {
-            dateToday.count = click.count;
-            dateToday.$save();
-          }
+            if(dateToday.userId === click.userId) {
+              dateToday.count = click.count;
+              dateToday.$save();
+            }
+          });
+        } else {
+          clickers.$add(click.date).then(function(ref) {
+            var key = $firebaseArray(ref.child(click.date));
+            key.$add({
+              count: click.count,
+              userId: click.userId
+            });
+          });
         }
 
-        console.log(users);
-        
-        // clickers.$add(thisClick);
-
-        // ref.child('clickers').on('value', function(snapshot) {
-        //   clickersList = snapshot.val() || [];
-        // });
-
-        // if(!clickersList.length) {
-        //   clickersList.push(thisClick);
-        // } else {
-        //   for(var i in clickersList) {
-        //     for(var j in clickersList[i]) {
-        //       if(j === click.date && userKey in clickersList[i][j]) {
-        //         console.log(clickersList[i][j]['count']);
-        //       }
-        //     }
-        //   }
-        // }
-
-        // console.log('clickersList' + clickersList);
-        // ref.child('clickers').set(clickersList);
-
-        // // check if date today is logged in db
-        // // $scope.clickers.child(click.date).once('value', function(snapshot){
-        // //   if(snapshot.val() === null) {
-        // //     console.log('snapshot', snapshot.val());
-        // //     thisClick[click.date][userKey] = { count: click.count };
-        // //   } else {
-        // //     var userRecord = snapshot.val()[userKey],
-        // //         totalCount = click.count;
-
-        // //     // check if userId is logged under date today
-        // //     if (userRecord) {
-        // //       totalCount += userRecord.count;
-        // //     }
-
-        // //     thisClick[click.date][userKey] = { count: totalCount };
-        // //   }
-
-        // //   // log to db
-        // //   $scope.clickers.set(thisClick);
-        // // });
+        console.log(dates);
       }
     };
   });
