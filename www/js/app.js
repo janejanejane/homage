@@ -57,18 +57,27 @@ angular.module('homage', [
 
         if(click.dbId) {
           dateToday = clickers.$getRecord(click.dbId);
-          console.log(dateToday);
-          dateToday.$loaded(function(){
-            angular.forEach(dateToday, function(user) {
-              console.log(user);
-            })
-
-            if(dateToday.userId === click.userId) {
-              dateToday.count = click.count;
-              dateToday.$save();
+          console.log('This is date today', dateToday);
+          angular.forEach(dateToday[click.date], function(user){
+            console.log('User count?',user);
+            if(user.userId === click.userId){
+              user.count = click.count;
+              dateToday.newest = 'hello'+click.count;
+              clickers.$save(dateToday);
             }
           });
+          // dateToday.$loaded(function(){
+          //   angular.forEach(dateToday, function(user) {
+          //     console.log(user);
+          //   })
+
+          //   if(dateToday.userId === click.userId) {
+          //     dateToday.count = click.count;
+          //     dateToday.$save();
+          //   }
+          // });
         } else {
+          console.log('Else what is click', click);
           clickers.$add(click.date).then(function(ref) {
             var key = $firebaseArray(ref.child(click.date));
             key.$add({
@@ -78,7 +87,7 @@ angular.module('homage', [
           });
         }
 
-        console.log(dates);
+        console.log('setClickCount:',dates);
       }
     };
   });
