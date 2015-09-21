@@ -12,6 +12,7 @@ app
         uuid = $cordovaDevice.getUUID();
       }else{
         console.log("Is not Android");
+        // uuid = 1;
         uuid = "testUUID";
       }
     });
