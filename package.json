@@ -1,7 +1,7 @@
 {
-  "name": "todo",
+  "name": "homage",
   "version": "1.0.0",
-  "description": "todo: An Ionic project",
+  "description": "homage: An Ionic project",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",

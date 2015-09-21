@@ -1,6 +1,7 @@
 
 var app = angular.module('homage', [
   'ionic', 
+  'ngCordova',
   'firebase', 
   'restangular'
   ])

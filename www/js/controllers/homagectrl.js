@@ -1,9 +1,20 @@
 app
-  .controller('HomageCtrl', function($scope, HomageFactory) {
+  .controller('HomageCtrl', function($scope, $ionicPlatform, $cordovaDevice, HomageFactory) {
 
-    $scope.shout = '';
+    $scope.shout = null;
 
-    var index = 0;
+    var index = 0,
+        uuid = null;
+
+    $ionicPlatform.ready(function() {
+      // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
+      if( ionic.Platform.isAndroid() ){
+        uuid = $cordovaDevice.getUUID();
+      }else{
+        console.log("Is not Android");
+        uuid = "testUUID";
+      }
+    });
 
     HomageFactory.getAllResponses().success(function(data) {
       $scope.responsedata = data;
@@ -16,7 +27,7 @@ app
 
     $scope.buttonClick = function() {
       var data = {
-        userId: 3,
+        userId: uuid,
         count: 1,
         date: moment().format('MM-DD-YYYY')
       }
