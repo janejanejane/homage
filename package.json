@@ -15,7 +15,10 @@
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
   },
-  "cordovaPlugins": [],
+  "cordovaPlugins": [
+    "cordova-plugin-device",
+    "cordova-plugin-whitelist"
+  ],
   "cordovaPlatforms": [
     "android"
   ]
