@@ -9,6 +9,7 @@ app
     $ionicPlatform.ready(function() {
       // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
       if( ionic.Platform.isAndroid() ){
+        console.log('hello?');
         uuid = $cordovaDevice.getUUID();
       }else{
         console.log("Is not Android");

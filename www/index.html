@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval'"> -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-eval' 'unsafe-inline'">
     <title></title>
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
@@ -33,7 +34,7 @@
   <body ng-app="homage">
 
     <ion-pane>
-      <ion-header-bar class="bar-balanced">
+      <ion-header-bar class="bar bar-header bar-balanced">
         <h1 class="title">Homage to mobile apps</h1>
       </ion-header-bar>
       <ion-content>
@@ -45,7 +46,9 @@
             Click Me!
             <i class="icon ion-happy-outline"></i>
           </button>
-          <div class="row row-center" ng-show="shout">{{shout}}</div>
+          <div class="row row-center responsive-sm" ng-show="shout">
+            <div class="col col-33 col-offset-33 text-center">{{shout}}</div>
+          </div>
         </div>
       </ion-content>
     </ion-pane>

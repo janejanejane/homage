@@ -21,6 +21,8 @@ app
             savedNew = false,
             lastKey = '';
 
+        console.log('inside setClickCount:', click);
+
         if(click.dbId) { // it has a dbId when the userId is has data in db
           userRecord = clickers.$getRecord(click.dbId);
           userRecordKeys = Object.keys(userRecord[click.userId]);
@@ -45,6 +47,7 @@ app
           }
 
         } else { // save new userId to db
+          console.log('new id??');
           clickers.$add(click.userId).then(function(ref) {
             var key = $firebaseArray(ref.child(click.userId));
             key.$add({
