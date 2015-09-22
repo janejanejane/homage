@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.todo191230" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>todo</name>
+<widget id="com.ionicframework.homage191230" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>homage</name>
   <description>
-        An Ionic Framework and Cordova project.
+        Another mobile app project.
     </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+  <author email="jeanclaudetteambait@gmail.com" href="http://jeanambait.com/">
+      Jean Claudette Ambait
     </author>
   <content src="index.html"/>
   <access origin="*"/>
