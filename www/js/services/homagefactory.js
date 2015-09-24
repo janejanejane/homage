@@ -13,7 +13,7 @@ app
         return (!record.length) ? null : record[0].$id; 
       },
       getAllResponses: function() { // used in $scope.shout to show some response
-        return $http.get('/data/responses.data.json');
+        return $http.get('data/responses.data.json');
       },
       setClickCount: function(click) { // function when 'Click Me!' button is clicked
         var userRecord = null,

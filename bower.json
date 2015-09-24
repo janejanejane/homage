@@ -2,12 +2,12 @@
   "name": "HomageIonic",
   "private": "true",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.0.0"
+    "ionic": "driftyco/ionic-bower#1.1.0"
   },
   "dependencies": {
-    "angularfire": "~1.1.1",
-    "firebase": "~2.2.5",
-    "moment": "~2.10.3",
+    "angularfire": "~1.1.2",
+    "firebase": "~2.2.9",
+    "moment": "~2.10.6",
     "ngCordova": "~0.1.20-alpha",
     "restangular": "~1.5.1"
   }
