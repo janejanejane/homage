@@ -20,6 +20,7 @@
     <script src="lib/lodash/lodash.min.js"></script>
     <script src="lib/restangular/dist/restangular.min.js"></script>
     <script src="lib/moment/min/moment.min.js"></script>
+    <script src="lib/d3/d3.min.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
@@ -28,6 +29,7 @@
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/controllers/homagectrl.js"></script>
+    <script src="js/controllers/chartctrl.js"></script>
     <script src="js/services/homagefactory.js"></script>
   </head>
   <body ng-app="homage">
@@ -49,6 +51,7 @@
             <div class="col col-33 col-offset-33 text-center">{{shout}}</div>
           </div>
         </div>
+        <div class="padding" id="chart-div" ng-controller="ChartCtrl"></div>
       </ion-content>
     </ion-pane>
   </body>
