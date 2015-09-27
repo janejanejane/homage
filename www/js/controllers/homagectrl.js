@@ -1,5 +1,5 @@
 app
-  .controller('HomageCtrl', function($scope, $ionicPlatform, $cordovaDevice, HomageFactory) {
+  .controller('HomageCtrl', ['$scope', '$ionicPlatform', '$cordovaDevice', 'HomageFactory', function($scope, $ionicPlatform, $cordovaDevice, HomageFactory) {
 
     $scope.shout = null;
 
@@ -39,4 +39,4 @@ app
       HomageFactory.setClickCount(data);
       $scope.displayResponse();
     };
-  });
+  }]);
