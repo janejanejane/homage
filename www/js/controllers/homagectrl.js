@@ -22,6 +22,8 @@ app
       $scope.responsedata = data;
     });
 
+    HomageFactory.allClicks(uuid);
+
     $scope.displayResponse = function() {
       index = Math.floor(Math.random() * $scope.responsedata.responses.length);
       $scope.shout = $scope.responsedata.responses[index];
