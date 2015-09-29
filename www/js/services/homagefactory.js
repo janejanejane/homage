@@ -15,6 +15,9 @@ app
       getAllResponses: function() { // used in $scope.shout to show some response
         return $http.get('data/responses.data.json');
       },
+      allClicks: function() { // get all the data on clicks of current user
+        
+      },
       setClickCount: function(click) { // function when 'Click Me!' button is clicked
         var userRecord = null,
             userRecordKeys = [],
