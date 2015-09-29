@@ -1,5 +1,5 @@
 app
-  .factory('HomageFactory', function($firebaseArray, $firebaseObject, $http, FIREBASE_URL, Restangular) {
+  .factory('HomageFactory', ['$firebaseArray', '$firebaseObject', '$http', 'FIREBASE_URL', 'Restangular', function($firebaseArray, $firebaseObject, $http, FIREBASE_URL, Restangular) {
     var ref = new Firebase(FIREBASE_URL),
         clickers = $firebaseArray(ref.child('clickerz'));
 
@@ -63,4 +63,4 @@ app
         }
       }
     };
-  });
+  }]);
