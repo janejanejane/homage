@@ -6,7 +6,11 @@ app
     Restangular.baseUrl = FIREBASE_URL;
 
     return {
-      hasUserRecord: function(userId) { // checks if the userId is in the db
+      hasUserRecord: function(userId, data) { // checks if the userId is in the db
+        if(data) {
+          clickers = data;
+        }
+
         var record = clickers.filter(function(value) { 
           return value.hasOwnProperty(userId); 
         });
@@ -15,9 +19,12 @@ app
       getAllResponses: function() { // used in $scope.shout to show some response
         return $http.get('data/responses.data.json');
       },
-      allClicks: function(userId) { // get all the data on clicks of current user
-        clickers.$loaded().then(function(arr) {
+      allClicks: function(userId, callback) { // get all the data on clicks of current user
+        var self = this;
+        clickers.$loaded().then(function(arr) { // wait for the data from firebaseio
           console.log('clickers', arr);
+          var result = self.hasUserRecord(userId, arr);
+          callback(arr.$getRecord(result));
         });
       },
       setClickCount: function(click) { // function when 'Click Me!' button is clicked

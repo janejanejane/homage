@@ -16,13 +16,16 @@ app
         // uuid = 1;
         uuid = "testUUID";
       }
+
+      HomageFactory.allClicks(uuid, function(result) { // wait for the device uuid to prevent null result
+        console.log('result', result);
+      });
+
     });
 
     HomageFactory.getAllResponses().success(function(data) {
       $scope.responsedata = data;
     });
-
-    HomageFactory.allClicks(uuid);
 
     $scope.displayResponse = function() {
       index = Math.floor(Math.random() * $scope.responsedata.responses.length);
