@@ -2,6 +2,7 @@ app
   .controller('HomageCtrl', ['$scope', '$ionicPlatform', '$cordovaDevice', 'HomageFactory', function($scope, $ionicPlatform, $cordovaDevice, HomageFactory) {
 
     $scope.shout = null;
+    $scope.savedClicks = [];
 
     var index = 0,
         uuid = null;
@@ -17,8 +18,9 @@ app
         uuid = "testUUID";
       }
 
-      HomageFactory.allClicks(uuid, function(result) { // wait for the device uuid to prevent null result
+      HomageFactory.getAllClicks(uuid, function(result) { // wait for the device uuid to prevent null result
         console.log('result', result);
+        $scope.savedClicks = result;
       });
 
     });

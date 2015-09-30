@@ -19,12 +19,24 @@ app
       getAllResponses: function() { // used in $scope.shout to show some response
         return $http.get('data/responses.data.json');
       },
-      allClicks: function(userId, callback) { // get all the data on clicks of current user
+      getAllClicks: function(userId, callback) { // get all the data on clicks of current user
         var self = this;
         clickers.$loaded().then(function(arr) { // wait for the data from firebaseio
           console.log('clickers', arr);
-          var result = self.hasUserRecord(userId, arr);
-          callback(arr.$getRecord(result));
+          var result = self.hasUserRecord(userId, arr),
+              record = arr.$getRecord(result)[userId],
+              keys = Object.keys(record);
+              count = 0,
+              data = [];
+
+          angular.forEach(record, function(record, key) {
+            data.push(record);
+            count++;
+
+            if(count === keys.length) {
+              callback(data);
+            }
+          });
         });
       },
       setClickCount: function(click) { // function when 'Click Me!' button is clicked
