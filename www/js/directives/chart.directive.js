@@ -20,26 +20,31 @@ app
 							data = val,
 							chart = d3.select("#" + elm[0].id);
 
+							// reference all divs
 							div = chart.selectAll("div")
 									.data(data, function(d) {
 										console.log('d', d);
 										return d.count;
 									});
-									
-							div.enter()
-								.append("div")
-									.attr("id", function(d) {
-										return d.date.replace(/[-]/g, '');
-									})
-									.style("height", function(d) { 
-										return d.count + 10 + "px"; 
-									})
-									.text(function(d) { 
-										return d.count; 
-									});
 
+							// remove old
 							div.exit()
 								.remove();
+
+							// add new
+							div.enter()
+								.append("div");
+
+							// update existing
+							div.attr("id", function(d) {
+									return d.date.replace(/[-]/g, '');
+								})
+								.style("height", function(d) { 
+									return d.count + 10 + "px"; 
+								})
+								.text(function(d) { 
+									return d.count; 
+								});
 
 						console.log('width', width, 'height', height);
 					}
