@@ -45,5 +45,10 @@ app
 
       HomageFactory.setClickCount(data);
       $scope.displayResponse();
+      
+      HomageFactory.getAllClicks(uuid, function(result) { // wait for the device uuid to prevent null result
+        console.log('result', result);
+        $scope.savedClicks = result;
+      });
     };
   }]);

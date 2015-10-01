@@ -28,6 +28,9 @@ app
 									
 							div.enter()
 								.append("div")
+									.attr("id", function(d) {
+										return d.date.replace(/[-]/g, '');
+									})
 									.style("height", function(d) { 
 										return d.count + 10 + "px"; 
 									})
