@@ -24,7 +24,7 @@ app
 							div = chart.selectAll("div")
 									.data(data, function(d) {
 										console.log('d', d);
-										return d.count;
+										return d.count + d.date;
 									});
 
 							// remove old
