@@ -18,7 +18,7 @@ app
 						// data = [4, 8, 15, 16, 23, 42];
 
 							data = val,
-							chart = d3.select("#" + elm[0].id);
+							chart = d3.select("#" + elm[0].id + ' div');
 
 							// reference all divs
 							div = chart.selectAll("div")

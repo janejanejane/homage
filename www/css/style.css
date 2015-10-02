@@ -1,4 +1,15 @@
-#chart-div div {
+#chart-div {
+	position: relative;
+	min-height: 300px;
+	display: block;
+}
+
+#chart-div > div {
+	position: absolute;
+	bottom: 0px;
+}
+
+#chart-div div div {
 	font: 10px sans-serif;
 	background-color: #EC530A;
 	text-align: right;
