@@ -11,12 +11,11 @@ app
 					if(val) {
 						var width = $window.innerWidth - 20,
 							height = $window.innerHeight,
-						// chart = d3.select("#chart-div").append("svg")
-						// 			.attr("width", width)
-						// 			.attr("height", height);
-
-						// data = [4, 8, 15, 16, 23, 42];
-
+							scale = d3.scale.linear()
+										.domain([0, d3.max(val, function(d) {
+											return d.count;
+										})])
+										.range([0, 300]),
 							data = val,
 							chart = d3.select("#" + elm[0].id + ' div');
 
@@ -40,7 +39,7 @@ app
 									return d.date.replace(/[-]/g, '');
 								})
 								.style("height", function(d) { 
-									return d.count + 10 + "px"; 
+									return scale(d.count) + 10 + "px"; 
 								})
 								.text(function(d) { 
 									return d.count; 
