@@ -16,8 +16,15 @@ app
 											return d.count;
 										})])
 										.range([0, 300]),
+							x = d3.scale.ordinal()
+									.rangeRoundBands([0, val.length], .1)
 							data = val,
 							chart = d3.select("#" + elm[0].id + ' div');
+
+
+							axis = d3.svg.axis()
+									.scale(scale)
+									.orient("bottom");
 
 							// reference all divs
 							div = chart.selectAll("div")
@@ -44,6 +51,11 @@ app
 								.text(function(d) { 
 									return d.count; 
 								});
+
+							chart.append("g")
+								.attr("class", "x axis")
+								.attr("transform", "translate(0, 300)")
+								.call(axis);
 
 						console.log('width', width, 'height', height);
 					}
