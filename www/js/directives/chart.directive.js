@@ -10,6 +10,8 @@ app
 
 					if(!!val.length) { // length greater than 0
 
+						d3.select("#" + elm[0].id + " svg").remove(); // remove existing svg
+
 						var clicksChartEl = elm[0], // this container
 							width = clicksChartEl.offsetWidth - 40,
 							height = clicksChartEl.offsetHeight,
@@ -30,7 +32,7 @@ app
 									.range([height, 0]),
 
 							// create svg element as container
-							svg = d3.select("#" + elm[0].id).append("svg")
+							svg = d3.select("#" + clicksChartEl.id).append("svg")
 												.attr("width", width + pad * 2)
 												.attr("height", height + pad * 2),
 
@@ -47,24 +49,26 @@ app
 							xAxis = d3.svg.axis()
 								.scale(axisScale)
 								.orient("bottom")
-								.tickFormat(d3.time.format("%b %d"));
+								.tickFormat(d3.time.format("%b %d")),
 
 							// create group for axis and call all axis
 							xAxisGroup = svg.append("g")
 								.attr("class", "axis-date")
 								.attr("transform", "translate(0, "+height+")")
-								.call(xAxis);
+								.call(xAxis),
 
 							// create group to use for bars
 							rectGroup = svg.append("g")
 											.attr("class", "rect-group");
 
+							// @link: http://alignedleft.com/tutorials/d3/making-a-bar-chart
 							// create every single bar
-							rectGroup.selectAll("rect")
+							bar = rectGroup.selectAll("rect")
 								.data(data, function(d) {
 									return d.count + d.date
-								})
-								.enter()
+								});
+
+							bar.enter()
 								.append("rect")
 								.attr("x", function(d) { // placement of bar horizontally
 									return axisScale(new Date(d.date));
@@ -73,6 +77,15 @@ app
 									return height - (y(d.count));
 								})
 								.attr("width", 25) // width of individual bars
+								.attr("height", function(d) { // height of individual bars inside chart
+									return y(d.count);
+								});
+
+							bar.exit().remove();
+
+							bar.attr("y", function(d) { // stick bar to x-axis
+									return height - (y(d.count));
+								})
 								.attr("height", function(d) { // height of individual bars inside chart
 									return y(d.count);
 								});
@@ -93,7 +106,7 @@ app
 								})
 								.attr("class", "bar-label");
 
-							// http://bl.ocks.org/phoebebright/3059392
+							// @link: http://bl.ocks.org/phoebebright/3059392
 							// change axis text display
 							svg.selectAll(".axis-date text")  // select all the text elements for the axis-date
 								.attr("transform", function(d) {
