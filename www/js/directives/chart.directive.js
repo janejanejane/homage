@@ -9,7 +9,6 @@ app
 					console.log('val', val, 'elm.id', elm[0].id);
 
 					if(!!val.length) { // length greater than 0
-
 						d3.select("#" + elm[0].id + " svg").remove(); // remove existing svg
 
 						var clicksChartEl = elm[0], // this container
@@ -63,12 +62,11 @@ app
 
 							// @link: http://alignedleft.com/tutorials/d3/making-a-bar-chart
 							// create every single bar
-							bar = rectGroup.selectAll("rect")
+							rectGroup.selectAll("rect")
 								.data(data, function(d) {
 									return d.count + d.date
-								});
-
-							bar.enter()
+								})
+								.enter()
 								.append("rect")
 								.attr("x", function(d) { // placement of bar horizontally
 									return axisScale(new Date(d.date));
@@ -77,15 +75,6 @@ app
 									return height - (y(d.count));
 								})
 								.attr("width", 25) // width of individual bars
-								.attr("height", function(d) { // height of individual bars inside chart
-									return y(d.count);
-								});
-
-							bar.exit().remove();
-
-							bar.attr("y", function(d) { // stick bar to x-axis
-									return height - (y(d.count));
-								})
 								.attr("height", function(d) { // height of individual bars inside chart
 									return y(d.count);
 								});
