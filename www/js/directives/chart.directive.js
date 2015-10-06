@@ -103,17 +103,17 @@ app
 				};
 
 				scope.$watch('savedClicks', function(val) {
-					console.log('val', val, 'elm.id', elm[0].id);
-
-					if(!!val.length) { // length greater than 0
-						// initial render
-						drawChart(val);
-
-						// bind action (jQuery?) then call angular digest
-						angular.element($window).bind('resize', function() {
-							scope.$apply(drawChart(val));
-						});
-					}
+					// console.log('val', val, 'elm.id', elm[0].id);
+					//
+					// if(!!val.length) { // length greater than 0
+					// 	// initial render
+					// 	drawChart(val);
+					//
+					// 	// bind action (jQuery?) then call angular digest
+					// 	angular.element($window).bind('resize', function() {
+					// 		scope.$apply(drawChart(val));
+					// 	});
+					// }
 				}, true);
 			}
 		}
