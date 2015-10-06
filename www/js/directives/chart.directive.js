@@ -8,6 +8,8 @@ app
 
 				var drawChart = function(val) { // called on page first load and on window resize
 
+					console.log('here is val>>', val);
+
 					d3.select("#" + elm[0].id + " svg").remove(); // remove existing svg
 
 					var clicksChartEl = elm[0], // this container
@@ -20,7 +22,8 @@ app
 						// create scale for data count (how tall)
 						y = d3.scale.linear()
 									.domain([0, d3.max(val, function(d) {
-										return d.count;
+										console.log('scale.linear', d.$value);
+										return d.$value;
 									})])
 									.range([0, height]),
 
@@ -35,8 +38,8 @@ app
 											.attr("height", height + pad * 2),
 
 						// minimum and maximum dates for use in scaling time
-						minDate = new Date(val[0]['date']),
-						maxDate = new Date(),
+						minDate = new Date(val[0].$id),
+						maxDate = moment().add(scope.maxDays, 'day'),
 
 						// create scale to use for axis
 						axisScale = d3.time.scale()
@@ -62,35 +65,37 @@ app
 						// @link: http://alignedleft.com/tutorials/d3/making-a-bar-chart
 						// create every single bar
 						rectGroup.selectAll("rect")
-							.data(data, function(d) {
-								return d.count + d.date
+							.data(val, function(d) {
+								console.log('rect',d);
+								return d.$value + d.$id
 							})
 							.enter()
 							.append("rect")
 							.attr("x", function(d) { // placement of bar horizontally
-								return axisScale(new Date(d.date));
+								return axisScale(new Date(d.$id));
 							})
 							.attr("y", function(d) { // stick bar to x-axis
-								return height - (y(d.count));
+								return height - (y(d.$value));
 							})
 							.attr("width", 25) // width of individual bars
 							.attr("height", function(d) { // height of individual bars inside chart
-								return y(d.count);
+								console.log('height', d);
+								return y(d.$value);
 							});
 
 						// append text to rect-group
 						rectGroup.selectAll("text")
-							.data(data)
+							.data(val)
 							.enter()
 							.append("text")
 							.text(function(d) {
-								return d.count;
+								return d.$value;
 							})
 							.attr("x", function(d) { // placement of bar horizontally
-								return axisScale(new Date(d.date)) + 12.5; // half of width: 25
+								return axisScale(new Date(d.$id)) + 12.5; // half of width: 25
 							})
 							.attr("y", function(d) { // stick bar to x-axis
-								return height - (y(d.count) - 12);
+								return height - (y(d.$value) - 12);
 							})
 							.attr("class", "bar-label");
 
@@ -102,18 +107,18 @@ app
 							});
 				};
 
-				scope.$watch('savedClicks', function(val) {
-					// console.log('val', val, 'elm.id', elm[0].id);
-					//
-					// if(!!val.length) { // length greater than 0
-					// 	// initial render
-					// 	drawChart(val);
-					//
-					// 	// bind action (jQuery?) then call angular digest
-					// 	angular.element($window).bind('resize', function() {
-					// 		scope.$apply(drawChart(val));
-					// 	});
-					// }
+				scope.$watch('clickArray', function(newVal, oldVal) {
+					console.log('newVal, oldVal', newVal, oldVal, 'elm.id', elm[0].id);
+					
+					if(newVal && newVal !== oldVal) { // is not undefined and length greater than 0
+						// initial render
+						drawChart(newVal);
+					
+						// bind action (jQuery) then call angular digest
+						angular.element($window).bind('resize', function() {
+							scope.$apply(drawChart(newVal));
+						});
+					}
 				}, true);
 			}
 		}

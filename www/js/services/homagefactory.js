@@ -40,8 +40,8 @@ app
           console.log('Done setting to database');
         });
       },
-      getClicks: function(uuid, callback){
-        var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(1);
+      getClicks: function(uuid, max, callback){
+        var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(max);
         var clickArray = $firebaseArray(obj);
         return callback(clickArray);
       }
