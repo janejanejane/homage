@@ -15,7 +15,7 @@ app
       }else{
         console.log("Is not Android");
         // uuid = 1;
-        uuid = "testUUID3";
+        uuid = "testUUID";
       }
 
       HomageFactory.getAllClicks(uuid, function(clickObj) { // wait for the device uuid to prevent null result
@@ -59,5 +59,19 @@ app
           moment().format('MM-DD-YYYY'),
           sum+1 );
       }
+
+      HomageFactory.getClicks(uuid, function(clickObj) { // wait for the device uuid to prevent null result
+        console.log('result', clickObj);
+        // clickObj.on(function(data){
+        //   console.log('On Data', data);
+        // });
+
+        clickObj.$loaded(function(data){
+          $scope.clickArray = data;
+          console.log('Saved Clicks: ', $scope.clickArray);
+        });
+      });
     };
+
+
   }]);
