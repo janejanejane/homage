@@ -40,6 +40,11 @@ app
           console.log('Done setting to database');
         });
       },
+      getClicks: function(uuid, callback){
+        var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(1);
+        var clickArray = $firebaseArray(obj);
+        return callback(clickArray);
+      }
       // setClickCount: function(click) { // function when 'Click Me!' button is clicked
       //   var userRecord = null,
       //       userRecordKeys = [],
