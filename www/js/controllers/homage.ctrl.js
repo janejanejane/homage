@@ -2,7 +2,7 @@ app
   .controller('HomageCtrl', ['$scope', '$ionicPlatform', '$cordovaDevice', 'HomageFactory', function($scope, $ionicPlatform, $cordovaDevice, HomageFactory) {
 
     $scope.shout = null;
-    $scope.savedClicks = [];
+    $scope.savedClicks = null;
 
     var index = 0,
         uuid = null;
@@ -18,9 +18,21 @@ app
         uuid = "testUUID";
       }
 
-      HomageFactory.getAllClicks(uuid, function(result) { // wait for the device uuid to prevent null result
-        console.log('result', result);
-        $scope.savedClicks = result;
+      HomageFactory.getAllClicks(uuid, function(clickObj) { // wait for the device uuid to prevent null result
+        console.log('result', clickObj);
+        // clickObj.on(function(data){
+        //   console.log('On Data', data);
+        // });
+
+        clickObj.$bindTo($scope, 'savedClicks').then(function(data){
+          console.log('Saved Clicks: ', $scope.savedClicks);
+          //if there is no click yet for this user
+          if($scope.savedClicks.$value === null){
+            //create a new clicks
+            console.log('Create a new clicks');
+            HomageFactory.createNewUser(uuid);
+          }
+        });
       });
 
     });
@@ -45,10 +57,10 @@ app
 
       HomageFactory.setClickCount(data);
       $scope.displayResponse();
-      
+
       HomageFactory.getAllClicks(uuid, function(result) { // wait for the device uuid to prevent null result
         console.log('result', result);
-        $scope.savedClicks = result;
+        // $scope.savedClicks = result;
       });
     };
   }]);

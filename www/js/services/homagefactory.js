@@ -11,32 +11,26 @@ app
           clickers = data;
         }
 
-        var record = clickers.filter(function(value) { 
-          return value.hasOwnProperty(userId); 
+        var record = clickers.filter(function(value) {
+          return value.hasOwnProperty(userId);
         });
-        return (!record.length) ? null : record[0].$id; 
+        return (!record.length) ? null : record[0].$id;
       },
-      getAllResponses: function() { // used in $scope.shout to show some response
+      getAllResponses: function() { // used in $scope.shout to show some response, returns a promise
         return $http.get('data/responses.data.json');
       },
       getAllClicks: function(userId, callback) { // get all the data on clicks of current user
         var self = this;
-        clickers.$loaded().then(function(arr) { // wait for the data from firebaseio
-          console.log('clickers', arr);
-          var result = self.hasUserRecord(userId, arr),
-              record = arr.$getRecord(result)[userId],
-              keys = Object.keys(record);
-              count = 0,
-              data = [];
-
-          angular.forEach(record, function(record, key) {
-            data.push(record);
-            count++;
-
-            if(count === keys.length) {
-              callback(data);
-            }
-          });
+        console.log('Getting all clicks', userId);
+        var clickObj = $firebaseObject(ref.child('clickerz/'+userId));
+        return callback(clickObj);
+      },
+      createNewUser: function(uuid){
+        var obj = ref.child('clickerz/'+uuid)
+        obj.set({
+          clicks: [
+          ],
+          name: uuid
         });
       },
       setClickCount: function(click) { // function when 'Click Me!' button is clicked
