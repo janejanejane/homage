@@ -107,16 +107,14 @@ app
 							});
 				};
 
-				scope.$watch('clickArray', function(newVal, oldVal) {
-					console.log('newVal, oldVal', newVal, oldVal, 'elm.id', elm[0].id);
-					
-					if(newVal && newVal !== oldVal) { // is not undefined and length greater than 0
+				scope.$watch('savedClicks', function() {					
+					if(scope.clickArray && !!scope.clickArray.length) { // is not undefined and length greater than 0
 						// initial render
-						drawChart(newVal);
+						drawChart(scope.clickArray);
 					
 						// bind action (jQuery) then call angular digest
 						angular.element($window).bind('resize', function() {
-							scope.$apply(drawChart(newVal));
+							scope.$apply(drawChart(scope.clickArray));
 						});
 					}
 				}, true);
