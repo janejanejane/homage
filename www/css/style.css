@@ -20,3 +20,13 @@
 	vertical-align: bottom;
 	width: 25px;
 }
+
+rect {
+	fill: #EC530A;
+}
+
+.bar-label {
+	font-size: 8px;
+	fill: white;
+	text-anchor: middle;
+}
