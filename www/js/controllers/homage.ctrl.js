@@ -15,7 +15,7 @@ app
       }else{
         console.log("Is not Android");
         // uuid = 1;
-        uuid = "testUUID";
+        uuid = "testUUID3";
       }
 
       HomageFactory.getAllClicks(uuid, function(clickObj) { // wait for the device uuid to prevent null result
@@ -29,7 +29,6 @@ app
           //if there is no click yet for this user
           if($scope.savedClicks.$value === null){
             //create a new clicks
-            console.log('Create a new clicks');
             HomageFactory.createNewUser(uuid);
           }
         });
@@ -47,20 +46,18 @@ app
     };
 
     $scope.buttonClick = function() {
-      var data = {
-        userId: uuid,
-        count: 1,
-        date: moment().format('MM-DD-YYYY')
+
+      if(!$scope.savedClicks.clicks){
+        HomageFactory.setClickCount($scope.savedClicks.$id, moment().format('MM-DD-YYYY'), 1);
+      }else{
+        var sum = 0;
+        if($scope.savedClicks.clicks[moment().format('MM-DD-YYYY')]){
+          sum = $scope.savedClicks.clicks[moment().format('MM-DD-YYYY')];
+        }
+        HomageFactory.setClickCount(
+          $scope.savedClicks.$id,
+          moment().format('MM-DD-YYYY'),
+          sum+1 );
       }
-
-      data['dbId'] = HomageFactory.hasUserRecord(data.userId);
-
-      HomageFactory.setClickCount(data);
-      $scope.displayResponse();
-
-      HomageFactory.getAllClicks(uuid, function(result) { // wait for the device uuid to prevent null result
-        console.log('result', result);
-        // $scope.savedClicks = result;
-      });
     };
   }]);
