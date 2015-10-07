@@ -145,6 +145,14 @@ app
 						drawChart(scope.clickArray);
 					}
 				}, true);
+
+				scope.goNext = function() {
+					console.log('next clicked!');
+				}
+
+				scope.goPrev = function() {
+					console.log('prev clicked!');
+				}
 			}
 		}
 	}]);

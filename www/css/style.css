@@ -31,3 +31,26 @@ rect {
 	fill: white;
 	text-anchor: middle;
 }
+
+/* @link: https://css-tricks.com/snippets/css/css-triangle/ */
+.circle {
+	/*background-color: gray;*/
+	height: 50px;
+	width: 50px;
+	/*border-radius: 50px;*/
+	display: inline-block;
+	top: 40%;
+	position: absolute;
+	border-top: 50px solid transparent;
+	border-bottom: 50px solid transparent;
+}
+
+#next {
+	right: -25px;
+	border-left: 20px solid blue;
+}
+
+#prev {
+	left: -25px;
+	border-right: 20px solid blue;
+}
