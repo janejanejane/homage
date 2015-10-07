@@ -3,6 +3,7 @@
 	min-height: 300px;
 	display: block;
 	border: 1px solid #AAAAAA;
+	margin: 20px;
 }
 /*
 #chart-div > div {
@@ -46,11 +47,11 @@ rect {
 }
 
 #next {
-	right: -25px;
+	right: -55px;
 	border-left: 20px solid blue;
 }
 
 #prev {
-	left: -25px;
+	left: -55px;
 	border-right: 20px solid blue;
 }

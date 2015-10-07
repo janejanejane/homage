@@ -30,7 +30,7 @@ app
 
 					// minimum and maximum dates for use in scaling time
 					minDate = moment().startOf('week'),
-					maxDate = moment(minDate).add(scope.maxDays, 'day'),
+					maxDate = moment(minDate).add(scope.maxDays - 1, 'day'),
 
 					// create scale to use for axis
 					axisScale = d3.time.scale()
@@ -46,8 +46,8 @@ app
 					var	xAxis = d3.svg.axis()
 							.scale(axisScale)
 							.ticks(d3.time.day, 1)
-							.orient("bottom"),
-							// .tickFormat(d3.time.format("%b %d")),
+							.orient("bottom")
+							.tickFormat(d3.time.format("%b %d")),
 
 						// create group for axis and call all axis
 						xAxisGroup = svg.append("g")
@@ -147,11 +147,25 @@ app
 				}, true);
 
 				scope.goNext = function() {
-					console.log('next clicked!');
+					console.log('next clicked!', maxDate, minDate);
+					minDate = moment(maxDate).add(1, 'day').startOf('week');
+					maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
+
+					console.log('after next clicked!', maxDate, minDate);
+					axisScale.domain([minDate, maxDate]);
+
+					drawAxis();
 				}
 
 				scope.goPrev = function() {
-					console.log('prev clicked!');
+					console.log('prev clicked!', maxDate, minDate);
+					minDate = moment(maxDate).subtract(scope.maxDays, 'day').startOf('week');
+					maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
+
+					console.log('after prev clicked!', maxDate, minDate);
+					axisScale.domain([minDate, maxDate]);
+
+					drawAxis();
 				}
 			}
 		}
