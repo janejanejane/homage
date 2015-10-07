@@ -3,7 +3,7 @@ app
 
     $scope.shout = null;
     $scope.savedClicks = null;
-    $scope.clickArray = null;
+    $scope.clickArray = [];
     $scope.maxDays = 7;
 
     var index = 0,
@@ -33,14 +33,7 @@ app
         });
       });
 
-      HomageFactory.getClicks(uuid, $scope.maxDays, function(clickObj) { // wait for the device uuid to prevent null result
-        console.log('result', clickObj);
-
-        clickObj.$loaded(function(data){
-          $scope.clickArray = data;
-          console.log('Saved Clicks: ', $scope.clickArray);
-        });
-      });
+      updateClicksArray();
 
     });
 
@@ -68,6 +61,22 @@ app
           sum+1 );
       }
     };
+
+    function updateClicksArray(){
+      HomageFactory.getClicks(uuid, $scope.maxDays, function(clickObj) { // wait for the device uuid to prevent null result
+        console.log('result', clickObj);
+
+        clickObj.$watch(function(){
+          console.log('THis changed..');
+          //extract the data
+          for(var i in clickObj) {
+            if(typeof clickObj[i] !== 'function') {
+              $scope.clickArray.push(clickObj[i]);
+            }
+          }
+        });
+      });
+    }
 
 
   }]);
