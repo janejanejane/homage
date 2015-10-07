@@ -2,8 +2,9 @@
 	position: relative;
 	min-height: 300px;
 	display: block;
+	border: 1px solid #AAAAAA;
 }
-
+/*
 #chart-div > div {
 	position: absolute;
 	bottom: 0px;
@@ -20,7 +21,7 @@
 	vertical-align: bottom;
 	width: 25px;
 }
-
+*/
 rect {
 	fill: #EC530A;
 }

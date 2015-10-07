@@ -5,15 +5,27 @@ app
 			replace: true,
 			link: function(scope, elm, attrs) {
 
-					// this container
-				var clicksChartEl = elm[0],
-					width = clicksChartEl.offsetWidth - 40,
+				var clicksChartEl = null,
+					width = 0,
+					height = 0,
+					pad = 0,
+					svg = null,
+					minDate = null,
+					maxDate = null,
+					axisScale = null;
+
+				var init = function() {
+					
+					d3.select("#" + elm[0].id + " svg").remove(); // remove existing axis-date in svg
+
+					clicksChartEl = elm[0],
+					width = clicksChartEl.offsetWidth,
 					height = clicksChartEl.offsetHeight,
 					pad = 30,
 
 					// create svg element as container
 					svg = d3.select("#" + clicksChartEl.id).append("svg")
-											.attr("width", width + pad * 2)
+											.attr("width", width - 80 + pad * 2)
 											.attr("height", height + pad * 2),
 
 					// minimum and maximum dates for use in scaling time
@@ -23,7 +35,8 @@ app
 					// create scale to use for axis
 					axisScale = d3.time.scale()
 						.domain([minDate, maxDate])
-						.range([0, width]);
+						.range([0, width - 40]);
+				};
 
 				var drawAxis = function() {
 
@@ -110,12 +123,15 @@ app
 							.attr("class", "bar-label");
 				};
 
+				// initialize variable values;
+				init();
+
 				// draw the axis on screen load
 				drawAxis();
 
 				// bind draw action on screen resize then call angular digest
 				angular.element($window).bind('resize', function() {
-
+					init();
 					scope.$apply(drawAxis());
 
 					if(scope.clickArray && !!scope.clickArray.length) {
