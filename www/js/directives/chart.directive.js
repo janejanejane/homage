@@ -139,42 +139,41 @@ app
 					}
 				});
 
-				scope.$watch('clickArray', function(val, old) {				
+				scope.$watch('clickArray', function() {				
 					if(scope.clickArray && !!scope.clickArray.length) { // is not undefined and length greater than 0
 						// initial render
 						drawChart(scope.clickArray);
 					}
 				}, true);
 
+				scope.$watch('currentWeek', function(val) {
+					if(val === 0) init();
+
+					drawAxis();
+					drawChart(scope.clickArray);
+				})
+
 				scope.goNext = function() {
 
 					if(scope.currentWeek < 0) {
-						console.log('next clicked!', maxDate, minDate);
 
 						scope.currentWeek += 1;
 
 						minDate = moment(maxDate).add(1, 'day').startOf('week');
 						maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
 
-						console.log('after next clicked!', maxDate, minDate);
 						axisScale.domain([minDate, maxDate]);
-
-						drawAxis();
 					}
 				}
 
 				scope.goPrev = function() {
-					console.log('prev clicked!', maxDate, minDate);
 
 					scope.currentWeek -=1;
 
 					minDate = moment(maxDate).subtract(scope.maxDays, 'day').startOf('week');
 					maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
 
-					console.log('after prev clicked!', maxDate, minDate);
 					axisScale.domain([minDate, maxDate]);
-
-					drawAxis();
 				}
 			}
 		}

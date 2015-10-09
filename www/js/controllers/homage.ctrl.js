@@ -61,6 +61,10 @@ app
           moment().format('MM-DD-YYYY'),
           sum+1 );
       }
+
+      if($scope.currentWeek < 0) {
+        $scope.currentWeek = 0;
+      }
     };
 
     function updateClicksArray(){
