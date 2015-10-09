@@ -26,7 +26,7 @@ app
 					// create svg element as container
 					svg = d3.select("#" + clicksChartEl.id).append("svg")
 											.attr("width", width - 80 + pad * 2)
-											.attr("height", height + pad * 2),
+											.attr("height", height + 10 + pad * 2),
 
 					// minimum and maximum dates for use in scaling time
 					minDate = moment().startOf('week'),
@@ -40,7 +40,7 @@ app
 
 				var drawAxis = function() {
 
-					d3.select("#" + elm[0].id + " svg .axis-date").remove(); // remove existing axis-date in svg
+					d3.select("#" + elm[0].id + " svg .axis-date").transition().style("opacity", 0).remove(); // remove existing axis-date in svg
 
 						// create every axis point
 					var	xAxis = d3.svg.axis()
@@ -52,7 +52,7 @@ app
 						// create group for axis and call all axis
 						xAxisGroup = svg.append("g")
 							.attr("class", "axis-date")
-							.attr("transform", "translate(0, "+height+")")
+							.attr("transform", "translate(0, "+(height+10)+")")
 							.call(xAxis);
 
 					// @link: http://bl.ocks.org/phoebebright/3059392
@@ -65,7 +65,7 @@ app
 
 				var drawChart = function(val) { // called on page first load and on window resize
 
-					d3.select("#" + elm[0].id + " svg .rect-group").remove(); // remove existing rect-group in svg
+					d3.select("#" + elm[0].id + " svg .rect-group").transition().style("opacity", 0).remove(); // remove existing rect-group in svg
 					
 					var left = clicksChartEl.offsetLeft,
 						top = clicksChartEl.offsetTop - 100,
@@ -85,7 +85,8 @@ app
 
 						// create group to use for bars
 						rectGroup = svg.append("g")
-										.attr("class", "rect-group");
+										.attr("class", "rect-group")
+										.attr("transform", "translate(0, 10)");
 
 						// @link: http://alignedleft.com/tutorials/d3/making-a-bar-chart
 						// create every single bar
@@ -95,11 +96,12 @@ app
 							})
 							.enter()
 							.append("rect")
+							.transition().duration(300).ease("quad")
 							.attr("x", function(d) { // placement of bar horizontally
 								return axisScale(new Date(d.$id));
 							})
 							.attr("y", function(d) { // stick bar to x-axis
-								return height - (y(d.$value));
+								return height - (y(d.$value) + 3);
 							})
 							.attr("width", 25) // width of individual bars
 							.attr("height", function(d) { // height of individual bars inside chart
@@ -120,7 +122,7 @@ app
 								return axisScale(new Date(d.$id)) + 12.5; // half of width: 25
 							})
 							.attr("y", function(d) { // stick bar to x-axis
-								return height - (y(d.$value) - 12);
+								return (d.$value === 1) ? height - 6 : height - (y(d.$value) - 12);
 							})
 							.attr("class", "bar-label");
 				};

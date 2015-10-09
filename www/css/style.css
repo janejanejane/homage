@@ -25,6 +25,8 @@
 */
 rect {
 	fill: #EC530A;
+	stroke: #C54406;
+	stroke-width: 5px;
 }
 
 .bar-label {
