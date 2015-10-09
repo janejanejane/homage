@@ -147,18 +147,27 @@ app
 				}, true);
 
 				scope.goNext = function() {
-					console.log('next clicked!', maxDate, minDate);
-					minDate = moment(maxDate).add(1, 'day').startOf('week');
-					maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
 
-					console.log('after next clicked!', maxDate, minDate);
-					axisScale.domain([minDate, maxDate]);
+					if(scope.currentWeek < 0) {
+						console.log('next clicked!', maxDate, minDate);
 
-					drawAxis();
+						scope.currentWeek += 1;
+
+						minDate = moment(maxDate).add(1, 'day').startOf('week');
+						maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
+
+						console.log('after next clicked!', maxDate, minDate);
+						axisScale.domain([minDate, maxDate]);
+
+						drawAxis();
+					}
 				}
 
 				scope.goPrev = function() {
 					console.log('prev clicked!', maxDate, minDate);
+
+					scope.currentWeek -=1;
+
 					minDate = moment(maxDate).subtract(scope.maxDays, 'day').startOf('week');
 					maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
 

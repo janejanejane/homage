@@ -5,6 +5,7 @@ app
     $scope.savedClicks = null;
     $scope.clickArray = [];
     $scope.maxDays = 7;
+    $scope.currentWeek = 0;
 
     var index = 0,
         uuid = null;

@@ -55,3 +55,7 @@ rect {
 	left: -55px;
 	border-right: 20px solid blue;
 }
+
+.disabled {
+	border-left: 20px solid gray !important;
+}
