@@ -108,7 +108,9 @@ app
 
 						// append text to rect-group
 						rectGroup.selectAll("text")
-							.data(val)
+							.data(val, function(d) {
+								return d.$value + d.$id;
+							})
 							.enter()
 							.append("text")
 							.text(function(d) {
