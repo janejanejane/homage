@@ -42,8 +42,6 @@ app
 
 				var drawAxis = function() {
 
-					d3.select("#" + elm[0].id + " svg .axis-date").remove(); // remove existing axis-date in svg
-
 						// create every axis point
 					xAxis = d3.svg.axis()
 							.scale(axisScale)
@@ -161,8 +159,8 @@ app
 					}
 				}, true);
 
-				scope.$watch('currentWeek', function(val) {
-					if(val === 0) {
+				scope.$watch('currentWeek', function(newVal, oldVal) {
+					if(oldVal === 0 && newVal === 0) {
 
 						// initialize variable values;
 						init();
