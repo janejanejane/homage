@@ -12,11 +12,13 @@ app
 					svg = null,
 					minDate = null,
 					maxDate = null,
-					axisScale = null;
+					axisScale = null,
+					xAxis = null,
+					xAxisGroup = null;
 
 				var init = function() {
 					
-					d3.select("#" + elm[0].id + " svg").remove(); // remove existing axis-date in svg
+					d3.select("#" + elm[0].id + " svg").remove(); // remove existing svg
 
 					clicksChartEl = elm[0],
 					width = clicksChartEl.offsetWidth,
@@ -40,21 +42,36 @@ app
 
 				var drawAxis = function() {
 
-					d3.select("#" + elm[0].id + " svg .axis-date").transition().style("opacity", 0).remove(); // remove existing axis-date in svg
+					d3.select("#" + elm[0].id + " svg .axis-date").remove(); // remove existing axis-date in svg
 
 						// create every axis point
-					var	xAxis = d3.svg.axis()
+					xAxis = d3.svg.axis()
 							.scale(axisScale)
 							.ticks(d3.time.day, 1)
 							.orient("bottom")
 							.tickFormat(d3.time.format("%b %d")),
 
 						// create group for axis and call all axis
-						xAxisGroup = svg.append("g")
+					xAxisGroup = svg.append("g")
 							.attr("class", "axis-date")
 							.attr("transform", "translate(0, "+(height+10)+")")
 							.call(xAxis);
 
+					orientAxisText();
+				};
+
+				var moveAxis = function() {
+					svg.select(".axis-date")
+						.attr("transform", "translate(0, "+(height+10)+")")
+						.transition()
+						.duration(1000)
+						.ease("linear")
+						.call(xAxis);
+
+					orientAxisText();
+				};
+
+				var orientAxisText = function() {
 					// @link: http://bl.ocks.org/phoebebright/3059392
 					// change axis text display
 					svg.selectAll(".axis-date text")  // select all the text elements for the axis-date
@@ -65,7 +82,7 @@ app
 
 				var drawChart = function(val) { // called on page first load and on window resize
 
-					d3.select("#" + elm[0].id + " svg .rect-group").transition().style("opacity", 0).remove(); // remove existing rect-group in svg
+					d3.select("#" + elm[0].id + " svg .rect-group").remove(); // remove existing rect-group in svg
 					
 					var left = clicksChartEl.offsetLeft,
 						top = clicksChartEl.offsetTop - 100,
@@ -127,12 +144,6 @@ app
 							.attr("class", "bar-label");
 				};
 
-				// initialize variable values;
-				init();
-
-				// draw the axis on screen load
-				drawAxis();
-
 				// bind draw action on screen resize then call angular digest
 				angular.element($window).bind('resize', function() {
 					init();
@@ -151,9 +162,17 @@ app
 				}, true);
 
 				scope.$watch('currentWeek', function(val) {
-					if(val === 0) init();
+					if(val === 0) {
 
-					drawAxis();
+						// initialize variable values;
+						init();
+
+						// draw the axis on screen load
+						drawAxis();
+					} else {
+						moveAxis();
+					}
+
 					drawChart(scope.clickArray);
 				})
 
