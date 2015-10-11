@@ -40,12 +40,10 @@ app
           console.log('Done setting to database');
         });
       },
-      getClicks: function(uuid, max, callback){
-        // !!! change to have start date
+      getClicks: function(uuid, start, max, callback){
         // var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(max);
-        var start = moment().startOf('week').format('MM-DD-YYYY').toString(),
-            end = moment().add(max).format('MM-DD-YYYY').toString(),
-            obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().startAt(start).endAt(end),
+        var end = moment(start).add(max - 1, 'day').format('MM-DD-YYYY').toString(),
+            obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().startAt(start.format('MM-DD-YYYY').toString()).endAt(end),
             clickArray = $firebaseArray(obj);
         return callback(clickArray);
       }

@@ -111,7 +111,6 @@ app
 							})
 							.enter()
 							.append("rect")
-							.transition().duration(300).ease("quad")
 							.attr("x", function(d) { // placement of bar horizontally
 								return axisScale(new Date(d.$id));
 							})
@@ -152,10 +151,10 @@ app
 					}
 				});
 
-				scope.$watch('clickArray', function() {				
-					if(scope.clickArray && !!scope.clickArray.length) { // is not undefined and length greater than 0
+				scope.$watch('clickArray', function(val) {
+					if(val && !!val.length) { // is not undefined and length greater than 0
 						// initial render
-						drawChart(scope.clickArray);
+						drawChart(val);
 					}
 				}, true);
 
@@ -170,8 +169,6 @@ app
 					} else {
 						moveAxis();
 					}
-
-					drawChart(scope.clickArray);
 				})
 
 				scope.goNext = function() {
@@ -183,6 +180,7 @@ app
 						minDate = moment(maxDate).add(1, 'day').startOf('week');
 						maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
 
+						scope.updateClicksArray(minDate);
 						axisScale.domain([minDate, maxDate]);
 					}
 				}
@@ -194,6 +192,7 @@ app
 					minDate = moment(maxDate).subtract(scope.maxDays, 'day').startOf('week');
 					maxDate = moment(minDate).add(scope.maxDays - 1, 'day');
 
+					scope.updateClicksArray(minDate);
 					axisScale.domain([minDate, maxDate]);
 				}
 			}
