@@ -41,8 +41,12 @@ app
         });
       },
       getClicks: function(uuid, max, callback){
-        var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(max);
-        var clickArray = $firebaseArray(obj);
+        // !!! change to have start date
+        // var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(max);
+        var start = moment().startOf('week').format('MM-DD-YYYY').toString(),
+            end = moment().add(max).format('MM-DD-YYYY').toString(),
+            obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().startAt(start).endAt(end),
+            clickArray = $firebaseArray(obj);
         return callback(clickArray);
       }
       // setClickCount: function(click) { // function when 'Click Me!' button is clicked
