@@ -76,7 +76,9 @@ app
       HomageFactory.getClicks(uuid, startDate, $scope.maxDays, function(clickObj) { // wait for the device uuid to prevent null result
         console.log('result', clickObj);
 
-        clickObj.$watch(function(){
+        if(length === 0) $scope.clickArray = [];
+
+        clickObj.$loaded(function(){
           $scope.clickArray = [];
 
           console.log('THis changed..');

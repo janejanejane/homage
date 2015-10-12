@@ -178,6 +178,8 @@ app
 					if(val && !!val.length) { // is not undefined and length greater than 0
 						// initial render
 						drawChart(val);
+					} else {
+						drawChart();
 					}
 				}, true);
 
