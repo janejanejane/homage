@@ -5,6 +5,20 @@
 	border: 1px solid #AAAAAA;
 	margin: 20px;
 }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
 /*
 #chart-div > div {
 	position: absolute;
@@ -23,7 +37,7 @@
 	width: 25px;
 }
 */
-rect {
+/*rect {
 	fill: #EC530A;
 	stroke: #C54406;
 	stroke-width: 5px;
@@ -35,12 +49,12 @@ rect {
 	text-anchor: middle;
 }
 
-/* @link: https://css-tricks.com/snippets/css/css-triangle/ */
+/* @link: https://css-tricks.com/snippets/css/css-triangle/ 
 .circle {
-	/*background-color: gray;*/
+	/*background-color: gray;
 	height: 50px;
 	width: 50px;
-	/*border-radius: 50px;*/
+	/*border-radius: 50px;
 	display: inline-block;
 	top: 40%;
 	position: absolute;
@@ -60,4 +74,4 @@ rect {
 
 .disabled {
 	border-left: 20px solid gray !important;
-}
+}*/

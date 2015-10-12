@@ -6,6 +6,7 @@ app
     $scope.clickArray = [];
     $scope.maxDays = 7;
     $scope.currentWeek = 0;
+    $scope.choice = 'days';
 
     var index = 0,
         uuid = null;
@@ -76,9 +77,7 @@ app
       HomageFactory.getClicks(uuid, startDate, $scope.maxDays, function(clickObj) { // wait for the device uuid to prevent null result
         console.log('result', clickObj);
 
-        if(length === 0) $scope.clickArray = [];
-
-        clickObj.$loaded(function(){
+        clickObj.$watch(function(){
           $scope.clickArray = [];
 
           console.log('THis changed..');

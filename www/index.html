@@ -53,9 +53,11 @@
           <p>
             {{savedClicks['-JzhJC419i2NZuoY4CL2']}}
           </p>
+          <ion-radio ng-model="choice" ng-value="'days'">7 days</ion-radio>
+          <ion-radio ng-model="choice" ng-value="'month'">1 month</ion-radio>
           <clicks-chart class="padding" id="chart-div">
-            <div class="circle" id="prev" ng-click="goPrev();"></div>
-            <div class="circle" id="next" ng-click="goNext();" ng-class="{'disabled': currentWeek === 0}"></div>
+            <!-- <div class="circle" id="prev" ng-click="goPrev();"></div>
+            <div class="circle" id="next" ng-click="goNext();" ng-class="{'disabled': currentWeek === 0}"></div> -->
           </clicks-chart>
         </div>
       </ion-content>
