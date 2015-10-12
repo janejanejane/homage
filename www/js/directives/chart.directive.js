@@ -15,7 +15,8 @@ app
 					axisScale = null,
 					xAxis = null,
 					xAxisGroup = null,
-					rectGroup = null;
+					rectGroup = null,
+					timeChange = 500;
 
 				var init = function() {
 					
@@ -69,7 +70,7 @@ app
 					svg.select(".axis-date")
 						.attr("transform", "translate(0, "+(height+10)+")")
 						.transition()
-						.duration(500)
+						.duration(timeChange)
 						.ease("linear")
 						.call(xAxis);
 
@@ -111,6 +112,12 @@ app
 							bars = rectGroup.selectAll("rect")
 								.data(val, function(d) {
 									return d.$value + d.$id
+								}),
+
+							// append text to rect-group
+							texts = rectGroup.selectAll("text")
+								.data(val, function(d) {
+									return d.$value + d.$id;
 								});
 
 							// add unique data
@@ -121,7 +128,7 @@ app
 							// transition removing from svg
 							bars.exit()
 								.transition()
-								.duration(500)
+								.duration(timeChange)
 								.ease("exp")
 								.attr("y", height)
 								.attr("height", 0)
@@ -131,7 +138,7 @@ app
 							bars.attr("y", height)
 								.attr("height", 0)
 								.transition()
-								.duration(500)
+								.duration(timeChange)
 								.ease("quad")
 								.attr("x", function(d) { // placement of bar horizontally
 									return axisScale(new Date(d.$id));
@@ -144,23 +151,34 @@ app
 									return y(d.$value);
 								});
 
-							// // append text to rect-group
-							// rectGroup.selectAll("text")
-							// 	.data(val, function(d) {
-							// 		return d.$value + d.$id;
-							// 	})
-							// 	.enter()
-							// 	.append("text")
-							// 	.text(function(d) {
-							// 		return d.$value;
-							// 	})
-							// 	.attr("x", function(d) { // placement of bar horizontally
-							// 		return axisScale(new Date(d.$id)) + 12.5; // half of width: 25
-							// 	})
-							// 	.attr("y", function(d) { // stick bar to x-axis
-							// 		return (d.$value === 1) ? height - 6 : height - (y(d.$value) - 12);
-							// 	})
-							// 	.attr("class", "bar-label");
+							// add unique data
+							texts.enter()
+								.append("text")
+								.attr("class", "bar-label");
+
+							// transition removing from svg
+							texts.exit()
+								.transition()
+								.duration(timeChange)
+								.ease("exp")
+								.attr("y", height)
+								.attr("height", 0)
+								.remove();
+
+							// transition adding into svg
+							texts.text(function(d) {
+									return d.$value;
+								})
+								.attr("y", height)
+								.transition()
+								.duration(timeChange)
+								.ease("quad")
+								.attr("x", function(d) { // placement of bar horizontally
+									return axisScale(new Date(d.$id)) + 12.5; // half of width: 25
+								})
+								.attr("y", function(d) { // stick bar to x-axis
+									return (d.$value === 1) ? height - 6 : height - (y(d.$value) - 12);
+								});
 					}
 				};
 
