@@ -14,7 +14,8 @@ app
 					maxDate = null,
 					axisScale = null,
 					xAxis = null,
-					xAxisGroup = null;
+					xAxisGroup = null,
+					rectGroup = null;
 
 				var init = function() {
 					
@@ -38,6 +39,12 @@ app
 					axisScale = d3.time.scale()
 						.domain([minDate, maxDate])
 						.range([0, width - 40]);
+
+
+					// create group to use for bars
+					rectGroup = svg.append("g")
+									.attr("class", "rect-group")
+									.attr("transform", "translate(0, 10)");
 				};
 
 				var drawAxis = function() {
@@ -62,7 +69,7 @@ app
 					svg.select(".axis-date")
 						.attr("transform", "translate(0, "+(height+10)+")")
 						.transition()
-						.duration(1000)
+						.duration(500)
 						.ease("linear")
 						.call(xAxis);
 
@@ -79,66 +86,82 @@ app
 				}
 
 				var drawChart = function(val) { // called on page first load and on window resize
+					if(!val) val = [];
 
-					d3.select("#" + elm[0].id + " svg .rect-group").remove(); // remove existing rect-group in svg
-					
-					var left = clicksChartEl.offsetLeft,
-						top = clicksChartEl.offsetTop - 100,
+					if(clicksChartEl) {
 
-						// create scale for data count (how tall)
-						y = d3.scale.linear()
-									.domain([0, d3.max(val, function(d) {
-										return d.$value;
-									})])
-									.range([0, height]),
+						var left = clicksChartEl.offsetLeft,
+							top = clicksChartEl.offsetTop - 100,
 
-						// create scale for data dates (how wide)
-						x = d3.scale.linear()
-								.domain([0, val.length])
-								.range([height, 0]),
+							// create scale for data count (how tall)
+							y = d3.scale.linear()
+										.domain([0, d3.max(val, function(d) {
+											return d.$value;
+										})])
+										.range([0, height]),
+
+							// create scale for data dates (how wide)
+							x = d3.scale.linear()
+									.domain([0, val.length])
+									.range([height, 0]),
 
 
-						// create group to use for bars
-						rectGroup = svg.append("g")
-										.attr("class", "rect-group")
-										.attr("transform", "translate(0, 10)");
+							// @link: http://alignedleft.com/tutorials/d3/making-a-bar-chart
+							// create every single bar
+							bars = rectGroup.selectAll("rect")
+								.data(val, function(d) {
+									return d.$value + d.$id
+								});
 
-						// @link: http://alignedleft.com/tutorials/d3/making-a-bar-chart
-						// create every single bar
-						rectGroup.selectAll("rect")
-							.data(val, function(d) {
-								return d.$value + d.$id
-							})
-							.enter()
-							.append("rect")
-							.attr("x", function(d) { // placement of bar horizontally
-								return axisScale(new Date(d.$id));
-							})
-							.attr("y", function(d) { // stick bar to x-axis
-								return height - (y(d.$value) + 3);
-							})
-							.attr("width", 25) // width of individual bars
-							.attr("height", function(d) { // height of individual bars inside chart
-								return y(d.$value);
-							});
+							// add unique data
+							bars.enter()
+								.append("rect")
+								.attr("class", "bar-value");
 
-						// append text to rect-group
-						rectGroup.selectAll("text")
-							.data(val, function(d) {
-								return d.$value + d.$id;
-							})
-							.enter()
-							.append("text")
-							.text(function(d) {
-								return d.$value;
-							})
-							.attr("x", function(d) { // placement of bar horizontally
-								return axisScale(new Date(d.$id)) + 12.5; // half of width: 25
-							})
-							.attr("y", function(d) { // stick bar to x-axis
-								return (d.$value === 1) ? height - 6 : height - (y(d.$value) - 12);
-							})
-							.attr("class", "bar-label");
+							// transition removing from svg
+							bars.exit()
+								.transition()
+								.duration(500)
+								.ease("exp")
+								.attr("y", height)
+								.attr("height", 0)
+								.remove();
+
+							// transition adding into svg
+							bars.attr("y", height)
+								.attr("height", 0)
+								.transition()
+								.duration(500)
+								.ease("quad")
+								.attr("x", function(d) { // placement of bar horizontally
+									return axisScale(new Date(d.$id));
+								})
+								.attr("y", function(d) { // stick bar to x-axis
+									return height - (y(d.$value) + 3);
+								})
+								.attr("width", 25) // width of individual bars
+								.attr("height", function(d) { // height of individual bars inside chart
+									return y(d.$value);
+								});
+
+							// // append text to rect-group
+							// rectGroup.selectAll("text")
+							// 	.data(val, function(d) {
+							// 		return d.$value + d.$id;
+							// 	})
+							// 	.enter()
+							// 	.append("text")
+							// 	.text(function(d) {
+							// 		return d.$value;
+							// 	})
+							// 	.attr("x", function(d) { // placement of bar horizontally
+							// 		return axisScale(new Date(d.$id)) + 12.5; // half of width: 25
+							// 	})
+							// 	.attr("y", function(d) { // stick bar to x-axis
+							// 		return (d.$value === 1) ? height - 6 : height - (y(d.$value) - 12);
+							// 	})
+							// 	.attr("class", "bar-label");
+					}
 				};
 
 				// bind draw action on screen resize then call angular digest
