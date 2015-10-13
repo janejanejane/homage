@@ -40,10 +40,12 @@ app
           console.log('Done setting to database');
         });
       },
-      getClicks: function(uuid, start, max, callback){
+      getClicks: function(uuid, start, end, callback){
         // var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(max);
-        var end = moment(start).add(max - 1, 'day').format('MM-DD-YYYY').toString(),
-            obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().startAt(start.format('MM-DD-YYYY').toString()).endAt(end),
+        var obj = ref.child('clickerz/'+uuid+'/clicks')
+                      .orderByKey()
+                      .startAt(start.format('MM-DD-YYYY').toString())
+                      .endAt(end.format('MM-DD-YYYY').toString()),
             clickArray = $firebaseArray(obj);
         return callback(clickArray);
       }

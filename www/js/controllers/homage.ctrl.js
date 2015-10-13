@@ -1,5 +1,5 @@
 app
-  .controller('HomageCtrl', ['$scope', '$ionicPlatform', '$cordovaDevice', 'HomageFactory', function($scope, $ionicPlatform, $cordovaDevice, HomageFactory) {
+  .controller('HomageCtrl', ['$scope', '$filter', '$ionicPlatform', '$cordovaDevice', 'HomageFactory', function($scope, $filter, $ionicPlatform, $cordovaDevice, HomageFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -63,18 +63,23 @@ app
           sum+1 );
       }
 
-      if($scope.currentWeek < 0) {
-        $scope.currentWeek = 0;
-      }
+      $scope.updateClicksArray();
     };
 
-    $scope.updateClicksArray = function(start){
-      var startDate = start;
+    $scope.updateClicksArray = function(start, end){
+      var startDate = start,
+          endDate = end,
+          found = null;
+
       if(!start) {
         startDate = moment().startOf('week');
       }
 
-      HomageFactory.getClicks(uuid, startDate, $scope.maxDays, function(clickObj) { // wait for the device uuid to prevent null result
+      if(!end) {
+        endDate = moment(start).add($scope.maxDays - 1, 'day');
+      }
+
+      HomageFactory.getClicks(uuid, startDate, endDate, function(clickObj) { // wait for the device uuid to prevent null result
         console.log('result', clickObj);
 
         clickObj.$watch(function(){
@@ -83,10 +88,17 @@ app
           console.log('THis changed..');
           //extract the data
           for(var i in clickObj) {
+
+            found = $filter('filter')($scope.clickArray, {'$id': clickObj[i]['$id']}, true);
+
             if(typeof clickObj[i] !== 'function') {
-              $scope.clickArray.push(clickObj[i]);
+              if($scope.clickArray.length < clickObj.length && found.length === 0) {
+                $scope.clickArray.push(clickObj[i]);
+              }
             }
           }
+
+          $scope.clickArray = $filter('orderBy')($scope.clickArray, '$id');
         });
       });
     }

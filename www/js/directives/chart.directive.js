@@ -18,7 +18,6 @@ app
 						maxDate = moment(minDate).add(scope.maxDays - 1, 'day'),
 
 						x = d3.time.scale()
-								.domain([minDate, maxDate])
 								.range([0, width - 20]),
 
 						y = d3.scale.linear()
@@ -52,6 +51,15 @@ app
 								.append("g")
 									.attr("transform", "translate(30,10)scale(0.9)");
 
+						if(val.length > 7) {
+							minDate = moment().startOf('month');
+							maxDate = moment().endOf('month');
+							xAxis.ticks(d3.time.day, 4);
+						}
+
+						x.domain([minDate, maxDate]);
+
+
 						svg.append("g")
 							.attr("class", "x axis")
 							.attr("transform", "translate(0," + height + ")")
@@ -78,6 +86,15 @@ app
 					if(val && !!val.length) { // is not undefined and length greater than 0
 						// initial render
 						drawChart(val);
+					}
+				}, true);
+
+
+				scope.$watch('choice', function(val) {
+					if(val === 'month') { // is not undefined and length greater than 0
+						scope.updateClicksArray(moment().startOf('month'), moment().endOf('month'));
+					} else {
+						scope.updateClicksArray();
 					}
 				}, true);
 
