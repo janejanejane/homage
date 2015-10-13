@@ -19,6 +19,10 @@
   stroke-width: 1.5px;
 }
 
+.click-circle {
+	fill: #4212E4;
+}
+
 /*
 #chart-div > div {
 	position: absolute;

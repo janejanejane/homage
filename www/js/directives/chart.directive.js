@@ -79,6 +79,22 @@ app
 								.datum(val)
 								.attr("class", "line")
 								.attr("d", line);
+
+						svg.selectAll("circle")
+							.data(val, function(d) {
+								return d.$value + d.$id;
+							})
+							.enter().append("circle")
+							.attr("cy", function(d) {
+								return y(d.$value);
+							})
+							.attr("cx", function(d) {
+								return x(new Date(d.$id));
+							})
+							.attr("r", function() {
+								return 3;
+							})
+							.attr("class", "click-circle");
 				}
 
 
