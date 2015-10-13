@@ -64,7 +64,7 @@ app
       }
 
       if($scope.choice === 'month') {
-        $scope.updateClicksArray(moment().startOf('month'), moment().endOf('month'));
+        $scope.updateClicksArray(moment().subtract(30, 'day'), moment());
       } else {
         $scope.updateClicksArray();
       }
@@ -76,11 +76,11 @@ app
           found = null;
 
       if(!start) {
-        startDate = moment().startOf('week');
+        startDate = moment().subtract($scope.maxDays - 1, 'day');
       }
 
       if(!end) {
-        endDate = moment(start).add($scope.maxDays - 1, 'day');
+        endDate = moment();
       }
 
       HomageFactory.getClicks(uuid, startDate, endDate, function(clickObj) { // wait for the device uuid to prevent null result

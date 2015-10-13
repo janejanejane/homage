@@ -14,8 +14,8 @@ app
 						format = d3.time.format("%m-%d-%Y").parse,
 
 
-						minDate = moment().startOf('week'),
-						maxDate = moment(minDate).add(scope.maxDays - 1, 'day'),
+						minDate = moment().subtract(scope.maxDays, 'day'),
+						maxDate = moment(),
 
 						x = d3.time.scale()
 								.range([0, width - 20]),
@@ -52,9 +52,9 @@ app
 									.attr("transform", "translate(30,10)scale(0.9)");
 
 						if(val.length > 7) {
-							minDate = moment().startOf('month');
-							maxDate = moment().endOf('month');
-							xAxis.ticks(d3.time.day, 4);
+							minDate = moment().subtract(30, 'day');
+							maxDate = moment();
+							xAxis.ticks(d3.time.day, 3);
 						}
 
 						x.domain([minDate, maxDate]);
@@ -64,6 +64,13 @@ app
 							.attr("class", "x axis")
 							.attr("transform", "translate(0," + height + ")")
 							.call(xAxis);
+
+						// @link: http://bl.ocks.org/phoebebright/3059392
+						// change axis text display
+						svg.selectAll(".x.axis text")  // select all the text elements for the axis-date
+							.attr("transform", function(d) {
+								return "translate(" + this.getBBox().height*-0.3 + "," + (this.getBBox().height) + ")rotate(-45)";
+							});
 
 						svg.append("g")
 								.attr("class", "y axis")
@@ -108,7 +115,7 @@ app
 
 				scope.$watch('choice', function(val) {
 					if(val === 'month') {
-						scope.updateClicksArray(moment().startOf('month'), moment().endOf('month'));
+						scope.updateClicksArray(moment().subtract(30, 'day'), moment());
 					} else {
 						scope.updateClicksArray();
 					}
