@@ -23,59 +23,14 @@
 	fill: #4212E4;
 }
 
-/*
-#chart-div > div {
-	position: absolute;
-	bottom: 0px;
+.slider-slide {
+	padding: 2px;
 }
 
-#chart-div div div {
-	font: 10px sans-serif;
-	background-color: #EC530A;
-	text-align: right;
-	padding: 3px;
-	margin: 1px;
-	color: white;
-	display: inline-block;
-	vertical-align: bottom;
-	width: 25px;
-}
-*/
-/*rect {
-	fill: #EC530A;
-	stroke: #C54406;
-	stroke-width: 5px;
+.slider-pager {
+	bottom: 1px;
 }
 
-.bar-label {
-	font-size: 8px;
-	fill: white;
-	text-anchor: middle;
+.box {
+	height: 80vh;
 }
-
-/* @link: https://css-tricks.com/snippets/css/css-triangle/ 
-.circle {
-	/*background-color: gray;
-	height: 50px;
-	width: 50px;
-	/*border-radius: 50px;
-	display: inline-block;
-	top: 40%;
-	position: absolute;
-	border-top: 50px solid transparent;
-	border-bottom: 50px solid transparent;
-}
-
-#next {
-	right: -55px;
-	border-left: 20px solid blue;
-}
-
-#prev {
-	left: -55px;
-	border-right: 20px solid blue;
-}
-
-.disabled {
-	border-left: 20px solid gray !important;
-}*/
