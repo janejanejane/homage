@@ -39,26 +39,24 @@
         <!-- <h1 class="title">Homage to mobile apps</h1> -->
       </ion-header-bar>
       <ion-content>
-        <!-- <div class="row row-center responsive-sm">
-          <div class="col col-33 col-offset-33 text-center">You only need to do one thing:</div>
-        </div> -->
         <div class="padding" ng-controller="HomageCtrl">
           <button class="button button-block button-royal" ng-click="buttonClick()">
             Click Me!
             <i class="icon ion-happy-outline"></i>
           </button>
-          <!-- <div class="row row-center responsive-sm" ng-show="shout">
-            <div class="col col-33 col-offset-33 text-center">{{shout}}</div>
-          </div> -->
-          <p>
-            {{savedClicks['-JzhJC419i2NZuoY4CL2']}}
-          </p>
-          <ion-radio ng-model="choice" ng-value="'days'">7 days</ion-radio>
-          <ion-radio ng-model="choice" ng-value="'month'">1 month</ion-radio>
-          <clicks-chart class="padding" id="chart-div">
-            <!-- <div class="circle" id="prev" ng-click="goPrev();"></div>
-            <div class="circle" id="next" ng-click="goNext();" ng-class="{'disabled': currentWeek === 0}"></div> -->
-          </clicks-chart>
+          <ion-slide-box on-slide-changed="slideHasChanged($index)">
+            <ion-slide>
+              <div class="box"><h1>BLUE</h1></div>
+            </ion-slide>
+            <ion-slide>
+              <div class="box">
+                <ion-radio ng-model="chart" ng-value="'days'">7 days</ion-radio>
+                <ion-radio ng-model="chart" ng-value="'month'">1 month</ion-radio>
+                <clicks-chart class="padding" id="chart-div">
+                </clicks-chart>
+              </div>
+            </ion-slide>
+          </ion-slide-box>
         </div>
       </ion-content>
     </ion-pane>

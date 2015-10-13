@@ -1,5 +1,5 @@
 app
-  .controller('HomageCtrl', ['$scope', '$filter', '$ionicPlatform', '$cordovaDevice', 'HomageFactory', function($scope, $filter, $ionicPlatform, $cordovaDevice, HomageFactory) {
+  .controller('HomageCtrl', ['$scope', '$filter', '$ionicPlatform', '$ionicSlideBoxDelegate', '$cordovaDevice', 'HomageFactory', function($scope, $filter, $ionicPlatform, $ionicSlideBoxDelegate, $cordovaDevice, HomageFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -107,5 +107,8 @@ app
       });
     }
 
+    $scope.slideHasChanged = function(index) {
+      $ionicSlideBoxDelegate.slide(index, 500);
+    }
 
   }]);
