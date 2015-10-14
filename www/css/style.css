@@ -34,3 +34,8 @@
 .box {
 	height: 80vh;
 }
+
+.top-adjust {
+	top: 40%;
+	position: absolute;
+}

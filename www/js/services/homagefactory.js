@@ -30,7 +30,8 @@ app
         obj.set({
           clicks: [
           ],
-          name: uuid
+          name: uuid,
+          totalCount: 0
         });
       },
       setClickCount: function(uuid, dateString, value){
@@ -39,6 +40,31 @@ app
         obj.set(value, function(){
           console.log('Done setting to database');
         });
+        this.setTotalCount(uuid, value);
+      },
+      setTotalCount: function(uuid, value) {
+        var obj = ref.child('clickerz/'+uuid+'/totalCount'),
+            total = 0;
+
+        if(!obj) {
+          obj.on('value', function(snap) {
+            total = snap.val() + value;
+          });
+          obj.set(total);
+        } else {
+          this.getAllClicks(uuid, function(record) {
+            record.$loaded().then(function() {
+              for(var i in record.clicks) {
+                total += record.clicks[i];
+              }
+              obj.set(total);
+            });
+          });
+        }
+      },
+      getTotalCount: function(uuid, callback) {
+        var totalObj = $firebaseObject(ref.child('clickerz/'+uuid+'/totalCount'));
+        return callback(totalObj);
       },
       getClicks: function(uuid, start, end, callback){
         // var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(max);

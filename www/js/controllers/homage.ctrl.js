@@ -7,6 +7,7 @@ app
     $scope.maxDays = 7;
     $scope.currentWeek = 0;
     $scope.choice = 'days';
+    $scope.clickCount = 0;
 
     var index = 0,
         uuid = null;
@@ -33,6 +34,10 @@ app
             HomageFactory.createNewUser(uuid);
           }
         });
+      });
+
+      HomageFactory.getTotalCount(uuid, function(totalObj) {
+        totalObj.$bindTo($scope, 'clickCount');
       });
 
       $scope.updateClicksArray();

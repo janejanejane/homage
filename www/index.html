@@ -46,7 +46,9 @@
           </button>
           <ion-slide-box on-slide-changed="slideHasChanged($index)">
             <ion-slide>
-              <div class="box"><h1>BLUE</h1></div>
+              <div class="box row row-center responsive-sm">
+                <h1 class="top-adjust col text-center">{{clickCount.$value}}</h1>
+              </div>
             </ion-slide>
             <ion-slide>
               <div class="box">
