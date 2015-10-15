@@ -160,7 +160,14 @@ app
 							return tooltip.style("display", null);
 						})
 						.on("mousemove", function(d){
-							return text.attr("transform", "translate(" + (x(new Date(d.$id)) - 50) + "," + (y(d.$value) + 30) + ")")
+							var maxVal = d3.max(val, function(v) {
+									return v.$value;
+								}),
+								cpos = x(new Date(d.$id)),
+								ypos = (d.$value < maxVal) ? (-40) : 30,
+								xpos = ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
+
+							return text.attr("transform", "translate(" + (xpos) + "," + (y(d.$value) + ypos) + ")")									
 									.text("Date: " + format(new Date(d.$id)))
 									.append("tspan")
 									.attr("x", 0)
