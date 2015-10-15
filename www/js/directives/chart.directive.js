@@ -28,7 +28,7 @@ app
 					var width = elm[0].offsetWidth;
 						height = elm[0].offsetHeight;
 
-						format = d3.time.format("%m-%d-%Y").parse;
+						format = d3.time.format("%b %d, %Y");
 
 						minDate = moment().subtract(scope.maxDays, 'day');
 						maxDate = moment();
@@ -79,6 +79,11 @@ app
 
 					var group = svg.append("g")
 								.attr("transform", "translate(30,10)scale(0.9)");
+					var tooltip = group.append("text")
+								.style("position", "absolute")
+								.style("z-index", "10")
+								.style("visibility", "hidden")
+								.style("fill", "red");
 
 					group.append("g")
 						.attr("class", "x axis")
@@ -124,7 +129,21 @@ app
 						.attr("r", function() {
 							return 2;
 						})
-						.attr("class", "click-circle");
+						.attr("class", "click-circle")
+						.on("mouseover", function(){
+							return tooltip.style("visibility", "visible");
+						})
+						.on("mousemove", function(d){
+							return tooltip.attr("transform", "translate(" + (x(new Date(d.$id)) - 50) + "," + (y(d.$value) + 30) + ")")
+											.text("Date: " + format(new Date(d.$id)))
+											.append("tspan")
+											.attr("x", 0)
+											.attr("y", 20)
+											.text("Count: " + d.$value);
+						})
+						.on("mouseout", function(){
+							return tooltip.style("visibility", "hidden");
+						});
 				}
 
 				scope.$watchCollection('clickArray', function(val) {
