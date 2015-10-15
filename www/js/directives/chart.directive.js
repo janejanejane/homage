@@ -79,11 +79,12 @@ app
 
 					var group = svg.append("g")
 								.attr("transform", "translate(30,10)scale(0.9)");
-					var tooltip = group.append("text")
-								.style("position", "absolute")
-								.style("z-index", "10")
-								.style("visibility", "hidden")
-								.style("fill", "red");
+
+					var tooltip = group.append("g")
+									.style("display", "none");
+
+					var text = tooltip.append("text")
+									.style("fill", "red");
 
 					group.append("g")
 						.attr("class", "x axis")
@@ -115,6 +116,9 @@ app
 					var circles = group.append("g")
 									.attr("class", "circle-group");
 
+					var hovers = group.append("g")
+									.attr("class", "circle-hover");
+
 					circles.selectAll("circle")
 						.data(val, function(d) {
 							return d.$value + d.$id;
@@ -130,19 +134,47 @@ app
 							return 2;
 						})
 						.attr("class", "click-circle")
-						.on("mouseover", function(){
-							return tooltip.style("visibility", "visible");
+
+					hovers.selectAll("circle")
+						.data(val, function(d) {
+							return d.$value + d.$id;
+						})
+						.enter().append("circle")
+						.attr("cy", function(d) {
+							return y(d.$value);
+						})
+						.attr("cx", function(d) {
+							return x(new Date(d.$id));
+						})
+						.attr("r", function() {
+							return 10;
+						})
+						.attr("class", "hover-circle")
+						.on("mouseover", function(d){
+							d3.select(this)
+								.style("opacity", 1)
+								.transition()
+								.duration(300)
+								.ease("linear");
+
+							return tooltip.style("display", null);
 						})
 						.on("mousemove", function(d){
-							return tooltip.attr("transform", "translate(" + (x(new Date(d.$id)) - 50) + "," + (y(d.$value) + 30) + ")")
-											.text("Date: " + format(new Date(d.$id)))
-											.append("tspan")
-											.attr("x", 0)
-											.attr("y", 20)
-											.text("Count: " + d.$value);
+							return text.attr("transform", "translate(" + (x(new Date(d.$id)) - 50) + "," + (y(d.$value) + 30) + ")")
+									.text("Date: " + format(new Date(d.$id)))
+									.append("tspan")
+									.attr("x", 0)
+									.attr("y", 20)
+									.text("Count: " + d.$value);
 						})
 						.on("mouseout", function(){
-							return tooltip.style("visibility", "hidden");
+							d3.select(this)
+								.style("opacity", 0)
+								.transition()
+								.duration(300)
+								.ease("linear");
+
+							return tooltip.style("display", "none");
 						});
 				}
 

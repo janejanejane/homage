@@ -23,6 +23,12 @@
 	fill: #4212E4;
 }
 
+.hover-circle {
+	fill: white;
+	opacity: 0;
+	stroke: #4244E4;
+}
+
 .slider-slide {
 	padding: 2px;
 }
