@@ -3,11 +3,13 @@ app
 
     $scope.shout = null;
     $scope.savedClicks = null;
-    $scope.clickArray = [];
-    $scope.maxDays = 7;
     $scope.currentWeek = 0;
-    $scope.choice = 'days';
-    $scope.clickCount = 0;
+    $scope.data = {
+      choice: 'days',
+      maxDays: 7,
+      clickCount: 0,
+      clickArray: []
+    }
 
     var index = 0,
         uuid = null;
@@ -37,7 +39,7 @@ app
       });
 
       HomageFactory.getTotalCount(uuid, function(totalObj) {
-        totalObj.$bindTo($scope, 'clickCount');
+        totalObj.$bindTo($scope, 'data.clickCount');
       });
 
       $scope.updateClicksArray();
@@ -68,7 +70,7 @@ app
           sum+1 );
       }
 
-      if($scope.choice === 'month') {
+      if($scope.data.choice === 'month') {
         $scope.updateClicksArray(moment().subtract(30, 'day'), moment());
       } else {
         $scope.updateClicksArray();
@@ -81,7 +83,7 @@ app
           found = null;
 
       if(!start) {
-        startDate = moment().subtract($scope.maxDays - 1, 'day');
+        startDate = moment().subtract($scope.data.maxDays - 1, 'day');
       }
 
       if(!end) {
@@ -92,22 +94,22 @@ app
         console.log('result', clickObj);
 
         clickObj.$loaded().then(function(){
-          $scope.clickArray = [];
+          $scope.data.clickArray = [];
 
-          console.log('THis changed..', $scope.clickArray);
+          console.log('THis changed..', $scope.data.clickArray);
           //extract the data
           for(var i in clickObj) {
 
-            // found = $filter('filter')($scope.clickArray, {'$id': clickObj[i]['$id']}, true);
+            // found = $filter('filter')($scope.data.clickArray, {'$id': clickObj[i]['$id']}, true);
 
             if(typeof clickObj[i] !== 'function') {
-              // if($scope.clickArray.length < clickObj.length && found.length === 0) {
-                $scope.clickArray.push(clickObj[i]);
+              // if($scope.data.clickArray.length < clickObj.length && found.length === 0) {
+                $scope.data.clickArray.push(clickObj[i]);
               // }
             }
           }
 
-          // $scope.clickArray = $filter('orderBy')($scope.clickArray, '$id');
+          // $scope.data.clickArray = $filter('orderBy')($scope.clickArray, '$id');
         });
       });
     }

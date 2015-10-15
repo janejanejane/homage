@@ -3,6 +3,12 @@ app
 		return {
 			restrict: 'E',
 			replace: true,
+			scope: {
+				choice: '=',
+				maxDays: '=',
+				clickArray: '=',
+				updateArray: '&'
+			},
 			link: function(scope, elm, attrs) {
 
 				function drawChart(val) {
@@ -115,9 +121,9 @@ app
 
 				scope.$watch('choice', function(val) {
 					if(val === 'month') {
-						scope.updateClicksArray(moment().subtract(30, 'day'), moment());
+						scope.updateArray({start: moment().subtract(30, 'day'), end: moment()});
 					} else {
-						scope.updateClicksArray();
+						scope.updateArray();
 					}
 				}, true);
 
