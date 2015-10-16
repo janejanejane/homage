@@ -66,7 +66,7 @@ app
 				function drawChart(val) {
 					d3.select("#" + elm[0].id + " svg g").remove();
 
-					if(val.length > 7) {
+					if(scope.choice === 'month') {
 						minDate = moment().subtract(30, 'day');
 						maxDate = moment();
 						xAxis.ticks(d3.time.day, 3);
