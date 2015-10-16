@@ -6,6 +6,16 @@
 	margin: 20px 0px;
 }
 
+#levelbar-div {
+	position: relative;
+	min-height: 100px;
+	display: block;
+}
+
+#progress-bar {
+	fill: #0D8BC1;
+}
+
 .axis path,
 .axis line {
   fill: none;

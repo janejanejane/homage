@@ -29,6 +29,7 @@
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/controllers/homage.ctrl.js"></script>
+    <script src="js/directives/progress.directive.js"></script>
     <script src="js/directives/chart.directive.js"></script>
     <script src="js/services/homagefactory.js"></script>
   </head>
@@ -47,7 +48,12 @@
           <ion-slide-box on-slide-changed="slideHasChanged($index)">
             <ion-slide>
               <div class="box row row-center responsive-sm">
-                <h1 class="top-adjust col text-center">{{data.clickCount.$value}}</h1>
+                <div class="top-adjust col text-center">
+                  <h1>{{data.clickCount.$value}}</h1>
+                  <div class="padding">
+                    <level-bar id="levelbar-div" total-clicks="data.clickCount.$value"></level-bar>
+                  </div>
+                </div>
               </div>
             </ion-slide>
             <ion-slide>
