@@ -150,22 +150,22 @@ app
 							return 10;
 						})
 						.attr("class", "hover-circle")
-						.on("mouseover", function(d){
-							d3.select(this)
-								.style("opacity", 1)
-								.transition()
-								.duration(300)
-								.ease("linear");
-
-							return tooltip.style("display", null);
-						})
-						.on("mousemove", function(d){
+						.on("click", function(d){
 							var maxVal = d3.max(val, function(v) {
 									return v.$value;
 								}),
 								cpos = x(new Date(d.$id)),
 								ypos = (d.$value < maxVal) ? (-40) : 30,
 								xpos = ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
+
+
+							d3.select(this)
+								.style("opacity", 1)
+								.transition()
+								.duration(300)
+								.ease("linear");
+
+							tooltip.style("display", null);
 
 							return text.attr("transform", "translate(" + (xpos) + "," + (y(d.$value) + ypos) + ")")									
 									.text("Date: " + format(new Date(d.$id)))
