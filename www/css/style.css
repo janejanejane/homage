@@ -1,6 +1,6 @@
 #chart-div {
 	position: relative;
-	min-height: 300px;
+	min-height: 250px;
 	display: block;
 	border: 1px solid #AAAAAA;
 	margin: 20px 0px;
@@ -21,6 +21,10 @@
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+
+.axis text {
+	font-size: 10px;
 }
 
 .line {

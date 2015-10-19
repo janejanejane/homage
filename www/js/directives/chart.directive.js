@@ -68,7 +68,7 @@ app
 
 					if(scope.choice === 'month') {
 						minDate = moment().subtract(30, 'day');
-						maxDate = moment();
+						maxDate = moment().add(1, 'day');
 						xAxis.ticks(d3.time.day, 3);
 					}
 
@@ -78,7 +78,7 @@ app
 					})]);
 
 					var group = svg.append("g")
-								.attr("transform", "translate(30,10)scale(0.9)");
+								.attr("transform", "translate(25,10)scale(0.9)");
 
 					var tooltip = group.append("g")
 									.style("display", "none");
@@ -95,7 +95,7 @@ app
 					// change axis text display
 					group.selectAll(".x.axis text")  // select all the text elements for the axis-date
 						.attr("transform", function(d) {
-							return "translate(" + this.getBBox().height*-0.3 + "," + (this.getBBox().height) + ")rotate(-45)";
+							return "translate(" + this.getBBox().height*-0.9 + "," + (this.getBBox().height) + ")rotate(-45)";
 						});
 
 					group.append("g")
@@ -167,7 +167,9 @@ app
 								}),
 								cpos = x(new Date(d.$id)),
 								ypos = (d.$value < maxVal) ? (-40) : 30,
-								xpos = ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
+								// if circle position is near left side, add 10 (shift to right)
+								// if difference of svg width and circle position is less 100, minus 100 (shift to left)
+								xpos = (cpos < 50) ? cpos + 10 : ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
 
 							disablePreviousClick();
 
