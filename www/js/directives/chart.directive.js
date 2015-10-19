@@ -77,10 +77,6 @@ app
 						return (d.$value < 5) ? 4 : d.$value;
 					})]);
 
-					svg.on("dblclick", function() {
-						disablePreviousClick()
-					});
-
 					var group = svg.append("g")
 								.attr("transform", "translate(25,10)scale(0.9)");
 
@@ -139,7 +135,10 @@ app
 						d3.select(item)
 							.style("opacity", 1)
 							.transition()
-							.duration(300)
+							.each("end", function() {
+								disablePreviousClick();
+							})
+							.duration(1000)
 							.ease("linear");
 
 						tooltip.style("display", null);
@@ -186,7 +185,6 @@ app
 								// if difference of svg width and circle position is less 100, minus 100 (shift to left)
 								xpos = (cpos < 50) ? cpos + 10 : ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
 
-							disablePreviousClick();
 							displayDetails(this);
 
 							return text.attr("transform", "translate(" + (xpos) + "," + (y(d.$value) + ypos) + ")")									
