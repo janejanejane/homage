@@ -77,6 +77,10 @@ app
 						return (d.$value < 5) ? 4 : d.$value;
 					})]);
 
+					svg.on("dblclick", function() {
+						disablePreviousClick()
+					});
+
 					var group = svg.append("g")
 								.attr("transform", "translate(25,10)scale(0.9)");
 
@@ -128,6 +132,17 @@ app
 							.ease("linear");
 
 						tooltip.style("display", "none");
+					};
+
+					var	displayDetails = function(item) {
+
+						d3.select(item)
+							.style("opacity", 1)
+							.transition()
+							.duration(300)
+							.ease("linear");
+
+						tooltip.style("display", null);
 					}
 
 					circles.selectAll("circle")
@@ -172,14 +187,7 @@ app
 								xpos = (cpos < 50) ? cpos + 10 : ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
 
 							disablePreviousClick();
-
-							d3.select(this)
-								.style("opacity", 1)
-								.transition()
-								.duration(300)
-								.ease("linear");
-
-							tooltip.style("display", null);
+							displayDetails(this);
 
 							return text.attr("transform", "translate(" + (xpos) + "," + (y(d.$value) + ypos) + ")")									
 									.text("Date: " + format(new Date(d.$id)))
@@ -187,15 +195,6 @@ app
 									.attr("x", 0)
 									.attr("y", 20)
 									.text("Count: " + d.$value);
-						})
-						.on("mouseout", function(){
-							d3.select(this)
-								.style("opacity", 0)
-								.transition()
-								.duration(300)
-								.ease("linear");
-
-							return tooltip.style("display", "none");
 						});
 				}
 
