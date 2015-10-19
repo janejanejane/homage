@@ -119,6 +119,17 @@ app
 					var hovers = group.append("g")
 									.attr("class", "circle-hover");
 
+					var disablePreviousClick = function() {
+
+						d3.selectAll(".hover-circle")
+							.style("opacity", 0)
+							.transition()
+							.duration(300)
+							.ease("linear");
+
+						tooltip.style("display", "none");
+					}
+
 					circles.selectAll("circle")
 						.data(val, function(d) {
 							return d.$value + d.$id;
@@ -158,6 +169,7 @@ app
 								ypos = (d.$value < maxVal) ? (-40) : 30,
 								xpos = ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
 
+							disablePreviousClick();
 
 							d3.select(this)
 								.style("opacity", 1)
