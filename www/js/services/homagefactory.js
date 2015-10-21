@@ -1,21 +1,10 @@
 app
   .factory('HomageFactory', ['$firebaseArray', '$firebaseObject', '$http', 'FIREBASE_URL', 'Restangular', function($firebaseArray, $firebaseObject, $http, FIREBASE_URL, Restangular) {
-    var ref = new Firebase(FIREBASE_URL),
-        clickers = $firebaseArray(ref.child('clickerz'));
+    var ref = new Firebase(FIREBASE_URL);
 
     Restangular.baseUrl = FIREBASE_URL;
 
     return {
-      hasUserRecord: function(userId, data) { // checks if the userId is in the db
-        if(data) {
-          clickers = data;
-        }
-
-        var record = clickers.filter(function(value) {
-          return value.hasOwnProperty(userId);
-        });
-        return (!record.length) ? null : record[0].$id;
-      },
       getAllResponses: function() { // used in $scope.shout to show some response, returns a promise
         return $http.get('data/responses.data.json');
       },
@@ -26,16 +15,14 @@ app
         return callback(clickObj);
       },
       createNewUser: function(uuid){
-        var obj = ref.child('clickerz/'+uuid)
+        var obj = ref.child('clickerz/'+uuid); // automatically creates user node if no record yet
         obj.set({
-          clicks: [
-          ],
+          clicks: [],
           name: uuid,
           totalCount: 0
         });
       },
       setClickCount: function(uuid, dateString, value){
-        console.log(uuid, dateString, value);
         var obj = ref.child('clickerz/'+uuid+'/clicks/'+dateString);
         obj.set(value, function(){
           console.log('Done setting to database');
@@ -47,12 +34,12 @@ app
             total = 0;
 
         if(!obj) {
-          obj.on('value', function(snap) {
+          obj.on('value', function(snap) { // get totalCount property and update
             total = snap.val() + value;
           });
           obj.set(total);
         } else {
-          this.getAllClicks(uuid, function(record) {
+          this.getAllClicks(uuid, function(record) { // iterate through all records then update totalCount
             record.$loaded().then(function() {
               for(var i in record.clicks) {
                 total += record.clicks[i];
@@ -62,12 +49,11 @@ app
           });
         }
       },
-      getTotalCount: function(uuid, callback) {
+      getTotalCount: function(uuid, callback) { // get the totalCount to show in client
         var totalObj = $firebaseObject(ref.child('clickerz/'+uuid+'/totalCount'));
         return callback(totalObj);
       },
-      getClicks: function(uuid, start, end, callback){
-        // var obj = ref.child('clickerz/'+uuid+'/clicks').orderByKey().limitToFirst(max);
+      getClicks: function(uuid, start, end, callback){ // get paginated clicks
         var obj = ref.child('clickerz/'+uuid+'/clicks')
                       .orderByKey()
                       .startAt(start.format('MM-DD-YYYY').toString())
@@ -75,47 +61,5 @@ app
             clickArray = $firebaseArray(obj);
         return callback(clickArray);
       }
-      // setClickCount: function(click) { // function when 'Click Me!' button is clicked
-      //   var userRecord = null,
-      //       userRecordKeys = [],
-      //       savedNew = false,
-      //       lastKey = '';
-      //
-      //   console.log('inside setClickCount:', click);
-      //
-      //   if(click.dbId) { // it has a dbId when the userId is has data in db
-      //     userRecord = clickers.$getRecord(click.dbId);
-      //     userRecordKeys = Object.keys(userRecord[click.userId]);
-      //     lastKey = userRecordKeys[userRecordKeys.length-1];
-      //
-      //     angular.forEach(userRecord[click.userId], function(record, key){ // iterate over user logged days
-      //       if(record.date === click.date){
-      //         record.count += click.count;
-      //         clickers.$save(userRecord);
-      //
-      //         if(lastKey === key) savedNew = true; // count updated for date today
-      //       }
-      //     });
-      //
-      //     if(!savedNew) { // date today is not logged in db
-      //       var user = $firebaseArray(ref.child('clickerz').child(click.dbId).child(click.userId));
-      //       user.$add({
-      //         date: click.date,
-      //         count: click.count
-      //       });
-      //       clickers.$save(user);
-      //     }
-      //
-      //   } else { // save new userId to db
-      //     console.log('new id??');
-      //     clickers.$add(click.userId).then(function(ref) {
-      //       var key = $firebaseArray(ref.child(click.userId));
-      //       key.$add({
-      //         date: click.date,
-      //         count: click.count
-      //       });
-      //     });
-      //   }
-      // }
     };
   }]);
