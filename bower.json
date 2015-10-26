@@ -10,10 +10,11 @@
     "firebase": "~2.2.9",
     "moment": "~2.10.6",
     "ngCordova": "~0.1.20-alpha",
-    "restangular": "~1.5.1"
+    "restangular": "~1.5.1",
+    "angular-material": "~0.11.4"
   },
   "resolutions": {
-    "angular": "1.3.13",
+    "angular": "1.4.3",
     "angular-animate": "1.3.13",
     "angular-sanitize": "1.3.13"
   }

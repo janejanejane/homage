@@ -1,5 +1,5 @@
 app
-  .controller('HomageCtrl', ['$scope', '$filter', '$ionicPlatform', '$ionicSlideBoxDelegate', '$cordovaDevice', 'HomageFactory', function($scope, $filter, $ionicPlatform, $ionicSlideBoxDelegate, $cordovaDevice, HomageFactory) {
+  .controller('HomageCtrl', ['$scope', '$filter', '$mdToast', '$ionicPlatform', '$ionicSlideBoxDelegate', '$cordovaDevice', 'HomageFactory', function($scope, $filter, $mdToast, $ionicPlatform, $ionicSlideBoxDelegate, $cordovaDevice, HomageFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -58,7 +58,14 @@ app
     $scope.buttonClick = function() {
 
       if(!$scope.savedClicks.clicks){
-        HomageFactory.setClickCount($scope.savedClicks.$id, moment().format('MM-DD-YYYY'), 1);
+        HomageFactory.setClickCount(
+          $scope.savedClicks.$id, 
+          moment().format('MM-DD-YYYY'), 
+          1, 
+          function(record) {
+            $scope.showAchievement(record)
+          }
+        );
       }else{
         var sum = 0;
         if($scope.savedClicks.clicks[moment().format('MM-DD-YYYY')]){
@@ -67,7 +74,11 @@ app
         HomageFactory.setClickCount(
           $scope.savedClicks.$id,
           moment().format('MM-DD-YYYY'),
-          sum+1 );
+          sum+1, 
+          function(record) {
+            $scope.showAchievement(record)
+          }
+        );
       }
 
       if($scope.data.choice === 'month') {
@@ -118,4 +129,18 @@ app
       $ionicSlideBoxDelegate.slide(index, 500);
     }
 
+    $scope.showAchievement = function(record) {
+      var toast = $mdToast.simple();
+      if(!record.id) {
+        toast.content('Error in AchievementFactory');
+      } else {
+        toast.content(record.achievement);
+      }
+
+      $mdToast.show(
+        toast
+          .position('bottom')
+          .hideDelay(1000)
+      );
+    }
   }]);

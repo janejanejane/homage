@@ -35,14 +35,14 @@ app
           achievements: []
         });
       },
-      setClickCount: function(uuid, dateString, value){
+      setClickCount: function(uuid, dateString, value, callback){
         var obj = ref.child('clickerz/'+uuid+'/clicks/'+dateString);
         obj.set(value, function(){
           console.log('Done setting to database');
         });
-        this.setTotalCount(uuid, value);
+        this.setTotalCount(uuid, value, callback);
       },
-      setTotalCount: function(uuid, value) {
+      setTotalCount: function(uuid, value, callback) {
         var obj = ref.child('clickerz/'+uuid+'/totalCount'),
             total = 0;
 
@@ -51,7 +51,7 @@ app
             total = snap.val() + value;
           });
           obj.set(total);
-          this.setAchievementData(uuid, total);
+          this.setAchievementData(uuid, total, callback);
         } else {
           var self = this;
           this.getAllClicks(uuid, function(record) { // iterate through all records then update totalCount
@@ -60,50 +60,68 @@ app
                 total += record.clicks[i];
               }
               obj.set(total);
-              self.setAchievementData(uuid, total);
+              self.setAchievementData(uuid, total, callback);
             });
           });
         }
       },
-      setAchievementData: function(uuid, total) {
+      setAchievementData: function(uuid, total, callback) {
+        var data = {
+          'aName': null,
+          'achievement': null
+        };
+
         // check totalCount value for achievements
         switch (total) {
           case 5:
-            AchievementFactory.onUnlocked(uuid, '5_clicks', '5 clicks!');
+            data['aName'] = '5_clicks';
+            data['achievement'] = '5 clicks!';
             break;
           case 10:
-            AchievementFactory.onUnlocked(uuid, '10_clicks', '10 clicks!');
+            data['aName'] = '10_clicks';
+            data['achievement'] = '10 clicks!';
             break;
           case 20:
-            AchievementFactory.onUnlocked(uuid, '20_clicks', '20 clicks!');
+            data['aName'] = '20_clicks';
+            data['achievement'] = '20 clicks!';
             break;
           case 50:
-            AchievementFactory.onUnlocked(uuid, '50_clicks', '50 clicks!');
+            data['aName'] = '50_clicks';
+            data['achievement'] = '50 clicks!';
             break;
           case 100:
-            AchievementFactory.onUnlocked(uuid, '100_clicks', '100 clicks!');
+            data['aName'] = '100_clicks';
+            data['achievement'] = '100 clicks!';
             break;
           case 250:
-            AchievementFactory.onUnlocked(uuid, '250_clicks', '250 clicks!');
+            data['aName'] = '250_clicks';
+            data['achievement'] = '250 clicks!';
             break;
           case 500:
-            AchievementFactory.onUnlocked(uuid, '500_clicks', '500 clicks!');
+            data['aName'] = '5000_clicks';
+            data['achievement'] = '500 clicks!';
             break;
           case 1000:
-            AchievementFactory.onUnlocked(uuid, '1000_clicks', '1000 clicks!');
+            data['aName'] = '1000_clicks';
+            data['achievement'] = '1000 clicks!';
             break;
           case 1500:
-            AchievementFactory.onUnlocked(uuid, '1500_clicks', '1500 clicks!');
+            data['aName'] = '1500_clicks';
+            data['achievement'] = '1500 clicks!';
             break;
           case 2000:
-            AchievementFactory.onUnlocked(uuid, '2000_clicks', '2000 clicks!');
+            data['aName'] = '2000_clicks';
+            data['achievement'] = '2000 clicks!';
             break;
           case 5000:
-            AchievementFactory.onUnlocked(uuid, '5000_clicks', '5000 clicks!');
+            data['aName'] = '5000_clicks';
+            data['achievement'] = '5000 clicks!';
             break;
           default:
             break;
         }
+
+        AchievementFactory.onUnlocked(uuid, data.aName, data.achievement, callback);
       }
     };
   }]);
