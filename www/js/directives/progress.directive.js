@@ -5,6 +5,7 @@ app
 			scope: {
 				totalClicks: '='
 			},
+			replace: true,
 			link: function(scope, elm, attrs) {
 
 				function drawProgress(val) {
@@ -18,7 +19,7 @@ app
 							.append("svg")
 							.attr("class", "progress-level")
 							.attr("width", width)
-							// .attr("height", 10)
+							.attr("height", 30)
 							.append("g")
 							.attr("transform", "translate(0, 10)");
 

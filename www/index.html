@@ -53,10 +53,19 @@
           <ion-slide-box on-slide-changed="slideHasChanged($index)">
             <ion-slide>
               <div class="box row row-center responsive-sm">
-                <div class="top-adjust col text-center">
+                <div class="col text-center">
+                  <div id="count-img">
+                    <img class="item-image" src="https://placehold.it/100x100">
+                  </div>
                   <h1>{{data.clickCount.$value}}</h1>
                   <div class="padding">
                     <level-bar id="levelbar-div" total-clicks="data.clickCount.$value"></level-bar>
+                  </div>
+                  <div id="group-img">
+                    <img class="item-image" src="https://placehold.it/30x30">
+                    <img class="item-image" src="https://placehold.it/30x30">
+                    <img class="item-image" src="https://placehold.it/30x30">
+                    <img class="item-image" src="https://placehold.it/30x30">
                   </div>
                 </div>
               </div>

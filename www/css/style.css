@@ -8,12 +8,17 @@
 
 #levelbar-div {
 	position: relative;
-	min-height: 100px;
+	min-height: 30px;
 	display: block;
 }
 
 #progress-bar {
 	fill: #0D8BC1;
+}
+
+#count-img img,
+#group-img img {
+	padding: 10px !important;
 }
 
 .axis path,
