@@ -5,20 +5,22 @@ app
 
 		return {
 			onUnlocked: function(uuid, aName, achievement, callback) {
-        		var obj = ref.child('clickerz/'+uuid+'/achievements'),
-        			achievementsArray = $firebaseArray(obj),
-        			aObj = {
-        				name: aName,
-        				description: achievement
-        			};
+				var obj = ref.child('clickerz/'+uuid+'/achievements'),
+					achievementsArray = $firebaseArray(obj),
+					aObj = {
+						name: aName,
+						description: achievement
+					};
 
-				achievementsArray.$add(aObj).then(function(ref) {
-					console.log('AchievementFactory>>', aObj);
-					callback({
-						id: ref.key(),
-						achievement: achievement
+				if(aName && achievement) {
+					achievementsArray.$add(aObj).then(function(ref) {
+						console.log('AchievementFactory>>', aObj);
+						callback({
+							id: ref.key(),
+							achievement: achievement
+						});
 					});
-				});
+				}
 			}
 		};
 	}]);

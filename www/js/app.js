@@ -7,6 +7,12 @@ var app = angular.module('homage', [
   'restangular'
   ])
 
+// https://github.com/angular/material/issues/1406
+// did not resolve: https://github.com/angular/material/issues/2365
+.config(function( $mdGestureProvider ) {
+  $mdGestureProvider.skipClickHijack();
+})
+
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

@@ -98,7 +98,7 @@ app
             data['achievement'] = '250 clicks!';
             break;
           case 500:
-            data['aName'] = '5000_clicks';
+            data['aName'] = '500_clicks';
             data['achievement'] = '500 clicks!';
             break;
           case 1000:
@@ -121,7 +121,9 @@ app
             break;
         }
 
-        AchievementFactory.onUnlocked(uuid, data.aName, data.achievement, callback);
+        if(data.aName && data.achievement) {
+          AchievementFactory.onUnlocked(uuid, data.aName, data.achievement, callback); 
+        }
       }
     };
   }]);
