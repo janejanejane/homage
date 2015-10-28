@@ -21,7 +21,7 @@ app
 			},
 			template:
 				'<div>'+
-					'<img ng-repeat="i in achievementsDeclared track by $index" class="item-image" src="https://placehold.it/30x30" ng-click="showDetails(i.description)">'+
+					'<img ng-repeat="i in achievementsDeclared track by $index" class="item-image" src="img/30x30.jpg" ng-click="showDetails(i.description)">'+
 				'</div>'
 		}
 	}]);
