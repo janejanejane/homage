@@ -53,17 +53,12 @@ app
         totalObj.$bindTo($scope, 'data.clickCount');
       });
 
-      AchievementFactory.getAllAchievements(uuid).$loaded().then(function(achievementObj) {
-        achievementObj.forEach(function(data) {
-          $scope.data.achievementArray.push(data);
-        });
-      });
-
       AchievementFactory.getAchievementsDeclared().then().then(function(response) {
         $scope.data.achievementsDeclared = response.data.achievements;
       });
 
       $scope.updateClicksArray();
+      $scope.updateAchievements(uuid);
 
     });
 
@@ -84,7 +79,8 @@ app
           moment().format('MM-DD-YYYY'), 
           1, 
           function(record) {
-            $scope.showAchievement(record)
+            $scope.showAchievement(record);
+            $scope.updateAchievements(uuid);
           }
         );
       }else{
@@ -97,7 +93,8 @@ app
           moment().format('MM-DD-YYYY'),
           sum+1, 
           function(record) {
-            $scope.showAchievement(record)
+            $scope.showAchievement(record);
+            $scope.updateAchievements(uuid);
           }
         );
       }
@@ -144,7 +141,17 @@ app
           // $scope.data.clickArray = $filter('orderBy')($scope.clickArray, '$id');
         });
       });
-    }
+    };
+
+    $scope.updateAchievements = function(uuid) {
+      $scope.data.achievementArray = [];
+
+      AchievementFactory.getAllAchievements(uuid).$loaded().then(function(achievementObj) {
+        achievementObj.forEach(function(data) {
+          $scope.data.achievementArray.push(data);
+        });
+      });
+    };
 
     $scope.slideHasChanged = function(index) {
       $ionicSlideBoxDelegate.slide(index, 500);
