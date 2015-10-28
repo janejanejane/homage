@@ -18,7 +18,8 @@ app
       maxDays: 7,
       clickCount: 0,
       clickArray: [],
-      achievementArray: []
+      achievementArray: [],
+      achievementsDeclared: []
     }
 
     var index = 0,
@@ -56,6 +57,10 @@ app
         achievementObj.forEach(function(data) {
           $scope.data.achievementArray.push(data);
         });
+      });
+
+      AchievementFactory.getAchievementsDeclared().then().then(function(response) {
+        $scope.data.achievementsDeclared = response.data.achievements;
       });
 
       $scope.updateClicksArray();
