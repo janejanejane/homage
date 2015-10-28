@@ -1,5 +1,14 @@
 app
-  .controller('HomageCtrl', ['$scope', '$filter', '$mdToast', '$ionicPlatform', '$ionicSlideBoxDelegate', '$cordovaDevice', 'HomageFactory', function($scope, $filter, $mdToast, $ionicPlatform, $ionicSlideBoxDelegate, $cordovaDevice, HomageFactory) {
+  .controller('HomageCtrl', [
+    '$scope', 
+    '$filter', 
+    '$mdToast', 
+    '$ionicPlatform', 
+    '$ionicSlideBoxDelegate', 
+    '$cordovaDevice', 
+    'HomageFactory', 
+    'AchievementFactory',
+    function($scope, $filter, $mdToast, $ionicPlatform, $ionicSlideBoxDelegate, $cordovaDevice, HomageFactory, AchievementFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -8,7 +17,8 @@ app
       choice: 'days',
       maxDays: 7,
       clickCount: 0,
-      clickArray: []
+      clickArray: [],
+      achievementArray: []
     }
 
     var index = 0,
@@ -40,6 +50,12 @@ app
 
       HomageFactory.getTotalCount(uuid, function(totalObj) {
         totalObj.$bindTo($scope, 'data.clickCount');
+      });
+
+      AchievementFactory.getAllAchievements(uuid).$loaded().then(function(achievementObj) {
+        achievementObj.forEach(function(data) {
+          $scope.data.achievementArray.push(data);
+        });
       });
 
       $scope.updateClicksArray();

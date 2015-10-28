@@ -51,78 +51,17 @@ app
             total = snap.val() + value;
           });
           obj.set(total);
-          this.setAchievementData(uuid, total, callback);
+          AchievementFactory.setAchievementData(uuid, total, callback);
         } else {
-          var self = this;
           this.getAllClicks(uuid, function(record) { // iterate through all records then update totalCount
             record.$loaded().then(function() {
               for(var i in record.clicks) {
                 total += record.clicks[i];
               }
               obj.set(total);
-              self.setAchievementData(uuid, total, callback);
+              AchievementFactory.setAchievementData(uuid, total, callback);
             });
           });
-        }
-      },
-      setAchievementData: function(uuid, total, callback) {
-        var data = {
-          'aName': null,
-          'achievement': null
-        };
-
-        // check totalCount value for achievements
-        switch (total) {
-          case 5:
-            data['aName'] = '5_clicks';
-            data['achievement'] = '5 clicks!';
-            break;
-          case 10:
-            data['aName'] = '10_clicks';
-            data['achievement'] = '10 clicks!';
-            break;
-          case 20:
-            data['aName'] = '20_clicks';
-            data['achievement'] = '20 clicks!';
-            break;
-          case 50:
-            data['aName'] = '50_clicks';
-            data['achievement'] = '50 clicks!';
-            break;
-          case 100:
-            data['aName'] = '100_clicks';
-            data['achievement'] = '100 clicks!';
-            break;
-          case 250:
-            data['aName'] = '250_clicks';
-            data['achievement'] = '250 clicks!';
-            break;
-          case 500:
-            data['aName'] = '500_clicks';
-            data['achievement'] = '500 clicks!';
-            break;
-          case 1000:
-            data['aName'] = '1000_clicks';
-            data['achievement'] = '1000 clicks!';
-            break;
-          case 1500:
-            data['aName'] = '1500_clicks';
-            data['achievement'] = '1500 clicks!';
-            break;
-          case 2000:
-            data['aName'] = '2000_clicks';
-            data['achievement'] = '2000 clicks!';
-            break;
-          case 5000:
-            data['aName'] = '5000_clicks';
-            data['achievement'] = '5000 clicks!';
-            break;
-          default:
-            break;
-        }
-
-        if(data.aName && data.achievement) {
-          AchievementFactory.onUnlocked(uuid, data.aName, data.achievement, callback); 
         }
       }
     };

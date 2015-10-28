@@ -1,0 +1,59 @@
+{
+	"achievements": [
+		{
+			"name": "5_clicks",
+			"clicks": 5,
+			"description": "5 clicks!"
+		},
+		{
+			"name": "10_clicks",
+			"clicks": 10,
+			"description": "10 clicks!"
+		},
+		{
+			"name": "20_clicks",
+			"clicks": 20,
+			"description": "20 clicks!"
+		},
+		{
+			"name": "50_clicks",
+			"clicks": 50,
+			"description": "50 clicks!"
+		},
+		{
+			"name": "100_clicks",
+			"clicks": 100,
+			"description": "100 clicks!"
+		},
+		{
+			"name": "250_clicks",
+			"clicks": 250,
+			"description": "250 clicks!"
+		},
+		{
+			"name": "500_clicks",
+			"clicks": 500,
+			"description": "500 clicks!"
+		},
+		{
+			"name": "1000_clicks",
+			"clicks": 1000,
+			"description": "1000 clicks!"
+		},
+		{
+			"name": "1500_clicks",
+			"clicks": 1500,
+			"description": "1500 clicks!"
+		},
+		{
+			"name": "2000_clicks",
+			"clicks": 2000,
+			"description": "2000 clicks!"
+		},
+		{
+			"name": "5000_clicks",
+			"clicks": 5000,
+			"description": "5000 clicks!"
+		}
+	]
+}
