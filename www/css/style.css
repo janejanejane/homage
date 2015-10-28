@@ -16,9 +16,12 @@
 	fill: #0D8BC1;
 }
 
-#count-img img,
-#group-img img {
+#count-img img {
 	padding: 10px !important;
+}
+
+#achievements-scroll {
+	bottom: 10px;
 }
 
 .axis path,
@@ -63,4 +66,16 @@
 .top-adjust {
 	top: 40%;
 	position: absolute;
+}
+
+.achievement-list {
+	display: block;
+    width: 100%;
+    padding: 10px;
+    border: solid 1px #EEEEEE;
+}
+
+.achievement-list > img {
+	position: absolute;
+	left: 10px;
 }

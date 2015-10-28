@@ -88,13 +88,15 @@
               </div>
             </ion-slide>
             <ion-slide>
-              <div class="box row row-center responsive-sm">
-                <div class="col text-center">
-                  <div id="group-img">
-                    <achievement-list achievements-declared="data.achievementsDeclared"></achievement-list>
+              <ion-scroll id="achievements-scroll">
+                <div class="box row row-center responsive-sm">
+                  <div class="col text-center">
+                    <div id="group-img">
+                      <achievement-list achievements-declared="data.achievementsDeclared" achievement-array="data.achievementArray"></achievement-list>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ion-scroll>
             </ion-slide>
           </ion-slide-box>
         </div>
