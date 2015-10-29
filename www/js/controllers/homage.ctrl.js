@@ -4,11 +4,12 @@ app
     '$filter', 
     '$mdToast', 
     '$ionicPlatform', 
+    '$ionicLoading',
     '$ionicSlideBoxDelegate', 
     '$cordovaDevice', 
     'HomageFactory', 
     'AchievementFactory',
-    function($scope, $filter, $mdToast, $ionicPlatform, $ionicSlideBoxDelegate, $cordovaDevice, HomageFactory, AchievementFactory) {
+    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $cordovaDevice, HomageFactory, AchievementFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -24,6 +25,15 @@ app
 
     var index = 0,
         uuid = null;
+
+    // Setup the loader
+    $ionicLoading.show({
+      content: 'Loading',
+      animation: 'fade-in',
+      showBackdrop: true,
+      maxWidth: 200,
+      showDelay: 0
+    });
 
     $ionicPlatform.ready(function() {
       // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
@@ -138,6 +148,7 @@ app
             }
           }
 
+          $ionicLoading.hide();
           // $scope.data.clickArray = $filter('orderBy')($scope.clickArray, '$id');
         });
       });

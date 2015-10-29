@@ -56,17 +56,17 @@
               <div class="box row row-center responsive-sm">
                 <div class="col text-center">
                   <div id="count-img">
-                    <img class="item-image" src="img/100x100.jpg">
+                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/100x100.jpg' || ''}}">
                   </div>
                   <h1>{{data.clickCount.$value}}</h1>
                   <div class="padding">
                     <level-bar id="levelbar-div" total-clicks="data.clickCount.$value"></level-bar>
                   </div>
                   <div id="group-img">
-                    <img class="item-image" src="img/30x30.jpg">
-                    <img class="item-image" src="img/30x30.jpg">
-                    <img class="item-image" src="img/30x30.jpg">
-                    <img class="item-image" src="img/30x30.jpg">
+                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
+                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
+                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
+                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
                   </div>
                 </div>
               </div>
