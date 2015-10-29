@@ -9,8 +9,10 @@ var app = angular.module('homage', [
 
 // https://github.com/angular/material/issues/1406
 // did not resolve: https://github.com/angular/material/issues/2365
-.config(function( $mdGestureProvider ) {
+.config(function( $mdGestureProvider, $mdThemingProvider ) {
   $mdGestureProvider.skipClickHijack();
+  $mdThemingProvider.theme('assertive');
+  $mdThemingProvider.theme('energized');
 })
 
 .run(function($ionicPlatform) {

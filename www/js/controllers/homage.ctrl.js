@@ -160,9 +160,9 @@ app
     $scope.showAchievement = function(record) {
       var toast = $mdToast.simple();
       if(!record.id) {
-        toast.content('Error in AchievementFactory');
+        toast.content('Error in AchievementFactory').theme('assertive');
       } else {
-        toast.content(record.achievement);
+        toast.content(record.achievement).theme('energized');
       }
 
       $mdToast.show(
