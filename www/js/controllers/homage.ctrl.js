@@ -130,26 +130,15 @@ app
       }
 
       HomageFactory.getClicks(uuid, startDate, endDate, function(clickObj) { // wait for the device uuid to prevent null result
-        console.log('result', clickObj);
+        $scope.data.clickArray = [];
 
         clickObj.$loaded().then(function(){
-          $scope.data.clickArray = [];
+          clickObj.forEach(function(data) { // use .forEach to exclude enumerated attributes
+            $scope.data.clickArray.push(data);
+          });
 
-          console.log('THis changed..', $scope.data.clickArray);
-          //extract the data
-          for(var i in clickObj) {
-
-            // found = $filter('filter')($scope.data.clickArray, {'$id': clickObj[i]['$id']}, true);
-
-            if(typeof clickObj[i] !== 'function') {
-              // if($scope.data.clickArray.length < clickObj.length && found.length === 0) {
-                $scope.data.clickArray.push(clickObj[i]);
-              // }
-            }
-          }
-
+          // hide loader
           $ionicLoading.hide();
-          // $scope.data.clickArray = $filter('orderBy')($scope.clickArray, '$id');
         });
       });
     };
