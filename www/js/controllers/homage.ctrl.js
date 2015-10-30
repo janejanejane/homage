@@ -50,7 +50,6 @@ app
         console.log('result', clickObj);
 
         clickObj.$bindTo($scope, 'savedClicks').then(function(data){
-          console.log('Saved Clicks: ', $scope.savedClicks);
           //if there is no click yet for this user
           if($scope.savedClicks.$value === null){
             //create a new clicks

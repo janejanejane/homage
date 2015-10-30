@@ -10,7 +10,6 @@ app
       },
       getAllClicks: function(userId, callback) { // get all the data on clicks of current user
         var self = this;
-        console.log('Getting all clicks', userId);
         var clickObj = $firebaseObject(ref.child('clickerz/'+userId));
         return callback(clickObj);
       },
