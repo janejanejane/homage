@@ -80,12 +80,6 @@ app
 					var group = svg.append("g")
 								.attr("transform", "translate(25,10)scale(0.9)");
 
-					var tooltip = group.append("g")
-									.style("display", "none");
-
-					var text = tooltip.append("text")
-									.style("fill", "red");
-
 					group.append("g")
 						.attr("class", "x axis")
 						.attr("transform", "translate(0," + height + ")")
@@ -113,11 +107,15 @@ app
 							.attr("class", "line")
 							.attr("d", line);
 
-					var circles = group.append("g")
-									.attr("class", "circle-group");
-
-					var hovers = group.append("g")
-									.attr("class", "circle-hover");
+					var circles = group.append("g").attr("class", "circle-group"),
+						hovers = group.append("g").attr("class", "circle-hover"),
+						tooltip = group.append("g").style("display", "none"),
+						tooltipRect = tooltip.append("rect")
+										.attr('height', 50)
+										.attr('width', 150),
+						text = tooltip.append("text")
+									.style("fill", "red")
+									.attr("class", "tooltip-text");
 
 					var disablePreviousClick = function() {
 
@@ -179,13 +177,25 @@ app
 							var maxVal = d3.max(val, function(v) {
 									return v.$value;
 								}),
+								secondMax = d3.max( // get second largest value
+									val.map(function(v) {
+										return (v.$value < maxVal) ? v : null; // do not include maxVal in new array
+									}), 
+									function(v) {
+										return (v) ? v.$value : null;
+									}),
 								cpos = x(new Date(d.$id)),
-								ypos = (d.$value < maxVal) ? (-40) : 30,
+								ypos = (d.$value < secondMax) ? (-45) : 35,
 								// if circle position is near left side, add 10 (shift to right)
 								// if difference of svg width and circle position is less 100, minus 100 (shift to left)
 								xpos = (cpos < 50) ? cpos + 10 : ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
 
 							displayDetails(this);
+
+							tooltipRect.attr('x', xpos - 10)
+										.attr('y', (y(d.$value) + ypos) - 20)
+										.style('fill', 'black')
+										.attr('stroke', 'black');
 
 							return text.attr("transform", "translate(" + (xpos) + "," + (y(d.$value) + ypos) + ")")									
 									.text("Date: " + format(new Date(d.$id)))
