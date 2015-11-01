@@ -158,7 +158,7 @@ app
 						r = this.size / 2;
 
 					var gradient = c.createRadialGradient(x, y, 0, x, y, r);
-					gradient.addColorStop(0.1, "rgba(255,255,255," + this.alpha + ")");
+					// gradient.addColorStop(0.1, "rgba(255,255,255," + this.alpha + ")");
 					gradient.addColorStop(0.8, "hsla(" + this.color + ", 100%, 50%, " + this.alpha + ")");
 					gradient.addColorStop(1, "hsla(" + this.color + ", 100%, 50%, 0.1)");
 
