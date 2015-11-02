@@ -6,10 +6,12 @@ app
     '$ionicPlatform', 
     '$ionicLoading',
     '$ionicSlideBoxDelegate', 
+    '$ionicPopup', 
+    '$cordovaNetwork', 
     '$cordovaDevice', 
     'HomageFactory', 
     'AchievementFactory',
-    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $cordovaDevice, HomageFactory, AchievementFactory) {
+    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, HomageFactory, AchievementFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -24,51 +26,75 @@ app
     }
 
     var index = 0,
-        uuid = null;
+        uuid = null,
+        isAvailable = null;
 
-    // Setup the loader
-    $ionicLoading.show({
-      content: 'Loading',
-      animation: 'fade-in',
-      showBackdrop: true,
-      maxWidth: 200,
-      showDelay: 0
-    });
+    var init = function() {
+        // Setup the loader
+        $ionicLoading.show({
+          content: 'Loading',
+          animation: 'fade-in',
+          showBackdrop: true,
+          maxWidth: 200,
+          showDelay: 0
+        });
+
+        // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
+        if( ionic.Platform.isAndroid() ){
+          console.log('hello?');
+          uuid = "testUUID"; // for browser mobile emulation
+          if(isAvailable) uuid = $cordovaDevice.getUUID();
+        }else{
+          console.log("Is not Android");
+          // uuid = 1;
+          uuid = "testUUID";
+        }
+
+        HomageFactory.getAllClicks(uuid, function(clickObj) { // wait for the device uuid to prevent null result
+          console.log('result', clickObj);
+
+          clickObj.$bindTo($scope, 'savedClicks').then(function(data){
+            //if there is no click yet for this user
+            if($scope.savedClicks.$value === null){
+              //create a new clicks
+              HomageFactory.createNewUser(uuid);
+            }
+          });
+        });
+
+        HomageFactory.getTotalCount(uuid, function(totalObj) {
+          totalObj.$bindTo($scope, 'data.clickCount');
+        });
+
+        AchievementFactory.getAchievementsDeclared().then().then(function(response) {
+          $scope.data.achievementsDeclared = response.data.achievements;
+        });
+
+        $scope.updateClicksArray();
+        $scope.updateAchievements(uuid);
+    }
 
     $ionicPlatform.ready(function() {
-      // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
-      if( ionic.Platform.isAndroid() ){
-        console.log('hello?');
-        uuid = $cordovaDevice.getUUID();
-      }else{
-        console.log("Is not Android");
-        // uuid = 1;
-        uuid = "testUUID";
-      }
+      isAvailable = ionic.Platform.device().available;
 
-      HomageFactory.getAllClicks(uuid, function(clickObj) { // wait for the device uuid to prevent null result
-        console.log('result', clickObj);
-
-        clickObj.$bindTo($scope, 'savedClicks').then(function(data){
-          //if there is no click yet for this user
-          if($scope.savedClicks.$value === null){
-            //create a new clicks
-            HomageFactory.createNewUser(uuid);
+      if(isAvailable) { 
+        console.log('$cordovaNetwork', $cordovaNetwork);
+        if($cordovaNetwork) {
+          if($cordovaNetwork.isOffline()) {
+            $ionicPopup.alert({
+              title: "Device Offline",
+              content: "There is no internet connection."
+            })
+            .then(function(result) {
+              ionic.Platform.exitApp();
+            });
+          } else {
+            init();
           }
-        });
-      });
-
-      HomageFactory.getTotalCount(uuid, function(totalObj) {
-        totalObj.$bindTo($scope, 'data.clickCount');
-      });
-
-      AchievementFactory.getAchievementsDeclared().then().then(function(response) {
-        $scope.data.achievementsDeclared = response.data.achievements;
-      });
-
-      $scope.updateClicksArray();
-      $scope.updateAchievements(uuid);
-
+        } 
+      } else {
+        init();
+      }
     });
 
     HomageFactory.getAllResponses().success(function(data) {
