@@ -67,7 +67,7 @@ app
 					d3.select("#" + elm[0].id + " svg g").remove();
 
 					if(scope.choice === 'month') {
-						minDate = moment().subtract(30, 'day');
+						minDate = moment().subtract(32, 'day');
 						maxDate = moment().add(1, 'day');
 						xAxis.ticks(d3.time.day, 3);
 					}
@@ -217,7 +217,7 @@ app
 
 				scope.$watch('choice', function(val) {
 					if(val === 'month') {
-						scope.updateArray({start: moment().subtract(30, 'day'), end: moment()});
+						scope.updateArray({start: moment().subtract(31, 'day'), end: moment()});
 					} else {
 						scope.updateArray();
 					}

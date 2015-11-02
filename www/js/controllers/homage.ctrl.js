@@ -135,7 +135,7 @@ app
       }
 
       if($scope.data.choice === 'month') {
-        $scope.updateClicksArray(moment().subtract(30, 'day'), moment());
+        $scope.updateClicksArray(moment().subtract(31, 'day'), moment());
       } else {
         $scope.updateClicksArray();
       }
