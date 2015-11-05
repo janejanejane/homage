@@ -24,6 +24,10 @@
 	bottom: 10px;
 }
 
+#levelup-stars {
+	position: absolute;
+}
+
 .tooltip-text {
 	font-weight: bold;
 }

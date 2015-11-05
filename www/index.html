@@ -36,6 +36,7 @@
     <script src="js/directives/progress.directive.js"></script>
     <script src="js/directives/achievement.directive.js"></script>
     <script src="js/directives/chart.directive.js"></script>
+    <script src="js/directives/stars.directive.js"></script>
     <script src="js/services/homage.factory.js"></script>
     <script src="js/services/achievement.factory.js"></script>
   </head>
@@ -51,6 +52,7 @@
             Click Me!
             <i class="icon ion-happy-outline"></i>
           </button>
+          <stars-div ng-show="data.clickArray.length" id="levelup-stars" current-level="data.currentLevel"></stars-div>
           <ion-slide-box on-slide-changed="slideHasChanged($index)">
             <ion-slide>
               <div class="box row row-center responsive-sm">
@@ -60,7 +62,9 @@
                   </div>
                   <h1>{{data.clickCount.$value}}</h1>
                   <div class="padding">
-                    <level-bar id="levelbar-div" total-clicks="data.clickCount.$value"></level-bar>
+                    <level-bar id="levelbar-div" 
+                                total-clicks="data.clickCount.$value" 
+                                current-level="data.currentLevel"></level-bar>
                   </div>
                   <div id="group-img">
                     <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">

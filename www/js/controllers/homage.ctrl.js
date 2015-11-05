@@ -20,6 +20,7 @@ app
       choice: 'days',
       maxDays: 7,
       clickCount: 0,
+      currentLevel: 0,
       clickArray: [],
       achievementArray: [],
       achievementsDeclared: []

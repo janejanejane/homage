@@ -3,7 +3,8 @@ app
 		return {
 			restrict: 'E',
 			scope: {
-				totalClicks: '='
+				totalClicks: '=',
+				currentLevel: '='
 			},
 			replace: true,
 			link: function(scope, elm, attrs) {
@@ -12,8 +13,8 @@ app
 
 						d3.select("#" + elm[0].id + " svg").remove();
 
-						var width = elm[0].offsetWidth,
-							currentLevel = Math.floor(Math.log(val)/Math.LN2);
+						var width = elm[0].offsetWidth;
+						scope.currentLevel = Math.floor(Math.log(val)/Math.LN2);
 
 						var svg = d3.select(elm[0])
 							.append("svg")
@@ -24,15 +25,15 @@ app
 							.attr("transform", "translate(0, 10)");
 
 						var x = d3.scale.linear()
-								.domain([currentLevel, currentLevel + 1])
+								.domain([scope.currentLevel, scope.currentLevel + 1])
 								.range([0, width]);
 
 						svg.append("text")
-							.text("Lvl " + currentLevel)
+							.text("Lvl " + scope.currentLevel)
 							.attr("id", "current-level");
 
 						svg.append("text")
-							.text("Lvl " + (currentLevel + 1))
+							.text("Lvl " + (scope.currentLevel + 1))
 							.attr("x", width - 35)
 							.attr("id", "next-level");
 
