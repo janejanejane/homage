@@ -17,6 +17,7 @@ app
     $scope.savedClicks = null;
     $scope.currentWeek = 0;
     $scope.data = {
+      uuid: '',
       choice: 'days',
       maxDays: 7,
       clickCount: 0,
@@ -26,8 +27,8 @@ app
     }
 
     var index = 0,
-        uuid = null,
-        isAvailable = null;
+        isAvailable = null,
+        popupUsername = '';
 
     var init = function() {
         // Setup the loader
@@ -42,37 +43,63 @@ app
         // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
         if( ionic.Platform.isAndroid() ){
           console.log('hello?');
-          uuid = "testUUID"; // for browser mobile emulation
-          if(isAvailable) uuid = $cordovaDevice.getUUID();
+          $scope.data.uuid = "testUUID"; // for browser mobile emulation
+          if(isAvailable) $scope.data.uuid = $cordovaDevice.getUUID();
+          setup($scope.data.uuid);
         }else{
-          console.log("Is not Android");
-          // uuid = 1;
-          uuid = "testUUID";
-        }
+          if(!window.cordova) {
+            popupUsername = $ionicPopup.show({
+              template: '<input type="text" ng-model="data.uuid">',
+              title: 'Enter user name',
+              scope: $scope,
+              buttons: [
+                { text: 'Cancel' },
+                {
+                  text: '<b>Save</b>',
+                  type: 'button-positive',
+                  onTap: function(e) {
+                    if (!$scope.data.uuid) {
+                      //don't allow the user to close unless there is input
+                      e.preventDefault();
+                    } else {
+                      return $scope.data.uuid;
+                    }
+                  }
+                }
+              ]
+            });
+          }
 
-        HomageFactory.getAllClicks(uuid, function(clickObj) { // wait for the device uuid to prevent null result
-          console.log('result', clickObj);
-
-          clickObj.$bindTo($scope, 'savedClicks').then(function(data){
-            //if there is no click yet for this user
-            if($scope.savedClicks.$value === null){
-              //create a new clicks
-              HomageFactory.createNewUser(uuid);
-            }
+          popupUsername.then(function(input){
+            setup(input);
           });
-        });
+        }
+    };
 
-        HomageFactory.getTotalCount(uuid, function(totalObj) {
-          totalObj.$bindTo($scope, 'data.clickCount');
-        });
+    var setup = function(user) {
+      HomageFactory.getAllClicks(user, function(clickObj) { // wait for the device uuid to prevent null result
+        console.log('result', clickObj);
 
-        AchievementFactory.getAchievementsDeclared().then().then(function(response) {
-          $scope.data.achievementsDeclared = response.data.achievements;
+        clickObj.$bindTo($scope, 'savedClicks').then(function(data){
+          //if there is no click yet for this user
+          if($scope.savedClicks.$value === null){
+            //create a new clicks
+            HomageFactory.createNewUser(user);
+          }
         });
+      });
 
-        $scope.updateClicksArray();
-        $scope.updateAchievements(uuid);
-    }
+      HomageFactory.getTotalCount(user, function(totalObj) {
+        totalObj.$bindTo($scope, 'data.clickCount');
+      });
+
+      AchievementFactory.getAchievementsDeclared().then().then(function(response) {
+        $scope.data.achievementsDeclared = response.data.achievements;
+      });
+
+      $scope.updateClicksArray();
+      $scope.updateAchievements(user); 
+    };
 
     $ionicPlatform.ready(function() {
       isAvailable = ionic.Platform.device().available;
@@ -97,10 +124,6 @@ app
       }
     });
 
-    HomageFactory.getAllResponses().success(function(data) {
-      $scope.responsedata = data;
-    });
-
     $scope.displayResponse = function() {
       index = Math.floor(Math.random() * $scope.responsedata.responses.length);
       $scope.shout = $scope.responsedata.responses[index];
@@ -115,7 +138,7 @@ app
           1, 
           function(record) {
             $scope.showAchievement(record);
-            $scope.updateAchievements(uuid);
+            $scope.updateAchievements($scope.data.uuid);
           }
         );
       }else{
@@ -129,7 +152,7 @@ app
           sum+1, 
           function(record) {
             $scope.showAchievement(record);
-            $scope.updateAchievements(uuid);
+            $scope.updateAchievements($scope.data.uuid);
           }
         );
       }
@@ -154,7 +177,7 @@ app
         endDate = moment();
       }
 
-      HomageFactory.getClicks(uuid, startDate, endDate, function(clickObj) { // wait for the device uuid to prevent null result
+      HomageFactory.getClicks($scope.data.uuid, startDate, endDate, function(clickObj) { // wait for the device uuid to prevent null result
         $scope.data.clickArray = [];
 
         clickObj.$loaded().then(function(){
