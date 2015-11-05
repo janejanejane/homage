@@ -33,8 +33,15 @@ app
 
 						svg.append("text")
 							.text("Lvl " + (currentLevel + 1))
-							.attr("x", width - 40)
+							.attr("x", width - 35)
 							.attr("id", "next-level");
+
+						svg.append("rect")
+							.attr("width", width)
+							.attr("height", 10)
+							.attr("x", 0)
+							.attr("y", 5)
+							.attr("fill", "#FF6347");
 
 						svg.append("rect")
 							.attr("width", function() {
@@ -44,7 +51,7 @@ app
 							.attr("x", 0)
 							.attr("y", 5)
 							.attr("id", "progress-bar");
-						};
+				};
 
 				scope.$watch('totalClicks', function(val) {
 					if(val) {
