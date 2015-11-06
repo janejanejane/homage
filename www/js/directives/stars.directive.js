@@ -58,14 +58,17 @@ app
 						})
 						.attr("transform", function(d, i) {
 							return "rotate("+ circleAngle(i) +", 0, 0)";
-						// })
-						// .transition()
-						// .duration(1000)
-						// .attr("transform", function(d, i) {
-						// 	var x = (i > total/2) ? circleAngle(i) * 10 : (-circleAngle(i)) * 10;
-						// 	var y = (i > total/2) ? circleAngle(i) * 10 : (-circleAngle(i)) * 10;
-						// 	console.log("x", x, "y", y);
-						// 	return "translate("+ x +", "+ y +")";
+						})
+						.transition()
+						.duration(1500)
+						.delay(function(d, i) {
+							return i * 20;
+						})
+						.each(function() {
+							var self = d3.select(this);
+							self.transition()
+								.attr("cx", width * (Math.random() * 2))
+								.attr("cy", (height + 100) * (Math.random() * 5));								
 						});
 				});
 			}	
