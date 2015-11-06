@@ -16,7 +16,8 @@ app
 					var width = elm.parent().prop('offsetWidth'),
 						height = elm.parent().prop('offsetHeight'),
 						circles = [],
-						total = 15;
+						total = 15,
+						ocRadius = 5;
 
 					for (var i = 0; i < total; i++) {
 						circles.push(Math.round(Math.random() * 100));
@@ -32,7 +33,7 @@ app
 					var center = svg.append("circle")
 						.style("stroke", "gray")
 						.style("fill", "blue")
-						.attr("r", 5)
+						.attr("r", 1)
 						.attr("cx", function() {
 							return ((width - 20) / 2);
 						})
@@ -43,15 +44,15 @@ app
 					var outside = svg.append("g")
 						.attr("transform", "translate("+ ((width - 20) / 2) +", "+ (height / 3) +")");
 
-					var circleAngle = d3.scale.linear().range([0,360]).domain([0,total]);
+					var circleAngle = d3.scale.linear().range([0,360]).domain([0,ocRadius]);
 
 					outside.selectAll("circle")
 						.data(circles)
 						.enter().append("circle")
 						.style("stroke", "red")
 						.style("fill", "black")
-						.attr("r", 10)
-						.attr("cx", 10)
+						.attr("r", ocRadius)
+						.attr("cx", ocRadius)
 						.attr("cy", function(d, i) {
 							return i;
 						})
