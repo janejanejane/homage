@@ -26,11 +26,11 @@ app
       achievementsDeclared: []
     }
 
-    var index = 0,
-        isAvailable = null,
-        popupUsername = '';
-
-    var init = function() {
+    var controller = {
+      index: 0,
+      isAvailable: null,
+      popupUsername: '',
+      init: function() {
         // Setup the loader
         $ionicLoading.show({
           content: 'Loading',
@@ -45,7 +45,7 @@ app
           console.log('hello?');
           $scope.data.uuid = "testUUID"; // for browser mobile emulation
           if(isAvailable) $scope.data.uuid = $cordovaDevice.getUUID();
-          setup($scope.data.uuid);
+          controller.setup($scope.data.uuid);
         }else{
           if(!window.cordova) {
             popupUsername = $ionicPopup.show({
@@ -71,34 +71,34 @@ app
           }
 
           popupUsername.then(function(input){
-            setup(input);
+            controller.setup(input);
           });
         }
-    };
+      },
+      setup: function(user) {
+        HomageFactory.getAllClicks(user, function(clickObj) { // wait for the device uuid to prevent null result
+          console.log('result', clickObj);
 
-    var setup = function(user) {
-      HomageFactory.getAllClicks(user, function(clickObj) { // wait for the device uuid to prevent null result
-        console.log('result', clickObj);
-
-        clickObj.$bindTo($scope, 'savedClicks').then(function(data){
-          //if there is no click yet for this user
-          if($scope.savedClicks.$value === null){
-            //create a new clicks
-            HomageFactory.createNewUser(user);
-          }
+          clickObj.$bindTo($scope, 'savedClicks').then(function(data){
+            //if there is no click yet for this user
+            if($scope.savedClicks.$value === null){
+              //create a new clicks
+              HomageFactory.createNewUser(user);
+            }
+          });
         });
-      });
 
-      HomageFactory.getTotalCount(user, function(totalObj) {
-        totalObj.$bindTo($scope, 'data.clickCount');
-      });
+        HomageFactory.getTotalCount(user, function(totalObj) {
+          totalObj.$bindTo($scope, 'data.clickCount');
+        });
 
-      AchievementFactory.getAchievementsDeclared().then().then(function(response) {
-        $scope.data.achievementsDeclared = response.data.achievements;
-      });
+        AchievementFactory.getAchievementsDeclared().then().then(function(response) {
+          $scope.data.achievementsDeclared = response.data.achievements;
+        });
 
-      $scope.updateClicksArray();
-      $scope.updateAchievements(user); 
+        $scope.updateClicksArray();
+        $scope.updateAchievements(user); 
+      }
     };
 
     $ionicPlatform.ready(function() {
@@ -116,11 +116,11 @@ app
               ionic.Platform.exitApp();
             });
           } else {
-            init();
+            controller.init();
           }
         } 
       } else {
-        init();
+        controller.init();
       }
     });
 
