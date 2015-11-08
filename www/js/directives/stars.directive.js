@@ -31,8 +31,8 @@ app
 						.attr("transform", "translate(0, 20)");
 
 					var center = svg.append("circle")
-						.style("stroke", "gray")
-						.style("fill", "blue")
+						.style("stroke", "white")
+						.style("fill", "white")
 						.attr("r", 1)
 						.attr("cx", function() {
 							return ((width - 20) / 2);
@@ -54,11 +54,20 @@ app
 						.delay(function(d, i) {
 							return i * 20;
 						})
-						.each(function() {
+						.each(function(d, i) {
 							var self = d3.select(this);
+
 							self.transition()
 								.attr("transform", function(d) {
-									return "translate("+ width * (Math.random() * 2) +","+ (height + 100) * (Math.random() * 2)+")"
+									// @link: http://stackoverflow.com/a/10152452/476584
+									// centre at (x, y), distance r, element is at:
+									// (x + r cos(2kπ/n), y + r sin(2kπ/n))
+									// where: 	n is the number of elements
+									// 			k is the element currently positioning (between 1 and n inclusive).
+									var x = 50 * width * Math.cos(2 * Math.PI * i / (total/2)),
+										y = 50 * height * Math.sin(2 * Math.PI * i / (total/2));
+
+									return "translate("+ x +","+ y +")"
 								});								
 						});
 
@@ -71,18 +80,7 @@ app
 							return i;
 						})
 						.attr("transform", function(d, i) {
-							return "rotate("+ circleAngle(i) +", 0, 0)";
-						// })
-						// .transition()
-						// .duration(1500)
-						// .delay(function(d, i) {
-						// 	return i * 20;
-						// })
-						// .each(function() {
-						// 	var self = d3.select(this);
-						// 	self.transition()
-						// 		.attr("cx", width * (Math.random() * 2))
-						// 		.attr("cy", (height + 100) * (Math.random() * 5));								
+							return "rotate("+ circleAngle(i) +", 0, 0)";								
 						});
 				});
 			}	
