@@ -77,7 +77,6 @@ app
       },
       setup: function(user) {
         HomageFactory.getAllClicks(user, function(clickObj) { // wait for the device uuid to prevent null result
-          console.log('result', clickObj);
 
           clickObj.$bindTo($scope, 'savedClicks').then(function(data){
             //if there is no click yet for this user
@@ -88,10 +87,12 @@ app
           });
         });
 
+        // get overall clicks logged
         HomageFactory.getTotalCount(user, function(totalObj) {
           totalObj.$bindTo($scope, 'data.clickCount');
         });
 
+        // get json data for all achievements
         AchievementFactory.getAchievementsDeclared().then().then(function(response) {
           $scope.data.achievementsDeclared = response.data.achievements;
         });
@@ -101,11 +102,12 @@ app
       }
     };
 
+    // checks if app is ready
     $ionicPlatform.ready(function() {
+      // checks if the app is used in a device
       isAvailable = ionic.Platform.device().available;
 
-      if(isAvailable) { 
-        console.log('$cordovaNetwork', $cordovaNetwork);
+      if(isAvailable) {
         if($cordovaNetwork) {
           if($cordovaNetwork.isOffline()) {
             $ionicPopup.alert({
@@ -113,6 +115,7 @@ app
               content: "There is no internet connection."
             })
             .then(function(result) {
+              // closes the app
               ionic.Platform.exitApp();
             });
           } else {
@@ -124,11 +127,7 @@ app
       }
     });
 
-    $scope.displayResponse = function() {
-      index = Math.floor(Math.random() * $scope.responsedata.responses.length);
-      $scope.shout = $scope.responsedata.responses[index];
-    };
-
+    // updates the click logged for current user
     $scope.buttonClick = function() {
 
       if(!$scope.savedClicks.clicks){
@@ -164,6 +163,7 @@ app
       }
     };
 
+    // updates clicks array used in UI
     $scope.updateClicksArray = function(start, end){
       var startDate = start,
           endDate = end,
@@ -191,6 +191,7 @@ app
       });
     };
 
+    // updates achievements array used in UI
     $scope.updateAchievements = function(uuid) {
       $scope.data.achievementArray = [];
 
@@ -201,10 +202,12 @@ app
       });
     };
 
+    // handles the ionic slide boxes change
     $scope.slideHasChanged = function(index) {
       $ionicSlideBoxDelegate.slide(index, 500);
-    }
+    };
 
+    // displays toast for achievement at the bottom of the screen
     $scope.showAchievement = function(record) {
       var toast = $mdToast.simple();
       if(!record.id) {
