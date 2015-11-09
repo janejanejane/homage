@@ -71,13 +71,35 @@ app
 								});								
 						});
 
-					outside.append("circle")
-						.style("stroke", "red")
-						.style("fill", "black")
-						.attr("r", ocRadius)
-						.attr("cx", ocRadius)
-						.attr("cy", function(d, i) {
-							return i;
+					// draw stars
+					outside.append("polygon")
+						.style("stroke", "orange")
+						.style("fill", "yellow")
+						.attr("points", function() {
+							// @link: https://dillieodigital.wordpress.com/2013/01/16/quick-tip-how-to-draw-a-star-with-svg-and-javascript/
+
+							var starSides = 5,
+								bigCircle = 5, // assumed radius for a big circle
+								smallCircle = 2.5, // assumed radius for a small circle
+								angle = Math.PI / starSides,
+								radius = 0,
+								xVal = 0,
+								yVal = 0,
+								coordinates = [];
+
+							for (var i = 0; i < 2 * starSides; i++) {
+								// starts at the bigCircle point then iterates to smallCircle point, and so on to form path for star
+								radius = (i % 2) == 0 ? bigCircle : smallCircle;
+
+								// same as above @line 62
+								xVal = ocRadius + Math.cos(i * angle) * radius;
+								yVal = ocRadius + Math.sin(i * angle) * radius;
+
+								// store x, y values for the pentagon path
+								coordinates.push(xVal + "," + yVal);
+							}
+
+							return coordinates.join(",");
 						})
 						.attr("transform", function(d, i) {
 							return "rotate("+ circleAngle(i) +", 0, 0)";								
