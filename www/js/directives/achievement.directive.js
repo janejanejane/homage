@@ -27,6 +27,14 @@ app
 						scope.list.push(record);
 					};
 				});
+
+				scope.$watchCollection('achievementsDeclared', function(newVal, oldVal) {
+					if(newVal !== oldVal) {
+						if(scope.list.length === 0) {
+							scope.list = newVal; // display list of locked achievements
+						}
+					}
+				});
 			},
 			template:
 				'<div class="list">'+
