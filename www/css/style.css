@@ -24,6 +24,10 @@
 	bottom: 10px;
 }
 
+#achievements-scroll > div.scroll > div.box {
+	height: 85vh;
+}
+
 #levelup-stars {
 	position: absolute;
 }
@@ -110,6 +114,17 @@
 .top-adjust {
 	top: 20%;
 	position: absolute;
+}
+
+.button-choice {
+	top: 30%;
+	position: absolute;
+	width: 50%;
+	left: 25%;
+}
+
+.list-close {
+	cursor: pointer;
 }
 
 .achievement-list {

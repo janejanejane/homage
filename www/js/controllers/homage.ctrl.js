@@ -20,12 +20,13 @@ app
       uuid: '',
       popupEnabled: true,
       choice: 'days',
+      selectedList: '',
       maxDays: 7,
       clickCount: 0,
       currentLevel: 0,
       clickArray: [],
       achievementArray: [],
-      achievementsDeclared: []
+      achievementsDeclared: [],
     }
 
     var controller = {

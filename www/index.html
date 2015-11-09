@@ -94,12 +94,28 @@
               </div>
             </ion-slide>
             <ion-slide>
+              <div class="row">
+                <div class="col text-center">
+                  <h1 class="list-close positive" ng-show="data.selectedList" ng-click="data.selectedList = ''">
+                    <i class="ion-arrow-left-a"></i>
+                  </h1>
+                </div>
+              </div>
               <ion-scroll id="achievements-scroll">
                 <div class="box">
                   <div class="row row-center responsive-sm">
                     <div class="col text-center">
+                      <div class="button-choice" ng-show="data.selectedList === ''">
+                        <button class="button button-block button-royal" ng-click="data.selectedList = 'achievement'">
+                          Achievements
+                        </button>
+                        <button class="button button-block button-assertive" ng-click="data.selectedList = 'avatar'">
+                          Avatars
+                        </button>
+                      </div>
                       <div id="group-img">
-                        <achievement-list achievements-declared="data.achievementsDeclared" achievement-array="data.achievementArray"></achievement-list>
+                        <achievement-list ng-show="data.selectedList === 'achievement'" achievements-declared="data.achievementsDeclared" achievement-array="data.achievementArray"></achievement-list>
+                        <achievement-list ng-show="data.selectedList === 'avatar'" achievements-declared="[]" achievement-array="[]"></achievement-list>
                       </div>
                     </div>
                   </div>
