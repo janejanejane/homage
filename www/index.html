@@ -43,22 +43,22 @@
   <body ng-app="homage">
 
     <ion-pane>
-      <ion-header-bar class="bar bar-header bar-balanced" align-title="center">
-        <!-- <h1 class="title">Homage to mobile apps</h1> -->
-      </ion-header-bar>
       <ion-content>
         <div class="padding" ng-controller="HomageCtrl">
-          <button class="button button-block button-royal" ng-click="buttonClick()">
-            Click Me!
-            <i class="icon ion-happy-outline"></i>
-          </button>
+          <div ng-class="{curtain: data.popupEnabled}"></div>
           <stars-div ng-show="data.clickArray.length" id="levelup-stars" current-level="data.currentLevel"></stars-div>
           <ion-slide-box on-slide-changed="slideHasChanged($index)">
             <ion-slide>
               <div class="box row row-center responsive-sm">
-                <div class="col text-center">
+                <div class="col text-center top-adjust">
+                  <div ng-show="data.clickCount.$value === 0" id="intro-click">
+                    <div class="arrow-body">
+                      <h1>Click</h1>
+                    </div>
+                    <div class="arrow-head-down"></div>
+                  </div>
                   <div id="count-img">
-                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/100x100.jpg' || ''}}">
+                    <img class="item-image" ng-src="img/100x100.jpg" ng-click="buttonClick()">
                   </div>
                   <h1>{{data.clickCount.$value}}</h1>
                   <div class="padding">
@@ -66,12 +66,12 @@
                                 total-clicks="data.clickCount.$value" 
                                 current-level="data.currentLevel"></level-bar>
                   </div>
-                  <div id="group-img">
+                  <!-- <div id="group-img">
                     <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
                     <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
                     <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
                     <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </ion-slide>
@@ -83,20 +83,24 @@
                               choice="data.choice" max-days="data.maxDays" 
                               click-array="data.clickArray" update-array="updateClicksArray(start, end)">
                   <div class="row row-center responsive-sm">
-                    <h1 ng-show="!data.clickArray.length">
-                      No data yet.
-                      <i class="icon ion-sad-outline"></i>
-                    </h1>
+                    <div class="col text-center">
+                      <h1 ng-show="!data.clickArray.length">
+                        No data yet.
+                        <i class="icon ion-sad-outline"></i>
+                      </h1>
+                    </div>
                   </div>
                 </clicks-chart>
               </div>
             </ion-slide>
             <ion-slide>
               <ion-scroll id="achievements-scroll">
-                <div class="box row row-center responsive-sm">
-                  <div class="col text-center">
-                    <div id="group-img">
-                      <achievement-list achievements-declared="data.achievementsDeclared" achievement-array="data.achievementArray"></achievement-list>
+                <div class="box">
+                  <div class="row row-center responsive-sm">
+                    <div class="col text-center">
+                      <div id="group-img">
+                        <achievement-list achievements-declared="data.achievementsDeclared" achievement-array="data.achievementArray"></achievement-list>
+                      </div>
                     </div>
                   </div>
                 </div>

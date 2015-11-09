@@ -1,6 +1,6 @@
 #chart-div {
 	position: relative;
-	min-height: 250px;
+	min-height: 350px;
 	display: block;
 	border: 1px solid #AAAAAA;
 	margin: 20px 0px;
@@ -26,6 +26,42 @@
 
 #levelup-stars {
 	position: absolute;
+}
+
+#intro-click {
+	bottom: 8px;
+	position: relative;
+	display: inline-block;
+	padding: 10px;
+	-webkit-animation:bounce 1s infinite;
+}
+
+#intro-click .arrow-body {
+	background-color: #FFA500;
+	display: inline-block;
+	padding: 5px;
+}
+
+#intro-click .arrow-head-down {
+	width: 0;
+	height: 0;
+	border-left: 70px solid transparent;
+	border-right: 70px solid transparent;
+	border-top: 50px solid #FFA500;
+}
+
+.curtain {
+	background-color: #FFFFFF;
+	z-index: 1;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+}
+
+.curtain.close {
+	display: none;
 }
 
 .tooltip-text {
@@ -68,11 +104,11 @@
 }
 
 .box {
-	height: 80vh;
+	height: 97vh;
 }
 
 .top-adjust {
-	top: 40%;
+	top: 20%;
 	position: absolute;
 }
 

@@ -18,6 +18,7 @@ app
     $scope.currentWeek = 0;
     $scope.data = {
       uuid: '',
+      popupEnabled: true,
       choice: 'days',
       maxDays: 7,
       clickCount: 0,
@@ -47,6 +48,7 @@ app
           $scope.data.uuid = "testUUID"; // for browser mobile emulation
           if(isAvailable) $scope.data.uuid = $cordovaDevice.getUUID();
           controller.setup($scope.data.uuid);
+          $scope.data.popupEnabled = false;
         }else{
           if(!window.cordova) {
             popupUsername = $ionicPopup.show({
@@ -73,6 +75,7 @@ app
 
           popupUsername.then(function(input){
             controller.setup(input);
+            $scope.data.popupEnabled = false;
           });
         }
       },
