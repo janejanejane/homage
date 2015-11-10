@@ -10,7 +10,7 @@ app
 				console.log('scope.currentLevel', scope.currentLevel);
 				scope.$watch('currentLevel', function(newVal, oldVal) {
 					// only show stars on level up
-					if(oldVal !== 0 && newVal > oldVal) {
+					if((oldVal === 0 && newVal === 1) || (oldVal !== 0 && newVal > oldVal)) {
 						d3.select("#" + elm[0].id + " svg").remove();
 
 						var width = elm.parent().prop('offsetWidth'),
