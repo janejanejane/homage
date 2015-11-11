@@ -58,7 +58,9 @@
                     <div class="arrow-head-down"></div>
                   </div>
                   <div id="count-img">
-                    <img class="item-image" ng-src="img/100x100.jpg" ng-click="buttonClick()">
+                    <img class="item-image" 
+                          ng-src="img/girls/avatar-f-small-{{(data.currentLevel < 10) ? '0' + data.currentLevel : data.currentLevel}}.png" 
+                          ng-click="buttonClick()">
                   </div>
                   <h1>{{data.clickCount.$value}}</h1>
                   <div class="padding">
