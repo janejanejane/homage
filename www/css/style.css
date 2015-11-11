@@ -7,20 +7,26 @@
 }
 
 #levelbar-div {
-	position: relative;
 	min-height: 30px;
+	width: 100%;
 	display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: -1;
+	-webkit-transform: translate(-50%, -65%);
+	-ms-transform: translate(-50%, -65%);
+	transform: translate(-50%, -65%);
 }
 
 #progress-bar {
-	fill: #0D8BC1;
+	fill: none;
 }
 
 #count-img img {
-	padding: 10px !important;
-	border-radius: 200px;
 	width: 200px;
 	height: 200px;
+	z-index: 1;
 }
 
 #achievements-scroll {
@@ -41,6 +47,7 @@
 	display: inline-block;
 	padding: 10px;
 	-webkit-animation:bounce 1s infinite;
+			animation:bounce 1s infinite;
 }
 
 #intro-click .arrow-body {
@@ -147,6 +154,7 @@ md-toast.md-assertive-theme {
 	font-size: xx-large;
 	background-color: #EF473A;
 	-webkit-animation:bounce 1s infinite;
+			animation:bounce 1s infinite;
 }
 
 md-toast.md-energized-theme {
@@ -154,6 +162,7 @@ md-toast.md-energized-theme {
 	color: #444444;
 	background-color: #FFC900;
 	-webkit-animation:bounce 1s infinite;
+			animation:bounce 1s infinite;
 }
 
 @-webkit-keyframes bounce {

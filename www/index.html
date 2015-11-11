@@ -61,12 +61,10 @@
                     <img class="item-image" 
                           ng-src="img/girls/avatar-f-small-{{(data.currentLevel < 10) ? '0' + data.currentLevel : data.currentLevel}}.png" 
                           ng-click="buttonClick()">
-                  </div>
-                  <h1>{{data.clickCount.$value}}</h1>
-                  <div class="padding">
                     <level-bar id="levelbar-div" 
                                 total-clicks="data.clickCount.$value" 
                                 current-level="data.currentLevel"></level-bar>
+                    <h1>{{data.clickCount.$value}}</h1>
                   </div>
                   <!-- <div id="group-img">
                     <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
