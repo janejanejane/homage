@@ -82,7 +82,7 @@
                 <clicks-chart class="padding" id="chart-div" 
                               choice="data.choice" max-days="data.maxDays" 
                               click-array="data.clickArray" update-array="updateClicksArray(start, end)">
-                  <div class="row row-center responsive-sm">
+                  <div class="row row-center responsive-sm" id="no-data-div">
                     <div class="col text-center">
                       <h1 ng-show="!data.clickArray.length">
                         No data yet.

@@ -11,78 +11,138 @@ app
 			},
 			link: function(scope, elm, attrs) {
 
-				var width,
-					height,
-					format,
+				var width = elm[0].offsetWidth,
+					height = elm[0].offsetHeight,
+
+					// used in display details for circle click
+					format = d3.time.format("%b %d, %Y"),
+
+					// used in x, y domains
 					minDate,
 					maxDate,
-					x,
-					y,
-					xAxis,
-					yAxis,
-					line,
-					svg;
+
+					// axes properties
+					x = d3.time.scale(),
+					y = d3.scale.linear(),
+					xAxis = d3.svg.axis()
+						.orient("bottom")
+						.ticks(d3.time.day, 1)
+						.tickFormat(d3.time.format("%b %d")),
+					yAxis = d3.svg.axis()
+						.orient("left")
+						.ticks(5),
+
+					// line chart initialization
+					line = d3.svg.line(),
+
+					// container of the chart
+					svg = d3.select(elm[0]).append("svg"),
+					group = svg.append("g"),
+
+					// axes of the chart
+					xGroup = group.append("g")
+						.attr("class", "x axis"),
+					yGroup = group.append("g")
+							.attr("class", "y axis"),
+
+					// the line of the chart
+					clicksLine = group.append("path")
+						.attr("class", "line"),
+
+					// the nodes of the line chart
+					circles = group.append("g").attr("class", "circle-group"),
+
+					// allowance for clicking the node
+					hovers = group.append("g").attr("class", "circle-hover"),
+
+					// group for the text display of a circle
+					tooltip = group.append("g").style("display", "none"),
+
+					// container for the text display
+					tooltipRect = tooltip.append("rect")
+						.attr('height', 50)
+						.attr('width', 150),
+
+					// text element containing details of the click circle
+					text = tooltip.append("text")
+						.style("fill", "red")
+						.attr("class", "tooltip-text");
+
+				var disablePreviousClick = function() {
+					// hide the circle click details
+					d3.selectAll(".hover-circle")
+						.style("opacity", 0)
+						.transition()
+						.duration(300)
+						.ease("linear");
+
+					tooltip.style("display", "none");
+				};
+
+				var	displayDetails = function(item) {
+					// hide the previous circle click then display current circle click details
+					d3.select(item)
+						.style("opacity", 1)
+						.transition()
+						.each("end", function() {
+							disablePreviousClick();
+						})
+						.duration(1000)
+						.ease("linear");
+
+					tooltip.style("display", null);
+				};
 
 				function init() {
-					d3.select("#" + elm[0].id + " svg").remove();
-					var width = elm[0].offsetWidth;
-						height = elm[0].offsetHeight;
+					// for resizing, update width
+					width = elm[0].offsetWidth;
 
-						format = d3.time.format("%b %d, %Y");
+					// default data minDate: 7 days before current date (maxDate)
+					minDate = moment().subtract(scope.maxDays, 'day');
+					maxDate = moment();
 
-						minDate = moment().subtract(scope.maxDays, 'day');
-						maxDate = moment();
+					// select existing svg
+					svg = d3.select(elm[0]).select("svg")
+						.attr("width", width - 20)
+						.attr("height", height + 20);
 
-						x = d3.time.scale()
-								.range([0, width - 20]);
+					// update values of the chart axes
+					x.range([0, width - 20]);
+					y.range([height, 0]);
+					xAxis.scale(x);
+					yAxis.scale(y);
 
-						y = d3.scale.linear()
-								.range([height, 0]);
-
-						xAxis = d3.svg.axis()
-								.scale(x)
-								.orient("bottom")
-								.ticks(d3.time.day, 1)
-								.tickFormat(d3.time.format("%b %d"));
-
-						yAxis = d3.svg.axis()
-								.scale(y)
-								.orient("left")
-								.ticks(5);
-
-						line = d3.svg.line()
-								.x(function(d) { 
-									return x(new Date(d.$id)); 
-								})
-								.y(function(d) { 
-									return y(d.$value);
-								});
-
-						svg = d3.select(elm[0]).append("svg")
-									.attr("width", width - 20)
-									.attr("height", height + 20);
+					// set the coordinates for the line chart
+					line.x(function(d) { 
+						return x(new Date(d.$id)); 
+					}).y(function(d) { 
+						return y(d.$value);
+					});
 				};
 
 				function drawChart(val) {
-					d3.select("#" + elm[0].id + " svg g").remove();
 
 					if(scope.choice === 'month') {
+						// month data minDate: 30 days before tomorrow's date (maxDate)
 						minDate = moment().subtract(32, 'day');
 						maxDate = moment().add(1, 'day');
 						xAxis.ticks(d3.time.day, 3);
+					} else {
+						xAxis.ticks(d3.time.day, 1)
 					}
 
+					// length of the axes
+					// y-axis default max is 4
 					x.domain([minDate, maxDate]);
 					y.domain([0, d3.max(val, function(d) {
 						return (d.$value < 5) ? 4 : d.$value;
 					})]);
 
-					var group = svg.append("g")
-								.attr("transform", "translate(25,10)scale(0.9)");
+					// move the chart group and decrease scale to fit svg container
+					group.attr("transform", "translate(25,10)scale(0.9)");
 
-					group.append("g")
-						.attr("class", "x axis")
-						.attr("transform", "translate(0," + height + ")")
+					// move the x-axis position
+					xGroup.attr("transform", "translate(0," + height + ")")
 						.call(xAxis);
 
 					// @link: http://bl.ocks.org/phoebebright/3059392
@@ -92,83 +152,54 @@ app
 							return "translate(" + this.getBBox().height*-0.9 + "," + (this.getBBox().height) + ")rotate(-45)";
 						});
 
-					group.append("g")
-							.attr("class", "y axis")
-							.call(yAxis)
-						.append("text")
+					// attach the values
+					yGroup.call(yAxis);
+
+					// append 'Count' text of y-axis once
+					if(d3.select("#count-label").empty()) {
+						yGroup.append("text")
 							.attr("transform", "rotate(-90)")
 							.attr("y", 6)
 							.attr("dy", ".71em")
 							.style("text-anchor", "end")
-							.text("Count");
-
-					group.append("path")
-							.datum(val)
-							.attr("class", "line")
-							.attr("d", line);
-
-					var circles = group.append("g").attr("class", "circle-group"),
-						hovers = group.append("g").attr("class", "circle-hover"),
-						tooltip = group.append("g").style("display", "none"),
-						tooltipRect = tooltip.append("rect")
-										.attr('height', 50)
-										.attr('width', 150),
-						text = tooltip.append("text")
-									.style("fill", "red")
-									.attr("class", "tooltip-text");
-
-					var disablePreviousClick = function() {
-
-						d3.selectAll(".hover-circle")
-							.style("opacity", 0)
-							.transition()
-							.duration(300)
-							.ease("linear");
-
-						tooltip.style("display", "none");
-					};
-
-					var	displayDetails = function(item) {
-
-						d3.select(item)
-							.style("opacity", 1)
-							.transition()
-							.each("end", function() {
-								disablePreviousClick();
-							})
-							.duration(1000)
-							.ease("linear");
-
-						tooltip.style("display", null);
+							.text("Count")
+							.attr("id", "count-label");
 					}
 
-					circles.selectAll("circle")
+					// update line of chart
+					clicksLine.datum(val)
+						.attr("d", line);
+
+					var circlesData = circles.selectAll("circle")
 						.data(val, function(d) {
 							return d.$value + d.$id;
-						})
-						.enter().append("circle")
-						.attr("cy", function(d) {
-							return y(d.$value);
-						})
-						.attr("cx", function(d) {
-							return x(new Date(d.$id));
-						})
+						});
+
+					// add data from current collection
+					circlesData.enter().append("circle")
 						.attr("r", function() {
 							return 2;
 						})
-						.attr("class", "click-circle")
+						.attr("class", "click-circle");
 
-					hovers.selectAll("circle")
-						.data(val, function(d) {
-							return d.$value + d.$id;
-						})
-						.enter().append("circle")
-						.attr("cy", function(d) {
+					// update position
+					circlesData.attr("cy", function(d) {
 							return y(d.$value);
 						})
 						.attr("cx", function(d) {
 							return x(new Date(d.$id));
-						})
+						});
+
+					// remove data not in current collection
+					circlesData.exit().remove();
+
+					var hoversData = hovers.selectAll("circle")
+						.data(val, function(d) {
+							return d.$value + d.$id;
+						});
+
+					// add data from current collection
+					hoversData.enter().append("circle")
 						.attr("r", function() {
 							return 10;
 						})
@@ -204,6 +235,17 @@ app
 									.attr("y", 20)
 									.text("Count: " + d.$value);
 						});
+
+					// update position
+					hoversData.attr("cy", function(d) {
+							return y(d.$value);
+						})
+						.attr("cx", function(d) {
+							return x(new Date(d.$id));
+						});
+
+					// remove data not in current collection
+					hoversData.exit().remove();
 				}
 
 				scope.$watchCollection('clickArray', function(val) {
