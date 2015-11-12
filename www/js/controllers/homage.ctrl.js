@@ -9,9 +9,10 @@ app
     '$ionicPopup', 
     '$cordovaNetwork', 
     '$cordovaDevice', 
+    'CONSTANTS',
     'HomageFactory', 
     'AchievementFactory',
-    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, HomageFactory, AchievementFactory) {
+    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -19,6 +20,7 @@ app
     $scope.data = {
       uuid: '',
       popupEnabled: true,
+      avatarLoc: CONSTANTS.AVATAR_DIR + '/' + CONSTANTS.AVATAR_FNAME,
       choice: 'days',
       selectedList: '',
       maxDays: 7,

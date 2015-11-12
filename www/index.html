@@ -35,6 +35,7 @@
     <script src="js/controllers/homage.ctrl.js"></script>
     <script src="js/directives/progress.directive.js"></script>
     <script src="js/directives/achievement.directive.js"></script>
+    <script src="js/directives/avatar.directive.js"></script>
     <script src="js/directives/chart.directive.js"></script>
     <script src="js/directives/stars.directive.js"></script>
     <script src="js/services/homage.factory.js"></script>
@@ -59,7 +60,7 @@
                   </div>
                   <div id="count-img">
                     <img class="item-image" 
-                          ng-src="img/girls/avatar-f-small-{{(data.currentLevel < 10) ? '0' + data.currentLevel : data.currentLevel}}.png" 
+                          ng-src="img/{{data.avatarLoc}}-{{(data.currentLevel < 10) ? '0' + data.currentLevel : data.currentLevel}}.png" 
                           ng-click="buttonClick()">
                   </div>
                   <h1>{{data.clickCount.$value}}</h1>
@@ -117,7 +118,7 @@
                       </div>
                       <div id="group-img">
                         <achievement-list ng-show="data.selectedList === 'achievement'" achievements-declared="data.achievementsDeclared" achievement-array="data.achievementArray"></achievement-list>
-                        <achievement-list ng-show="data.selectedList === 'avatar'" achievements-declared="[]" achievement-array="[]"></achievement-list>
+                        <avatar-list ng-show="data.selectedList === 'avatar'" current-level="data.currentLevel" avatar-loc="data.avatarLoc"></avatar-list>
                       </div>
                     </div>
                   </div>

@@ -1,8 +1,8 @@
 app
-  .factory('HomageFactory', ['$firebaseArray', '$firebaseObject', '$http', 'FIREBASE_URL', 'Restangular', 'AchievementFactory', function($firebaseArray, $firebaseObject, $http, FIREBASE_URL, Restangular, AchievementFactory) {
-    var ref = new Firebase(FIREBASE_URL);
+  .factory('HomageFactory', ['$firebaseArray', '$firebaseObject', '$http', 'CONSTANTS', 'Restangular', 'AchievementFactory', function($firebaseArray, $firebaseObject, $http, CONSTANTS, Restangular, AchievementFactory) {
+    var ref = new Firebase(CONSTANTS.FIREBASE_URL);
 
-    Restangular.baseUrl = FIREBASE_URL;
+    Restangular.baseUrl = CONSTANTS.FIREBASE_URL;
 
     return {
       getAllResponses: function() { // used in $scope.shout to show some response, returns a promise

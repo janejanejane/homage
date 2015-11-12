@@ -28,4 +28,8 @@ var app = angular.module('homage', [
   });
 })
 
-.constant('FIREBASE_URL', 'https://homage.firebaseio.com/');
+.constant('CONSTANTS', {
+  "FIREBASE_URL": "https://homage.firebaseio.com/",
+  "AVATAR_DIR": "girls",
+  "AVATAR_FNAME": "avatar-f-small"
+});
