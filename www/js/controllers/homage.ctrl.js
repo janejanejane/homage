@@ -6,13 +6,14 @@ app
     '$ionicPlatform', 
     '$ionicLoading',
     '$ionicSlideBoxDelegate', 
+    '$ionicScrollDelegate',
     '$ionicPopup', 
     '$cordovaNetwork', 
     '$cordovaDevice', 
     'CONSTANTS',
     'HomageFactory', 
     'AchievementFactory',
-    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory) {
+    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -168,6 +169,12 @@ app
       } else {
         $scope.updateClicksArray();
       }
+    };
+
+    // back button in achievements and avatars list
+    $scope.backClick = function() {
+      $scope.data.selectedList = ''; 
+      $ionicScrollDelegate.scrollTop();
     };
 
     // updates clicks array used in UI
