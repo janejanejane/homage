@@ -55,6 +55,10 @@
 			animation:bounce 1s infinite;
 }
 
+#intro-click.hide {
+	display: none !important;
+}
+
 #intro-click .arrow-body {
 	background-color: #FFA500;
 	display: inline-block;
