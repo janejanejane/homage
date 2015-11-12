@@ -30,6 +30,7 @@ var app = angular.module('homage', [
 
 .constant('CONSTANTS', {
   "FIREBASE_URL": "https://homage.firebaseio.com/",
+  "FIREBASE_DB": "clickerz",
   "AVATAR_DIR": "girls",
   "AVATAR_FNAME": "avatar-f-small"
 });

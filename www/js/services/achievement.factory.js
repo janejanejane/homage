@@ -2,6 +2,7 @@ app
 	.factory('AchievementFactory', ['$firebaseArray', '$http', 'CONSTANTS', function($firebaseArray, $http, CONSTANTS) {
 
 		var ref = new Firebase(CONSTANTS.FIREBASE_URL),
+			db = CONSTANTS.FIREBASE_DB,
 			achievementsDeclared = [],
 			achievementsArray = [];
 
@@ -24,7 +25,7 @@ app
 				}
 			},
 			getAllAchievements: function(uuid) {
-				var obj = ref.child('clickerz/'+uuid+'/achievements');
+				var obj = ref.child(db+'/'+uuid+'/achievements');
 				return $firebaseArray(obj);
 			},
 			getAchievementsDeclared: function() {

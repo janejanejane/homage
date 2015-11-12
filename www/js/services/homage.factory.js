@@ -1,6 +1,7 @@
 app
   .factory('HomageFactory', ['$firebaseArray', '$firebaseObject', '$http', 'CONSTANTS', 'Restangular', 'AchievementFactory', function($firebaseArray, $firebaseObject, $http, CONSTANTS, Restangular, AchievementFactory) {
-    var ref = new Firebase(CONSTANTS.FIREBASE_URL);
+    var ref = new Firebase(CONSTANTS.FIREBASE_URL),
+        db = CONSTANTS.FIREBASE_DB;
 
     Restangular.baseUrl = CONSTANTS.FIREBASE_URL;
 
@@ -10,15 +11,15 @@ app
       },
       getAllClicks: function(userId, callback) { // get all the data on clicks of current user
         var self = this;
-        var clickObj = $firebaseObject(ref.child('clickerz/'+userId));
+        var clickObj = $firebaseObject(ref.child(db+'/'+userId));
         return callback(clickObj);
       },
       getTotalCount: function(uuid, callback) { // get the totalCount to show in client
-        var totalObj = $firebaseObject(ref.child('clickerz/'+uuid+'/totalCount'));
+        var totalObj = $firebaseObject(ref.child(db+'/'+uuid+'/totalCount'));
         return callback(totalObj);
       },
       getClicks: function(uuid, start, end, callback){ // get paginated clicks
-        var obj = ref.child('clickerz/'+uuid+'/clicks')
+        var obj = ref.child(db+'/'+uuid+'/clicks')
                       .orderByKey()
                       .startAt(start.format('MM-DD-YYYY').toString())
                       .endAt(end.format('MM-DD-YYYY').toString()),
@@ -26,7 +27,7 @@ app
         return callback(clickArray);
       },
       createNewUser: function(uuid){
-        var obj = ref.child('clickerz/'+uuid); // automatically creates user node if no record yet
+        var obj = ref.child(db+'/'+uuid); // automatically creates user node if no record yet
         obj.set({
           clicks: [],
           name: uuid,
@@ -35,14 +36,14 @@ app
         });
       },
       setClickCount: function(uuid, dateString, value, callback){
-        var obj = ref.child('clickerz/'+uuid+'/clicks/'+dateString);
+        var obj = ref.child(db+'/'+uuid+'/clicks/'+dateString);
         obj.set(value, function(){
           console.log('Done setting to database');
         });
         this.setTotalCount(uuid, value, callback);
       },
       setTotalCount: function(uuid, value, callback) {
-        var obj = ref.child('clickerz/'+uuid+'/totalCount'),
+        var obj = ref.child(db+'/'+uuid+'/totalCount'),
             total = 0;
 
         if(!obj) {
