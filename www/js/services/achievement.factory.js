@@ -1,7 +1,7 @@
 app
-	.factory('AchievementFactory', ['$firebaseArray', '$http', 'FIREBASE_URL', function($firebaseArray, $http, FIREBASE_URL) {
+	.factory('AchievementFactory', ['$firebaseArray', '$http', 'CONSTANTS', function($firebaseArray, $http, CONSTANTS) {
 
-		var ref = new Firebase(FIREBASE_URL),
+		var ref = new Firebase(CONSTANTS.FIREBASE_URL),
 			achievementsDeclared = [],
 			achievementsArray = [];
 

@@ -143,16 +143,30 @@
 	cursor: pointer;
 }
 
-.achievement-list {
+.achievement-list,
+.avatar-list {
 	display: block;
 	width: 100%;
 	padding: 10px;
 	border: solid 1px #EEEEEE;
 }
 
-.achievement-list > img {
+.achievement-list > img,
+.avatar-list > img {
 	position: absolute;
 	left: 10px;
+	width: 30px;
+	height: 30px;
+}
+
+.avatar-list {
+	height: 120px;
+}
+
+.avatar-list > img {
+	width: 100px;
+	height: 100px;
+	border-radius: 100px;
 }
 
 /* override mdtoast */

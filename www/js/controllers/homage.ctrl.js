@@ -6,12 +6,14 @@ app
     '$ionicPlatform', 
     '$ionicLoading',
     '$ionicSlideBoxDelegate', 
+    '$ionicScrollDelegate',
     '$ionicPopup', 
     '$cordovaNetwork', 
     '$cordovaDevice', 
+    'CONSTANTS',
     'HomageFactory', 
     'AchievementFactory',
-    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, HomageFactory, AchievementFactory) {
+    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -19,6 +21,7 @@ app
     $scope.data = {
       uuid: '',
       popupEnabled: true,
+      avatarLoc: CONSTANTS.AVATAR_DIR + '/' + CONSTANTS.AVATAR_FNAME,
       choice: 'days',
       selectedList: '',
       maxDays: 7,
@@ -166,6 +169,12 @@ app
       } else {
         $scope.updateClicksArray();
       }
+    };
+
+    // back button in achievements and avatars list
+    $scope.backClick = function() {
+      $scope.data.selectedList = ''; 
+      $ionicScrollDelegate.scrollTop();
     };
 
     // updates clicks array used in UI
