@@ -4,6 +4,7 @@
 	display: block;
 	border: 1px solid #AAAAAA;
 	margin: 20px 0px;
+	background-color: #FFFFFF;
 }
 #no-data-div > div {
 	margin: 0px;
@@ -12,16 +13,12 @@
 }
 
 #levelbar-div {
-	min-height: 30px;
-	width: 100%;
-	display: block;
 	position: absolute;
-	top: 50%;
-	left: 50%;
+	top: -20px;
+	left: 0;
 	z-index: -1;
-	-webkit-transform: translate(-50%, -65%);
-	-ms-transform: translate(-50%, -65%);
-	transform: translate(-50%, -65%);
+	margin: 0 auto;
+	width: 100%;
 }
 
 #progress-bar {
@@ -55,6 +52,10 @@
 			animation:bounce 1s infinite;
 }
 
+#intro-click.hide {
+	display: none !important;
+}
+
 #intro-click .arrow-body {
 	background-color: #FFA500;
 	display: inline-block;
@@ -68,6 +69,12 @@
 	border-left: 70px solid transparent;
 	border-right: 70px solid transparent;
 	border-top: 50px solid #FFA500;
+}
+
+.click-arrow-div {
+	height: 0px;
+	padding: 0px;
+	margin: 0px;
 }
 
 .curtain {

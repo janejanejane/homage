@@ -43,7 +43,7 @@ app
 
 				function drawProgress(val) {
 
-						width = elm[0].offsetWidth;
+						width = 300;
 						scope.currentLevel = Math.floor(Math.log(val)/Math.LN2);
 
 						// update domain of values for progress angle

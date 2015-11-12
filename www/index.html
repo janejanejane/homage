@@ -50,29 +50,29 @@
           <stars-div ng-show="data.clickArray.length" id="levelup-stars" current-level="data.currentLevel"></stars-div>
           <ion-slide-box on-slide-changed="slideHasChanged($index)">
             <ion-slide>
-              <div class="box row row-center responsive-sm">
-                <div class="col text-center top-adjust">
-                  <div ng-show="data.clickCount.$value === 0" id="intro-click">
+              <div ng-class="{hide:data.clickCount.$value !== 0}" class="row row-center responsive-sm click-arrow-div">
+                <div class="col text-center">
+                  <div id="intro-click">
                     <div class="arrow-body">
                       <h1>Click</h1>
                     </div>
                     <div class="arrow-head-down"></div>
                   </div>
+                </div>
+              </div>
+              <div class="box row row-center responsive-sm">
+                <div class="col text-center top-adjust">
                   <div id="count-img">
-                    <img class="item-image" 
+                    <div>
+                      <img class="item-image" 
                           ng-src="img/{{data.avatarLoc}}-{{(data.currentLevel < 10) ? '0' + data.currentLevel : data.currentLevel}}.png" 
                           ng-click="buttonClick()">
+                      <h1>{{data.clickCount.$value}}</h1>
+                    </div>
                     <level-bar id="levelbar-div" 
                                 total-clicks="data.clickCount.$value" 
                                 current-level="data.currentLevel"></level-bar>
-                    <h1>{{data.clickCount.$value}}</h1>
                   </div>
-                  <!-- <div id="group-img">
-                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
-                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
-                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
-                    <img class="item-image" ng-src="{{data.clickArray.length && 'img/30x30.jpg' || ''}}">
-                  </div> -->
                 </div>
               </div>
             </ion-slide>

@@ -96,6 +96,7 @@ app
 				function init() {
 					// for resizing, update width
 					width = elm[0].offsetWidth;
+					height = $window.innerHeight - 230;
 
 					// default data minDate: 7 days before current date (maxDate)
 					minDate = moment().subtract(scope.maxDays, 'day');
