@@ -40,6 +40,7 @@
     <script src="js/directives/stars.directive.js"></script>
     <script src="js/services/homage.factory.js"></script>
     <script src="js/services/achievement.factory.js"></script>
+    <script src="js/services/avatar.factory.js"></script>
   </head>
   <body ng-app="homage">
 
@@ -116,7 +117,7 @@
                       </div>
                       <div id="group-img">
                         <achievement-list ng-show="data.selectedList === 'achievement'" achievements-declared="data.achievementsDeclared" achievement-array="data.achievementArray"></achievement-list>
-                        <avatar-list ng-show="data.selectedList === 'avatar'" current-level="data.currentLevel" avatar-loc="data.avatarLoc"></avatar-list>
+                        <avatar-list ng-show="data.selectedList === 'avatar'" current-level="data.currentLevel" avatar-loc="data.avatarLoc" avatar-names="data.avatarNames"></avatar-list>
                       </div>
                     </div>
                   </div>

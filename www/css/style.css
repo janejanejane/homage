@@ -176,6 +176,11 @@
 	border-radius: 100px;
 }
 
+.avatar-desc {
+	position: absolute;
+	left: 150px;
+}
+
 /* override mdtoast */
 md-toast.md-assertive-theme {
 	font-size: xx-large;

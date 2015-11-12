@@ -13,7 +13,22 @@ app
     'CONSTANTS',
     'HomageFactory', 
     'AchievementFactory',
-    function($scope, $filter, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory) {
+    'AvatarFactory',
+    function(
+      $scope, 
+      $filter,
+      $mdToast, 
+      $ionicPlatform, 
+      $ionicLoading, 
+      $ionicSlideBoxDelegate, 
+      $ionicScrollDelegate, 
+      $ionicPopup, 
+      $cordovaNetwork, 
+      $cordovaDevice, 
+      CONSTANTS, 
+      HomageFactory, 
+      AchievementFactory,
+      AvatarFactory) {
 
     $scope.shout = null;
     $scope.savedClicks = null;
@@ -30,6 +45,7 @@ app
       clickArray: [],
       achievementArray: [],
       achievementsDeclared: [],
+      avatarNames: []
     }
 
     var controller = {
@@ -101,8 +117,13 @@ app
         });
 
         // get json data for all achievements
-        AchievementFactory.getAchievementsDeclared().then().then(function(response) {
+        AchievementFactory.getAchievementsDeclared().then(function(response) {
           $scope.data.achievementsDeclared = response.data.achievements;
+        });
+
+        // get json data of the avatar names
+        AvatarFactory.getAvatarNames().then(function(response) {
+          $scope.data.avatarNames = response.data.avatars;
         });
 
         $scope.updateClicksArray();

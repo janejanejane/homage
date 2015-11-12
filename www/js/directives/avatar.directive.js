@@ -5,18 +5,18 @@ app
 			replace: true,
 			scope: {
 				currentLevel: '=',
-				avatarLoc: '='
+				avatarLoc: '=',
+				avatarNames: '='
 			},
 			link: function(scope, elm, attrs) {
 				scope.$watch('currentLevel', function(val) {
 					scope.list = [];
-					if(val !== 0) {
-						// there are 85 avatars
-						for (var i = 0; i < 85; i++) {
-							scope.list.push({
-								unlocked: (i<=val)
-							});
-						}
+					// there are 84 avatars
+					for (var i = 0; i < scope.avatarNames.length; i++) {
+						scope.list.push({
+							unlocked: (i<=val),
+							name: scope.avatarNames[i].name
+						});
 					}
 				});
 			},
@@ -25,7 +25,9 @@ app
 					'<div ng-repeat="i in list track by $index" ng-if="$index > 0">'+
 						'<div class="avatar-list">'+
 							'<img class="item-image" ng-src="{{(i.unlocked) ? (\'img/\'+avatarLoc+\'-\'+(($index < 10) ? \'0\' + $index : $index)+\'.png\') : \'img/\'+avatarLoc+\'-00.png\'}}" >'+
-							'<h6>Level {{$index}}</h6>'+
+							'<div class="avatar-desc">'+
+								'<h3 ng-if="i.unlocked">{{i.name}} is awake!</h3>'+
+							'</div>'+
 						'</div>'+
 					'</div>'+
 				'</div>'
