@@ -8,32 +8,51 @@ app
 			},
 			link: function(scope, elm, attrs) {
 				console.log('scope.currentLevel', scope.currentLevel);
+
+				var width = elm.parent().prop('offsetWidth'),
+					height = elm.parent().prop('offsetHeight'),
+					circles = [],
+					total = 50,
+					ocRadius = 5;
+
+				// container for the star blast
+				var svg = d3.select(elm[0])
+					.append("svg");
+
+				// star group for easy location transformation
+				var group = svg.append("g");
+
+				// inner circle as guide for the outer star blast
+				var center = svg.append("circle")
+					.style("stroke", "white")
+					.style("fill", "white");
+
+				// angle range for the stars
+				var circleAngle = d3.scale.linear().range([0,360]).domain([0,ocRadius]);
+
 				scope.$watch('currentLevel', function(newVal, oldVal) {
 					// only show stars on level up
 					if((oldVal === 0 && newVal === 1) || (oldVal !== 0 && newVal > oldVal)) {
-						d3.select("#" + elm[0].id + " svg").remove();
 
-						var width = elm.parent().prop('offsetWidth'),
-							height = elm.parent().prop('offsetHeight'),
-							circles = [],
-							total = 50,
-							ocRadius = 5;
+						// update container size
+						width = elm.parent().prop('offsetWidth');
+						height = elm.parent().prop('offsetHeight');
 
+						circles = [];
 						for (var i = 0; i < total; i++) {
 							circles.push(Math.round(Math.random() * 100));
 						};
 
-						var svg = d3.select(elm[0])
-							.append("svg")
+						// select existing container for the star blast
+						svg = d3.select("svg")
 							.attr("width", width - 20)
-							.attr("height", height - 90)
-							.append("g")
-							.attr("transform", "translate(0, 20)");
+							.attr("height", height - 90);
 
-						var center = svg.append("circle")
-							.style("stroke", "white")
-							.style("fill", "white")
-							.attr("r", 1)
+						// move star group
+						group.attr("transform", "translate(0, 20)");
+
+						// set location and radius of inner circle
+						center.attr("r", 1)
 							.attr("cx", function() {
 								return ((width - 20) / 2);
 							})
@@ -41,14 +60,20 @@ app
 								return (height / 3);
 							});
 
-						var outside = svg.selectAll(".blast")
-							.data(circles)
-							.enter().append("g")
-							.attr("class", "blast")
-							.attr("transform", "translate("+ ((width - 20) / 2) +", "+ (height / 3) +")");
+						// get all existing stars
+						var outside = group.selectAll(".blast")
+							.data(circles, function(d, i) {
+								return "" + d + i;
+							});
 
-						var circleAngle = d3.scale.linear().range([0,360]).domain([0,ocRadius]);
+						// add new stars if not already drawn
+						outside.enter().append("g")
+							.attr("class", "blast");
 
+						// adjust location of stars similar to inner circle
+						outside.attr("transform", "translate("+ ((width - 20) / 2) +", "+ (height / 3) +")");
+
+						// blast transition
 						outside.transition()
 							.duration(10000)
 							.delay(function(d, i) {
@@ -64,12 +89,16 @@ app
 										// (x + r cos(2kπ/n), y + r sin(2kπ/n))
 										// where: 	n is the number of elements
 										// 			k is the element currently positioning (between 1 and n inclusive).
-										var x = 50 * width * Math.cos(2 * Math.PI * i / (total/2)),
-											y = 50 * height * Math.sin(2 * Math.PI * i / (total/2));
+										var x = 5 * width * Math.cos(2 * Math.PI * i / (total/2)),
+											y = 5 * height * Math.sin(2 * Math.PI * i / (total/2));
 
 										return "translate("+ x +","+ y +")"
 									});
 							});
+
+						// remove old data
+						outside.exit().transition()
+							.delay(20000).remove();
 
 						// draw stars
 						outside.append("polygon")
