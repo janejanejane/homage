@@ -156,6 +156,7 @@
 	width: 100%;
 	padding: 10px;
 	border: solid 1px #EEEEEE;
+	background-color: #FFFFFF;
 }
 
 .achievement-list > img,
@@ -209,5 +210,14 @@ md-toast.md-energized-theme {
 	}
 	100% {
 		bottom:0;
+	}
+}
+
+
+@media only screen
+and (min-width : 450px) {
+	.click-arrow-div {
+		position: absolute;
+		top: 70px;
 	}
 }

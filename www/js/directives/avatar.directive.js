@@ -10,12 +10,22 @@ app
 			},
 			link: function(scope, elm, attrs) {
 				scope.$watch('currentLevel', function(val) {
+					if(scope.list) {
+						for (var i = 0; i <= val; i++) {
+							if(i <= val) {
+								scope.list[i].unlocked = true;
+							}
+						};
+					}
+				});
+
+				scope.$watch('avatarNames', function(val) {
 					scope.list = [];
 					// there are 84 avatars
-					for (var i = 0; i < scope.avatarNames.length; i++) {
+					for (var i = 0; i < val.length; i++) {
 						scope.list.push({
-							unlocked: (i<=val),
-							name: scope.avatarNames[i].name
+							unlocked: (i<=scope.currentLevel),
+							name: (val[i]) ? val[i].name : ''
 						});
 					}
 				});
@@ -27,6 +37,7 @@ app
 							'<img class="item-image" ng-src="{{(i.unlocked) ? (\'img/\'+avatarLoc+\'-\'+(($index < 10) ? \'0\' + $index : $index)+\'.png\') : \'img/\'+avatarLoc+\'-00.png\'}}" >'+
 							'<div class="avatar-desc">'+
 								'<h3 ng-if="i.unlocked">{{i.name}} is awake!</h3>'+
+								'<h3 ng-if="!i.unlocked">???</h3>'+
 							'</div>'+
 						'</div>'+
 					'</div>'+
