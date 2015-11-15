@@ -33,6 +33,7 @@
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/controllers/homage.ctrl.js"></script>
+    <script src="js/directives/click.directive.js"></script>
     <script src="js/directives/progress.directive.js"></script>
     <script src="js/directives/achievement.directive.js"></script>
     <script src="js/directives/avatar.directive.js"></script>
@@ -64,12 +65,10 @@
               <div class="box row row-center responsive-sm">
                 <div class="col text-center top-adjust">
                   <div id="count-img">
-                    <div>
-                      <img class="item-image" 
-                          ng-src="img/{{data.avatarLoc}}-{{(data.currentLevel < 10) ? '0' + data.currentLevel : data.currentLevel}}.png" 
-                          ng-click="buttonClick()">
-                      <h1>{{data.clickCount.$value}}</h1>
-                    </div>
+                    <click-div avatar-loc="data.avatarLoc"
+                                current-level="data.currentLevel"
+                                total-clicks="data.clickCount.$value"
+                                button-click="buttonClick()"></click-div>
                     <level-bar id="levelbar-div" 
                                 total-clicks="data.clickCount.$value" 
                                 current-level="data.currentLevel"></level-bar>

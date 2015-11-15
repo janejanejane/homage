@@ -31,6 +31,10 @@
 	z-index: 1;
 }
 
+#count-img img.held {
+	-webkit-filter: grayscale(1);
+}
+
 #achievements-scroll {
 	bottom: 10px;
 }
