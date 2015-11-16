@@ -22,8 +22,10 @@ app
 				}
 			},
 			template:
-				'<div on-touch="onTouch()" on-release="onRelease()">'+
-					'<img class="item-image" '+
+				'<div>'+
+					'<img class="item-image"'+
+						'on-touch="onTouch()"'+
+						'on-release="onRelease()"'+
 						'ng-class="{held: touchDown}"'+
 						'ng-src="img/{{avatarLoc}}-{{(currentLevel < 10) ? \'0\' + currentLevel : currentLevel}}.png" >'+
 					'<h1>{{totalClicks}}</h1>'+
