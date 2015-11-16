@@ -30,13 +30,15 @@ app
 
 				var progressCircle = base.append("path")
 					.datum({endAngle: twoPi})
-					.attr("d", arc);
+					.attr("d", arc)
+					.attr("id", "progress-bg");
 
 				// draw the progress
 				var progress = base.append("path")
 					.datum({endAngle: 0})
 					.attr("fill", "#990100")
-					.attr("d", arc);
+					.attr("d", arc)
+					.attr("id", "progress-color");
 
 				// angle of progress
 				var x = d3.scale.linear();
@@ -60,7 +62,8 @@ app
 						group.attr("transform", "translate(" + (width / 2) + ", " + (height / 2) + ")");
 
 						// add color to the circle background
-						progressCircle.attr("fill", "#333333");
+						progressCircle.attr("fill", "#333333")
+							.style("display", null);
 
 						// change progress angle with tween
 						progress.transition()
@@ -74,12 +77,17 @@ app
 									// compute arc with given value
 									return arc(d);
 								}
-							});
+							})
+							.style("display", null);
 				};
 
 				scope.$watch('totalClicks', function(val) {
 					if(val) {
 						drawProgress(val);
+					} else {
+						scope.currentLevel = 0;
+						d3.select('#progress-color').style("display", "none");
+						d3.select('#progress-bg').style("display", "none");
 					}
 				});
 

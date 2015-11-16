@@ -10,8 +10,17 @@ app
 			},
 			link: function(scope, elm, attrs) {
 				scope.$watch('currentLevel', function(val) {
+					// set unlocked avatar to false for currentLevel = 0
+					if(val === 0 && !!scope.list) {
+						scope.list.forEach(function(val, index) {
+							scope.list[index].unlocked = false;
+						});
+					}
+
+					// set unlocked avatar to true for currentLevel !=0
 					if(scope.list) {
 						for (var i = 0; i <= val; i++) {
+							scope.list[i].unlocked = false;
 							if(i <= val) {
 								scope.list[i].unlocked = true;
 							}

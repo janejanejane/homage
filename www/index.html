@@ -52,7 +52,7 @@
           <stars-div ng-show="data.clickArray.length" id="levelup-stars" current-level="data.currentLevel"></stars-div>
           <ion-slide-box on-slide-changed="slideHasChanged($index)">
             <ion-slide>
-              <div ng-class="{hide:data.clickCount.$value !== 0}" class="row row-center responsive-sm click-arrow-div">
+              <div ng-class="{hide:!!data.clickCount.$value}" class="row row-center responsive-sm click-arrow-div">
                 <div class="col text-center">
                   <div id="intro-click">
                     <div class="arrow-body">
@@ -67,7 +67,7 @@
                   <div id="count-img">
                     <click-div avatar-loc="data.avatarLoc"
                                 current-level="data.currentLevel"
-                                total-clicks="data.clickCount.$value"
+                                total-clicks="data.clickCount.$value || 0"
                                 button-click="buttonClick()"></click-div>
                     <level-bar id="levelbar-div" 
                                 total-clicks="data.clickCount.$value" 

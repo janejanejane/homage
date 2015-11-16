@@ -14,12 +14,17 @@ app
 
 				scope.onTouch = function(){
 					scope.touchDown = true;
-					scope.buttonClick();
 				}
 
 				scope.onRelease = function(){
 					scope.touchDown = false;
+					scope.buttonClick();
 				}
+
+				scope.$watch('currentLevel', function(val) {
+					// if level is less 10, prefix image filename with '0'
+					scope.currentImg = 'img/'+ scope.avatarLoc +'-'+ ((scope.currentLevel < 10) ? '0' + scope.currentLevel : scope.currentLevel) +'.png';
+				});
 			},
 			template:
 				'<div>'+
@@ -27,7 +32,7 @@ app
 						'on-touch="onTouch()"'+
 						'on-release="onRelease()"'+
 						'ng-class="{held: touchDown}"'+
-						'ng-src="img/{{avatarLoc}}-{{(currentLevel < 10) ? \'0\' + currentLevel : currentLevel}}.png" >'+
+						'ng-src="{{currentImg}}" >'+
 					'<h1>{{totalClicks}}</h1>'+
 				'</div>'
 		}
