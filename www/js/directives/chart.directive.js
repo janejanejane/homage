@@ -36,7 +36,8 @@ app
 					line = d3.svg.line(),
 
 					// container of the chart
-					svg = d3.select(elm[0]).append("svg"),
+					svg = d3.select(elm[0]).append("svg")
+						.attr("id", "chart-svg"),
 					group = svg.append("g"),
 
 					// axes of the chart
@@ -105,7 +106,8 @@ app
 					// select existing svg
 					svg = d3.select(elm[0]).select("svg")
 						.attr("width", width - 20)
-						.attr("height", height + 20);
+						.attr("height", height + 20)
+						.style("display", null);
 
 					// update values of the chart axes
 					x.range([0, width - 20]);
@@ -255,6 +257,9 @@ app
 						init();
 						// render
 						drawChart(val);
+					} else {
+						// hide svg
+						d3.select("#chart-svg").style("display", "none");
 					}
 				});
 

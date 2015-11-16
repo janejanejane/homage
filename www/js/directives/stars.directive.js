@@ -17,7 +17,8 @@ app
 
 				// container for the star blast
 				var svg = d3.select(elm[0])
-					.append("svg");
+					.append("svg")
+					.attr("id", "stars-svg");
 
 				// star group for easy location transformation
 				var group = svg.append("g");
@@ -44,7 +45,7 @@ app
 						};
 
 						// select existing container for the star blast
-						svg = d3.select("svg")
+						svg = d3.select("#stars-svg")
 							.attr("width", width - 20)
 							.attr("height", height - 90);
 

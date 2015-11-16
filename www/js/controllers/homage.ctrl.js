@@ -126,8 +126,10 @@ app
           $scope.data.avatarNames = response.data.avatars;
         });
 
+        // get binding to achievements array
+        $scope.data.achievementArray = AchievementFactory.getAllAchievements(user);
+
         $scope.updateClicksArray();
-        $scope.updateAchievements(user); 
       }
     };
 
@@ -166,7 +168,6 @@ app
           1, 
           function(record) {
             $scope.showAchievement(record);
-            $scope.updateAchievements($scope.data.uuid);
           }
         );
       }else{
@@ -180,7 +181,6 @@ app
           sum+1, 
           function(record) {
             $scope.showAchievement(record);
-            $scope.updateAchievements($scope.data.uuid);
           }
         );
       }
@@ -213,26 +213,12 @@ app
       }
 
       HomageFactory.getClicks($scope.data.uuid, startDate, endDate, function(clickObj) { // wait for the device uuid to prevent null result
-        $scope.data.clickArray = [];
-
-        clickObj.$loaded().then(function(){
-          clickObj.forEach(function(data) { // use .forEach to exclude enumerated attributes
-            $scope.data.clickArray.push(data);
-          });
+        // get binding to clicks array
+        clickObj.$loaded().then(function(data){
+          $scope.data.clickArray = data;
 
           // hide loader
           $ionicLoading.hide();
-        });
-      });
-    };
-
-    // updates achievements array used in UI
-    $scope.updateAchievements = function(uuid) {
-      $scope.data.achievementArray = [];
-
-      AchievementFactory.getAllAchievements(uuid).$loaded().then(function(achievementObj) {
-        achievementObj.forEach(function(data) {
-          $scope.data.achievementArray.push(data);
         });
       });
     };

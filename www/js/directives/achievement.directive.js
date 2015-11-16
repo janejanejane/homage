@@ -17,6 +17,9 @@ app
 						// copy details
 						record = scope.achievementsDeclared[i];
 
+						// set to false on first load
+						record['unlocked'] = false;
+
 						for (var j = 0; j < val.length; j++) {
 							if(scope.achievementsDeclared[i].name === val[j].name) {
 								record['unlocked'] = true;
