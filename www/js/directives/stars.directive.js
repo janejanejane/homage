@@ -28,7 +28,7 @@ app
 					.style("fill", "white");
 
 				// angle range for the stars
-				var circleAngle = d3.scale.linear().range([0,360]).domain([0,ocRadius]);
+				var circleAngle = d3.scale.linear().range([0,total]).domain([0,ocRadius]);
 
 				scope.$watch('currentLevel', function(newVal, oldVal) {
 					// only show stars on level up
@@ -70,15 +70,12 @@ app
 						outside.enter().append("g")
 							.attr("class", "blast");
 
-						// adjust location of stars similar to inner circle
-						outside.attr("transform", "translate("+ ((width - 20) / 2) +", "+ (height / 3) +")");
+						// // adjust location of stars similar to inner circle
+						outside.attr("transform", "translate("+ ((width - 20) / 2) +", 100)");
 
 						// blast transition
 						outside.transition()
-							.duration(10000)
-							.delay(function(d, i) {
-								return i * 20;
-							})
+							.duration(5000)
 							.each(function(d, i) {
 								var self = d3.select(this);
 
@@ -89,10 +86,10 @@ app
 										// (x + r cos(2kπ/n), y + r sin(2kπ/n))
 										// where: 	n is the number of elements
 										// 			k is the element currently positioning (between 1 and n inclusive).
-										var x = 5 * width * Math.cos(2 * Math.PI * i / (total/2)),
-											y = 5 * height * Math.sin(2 * Math.PI * i / (total/2));
+										var x = 2 * width * Math.cos(2 * Math.PI * i / total),
+											y = 2 * height * Math.sin(2 * Math.PI * i / total);
 
-										return "translate("+ x +","+ y +")"
+										return "translate("+ x +","+ y +")";
 									});
 							});
 
@@ -131,7 +128,7 @@ app
 								return coordinates.join(",");
 							})
 							.attr("transform", function(d, i) {
-								return "rotate("+ circleAngle(i) +", 0, 0)";
+								return "rotate("+ circleAngle(i) +", 0, 100)";
 							});
 					}
 				});
