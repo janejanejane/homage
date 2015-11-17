@@ -3,19 +3,17 @@ app
 
 		var ref = new Firebase(CONSTANTS.FIREBASE_URL),
 			db = CONSTANTS.FIREBASE_DB,
-			achievementsDeclared = [],
-			achievementsArray = [];
+			achievementsDeclared = [];
 
 		var AchievementFactory = {
-			onUnlocked: function(uuid, aName, achievement, callback) {
+			onUnlocked: function(uuid, aName, achievement, unlockedAchievements, callback) {
 				var aObj = {
 						name: aName,
 						description: achievement
 					};
-				achievementsArray = this.getAllAchievements(uuid);
 
 				if(aName && achievement) {
-					achievementsArray.$add(aObj).then(function(ref) {
+					unlockedAchievements.$add(aObj).then(function(ref) {
 						console.log('AchievementFactory>>', aObj);
 						callback({
 							id: ref.key(),
@@ -28,31 +26,42 @@ app
 				var obj = ref.child(db+'/'+uuid+'/achievements');
 				return $firebaseArray(obj);
 			},
+			setAchievementData: function(uuid, arr, aName, achievement, callback) {
+				// add when not in db
+				if(_.pluck(arr, 'name').indexOf(aName) === -1) {
+					this.onUnlocked(uuid, aName, achievement, arr, callback);
+				}
+			},
 			getAchievementsDeclared: function() {
 				return $http.get('data/achievements.data.json');
 			},
-			setAchievementClick: function(uuid, total, callback) {
-				var data = {
-						'aName': null,
-						'achievement': null
-					},
-					self = this,
-					arr = [];
+			setAchievementClick: function(uuid, total, unlockedAchievements, callback) {
+				for (var i = 0; i < achievementsDeclared.length; i++) {
+					if(achievementsDeclared[i].clicks <= total) {
+						// set achievement data
+						this.setAchievementData(uuid, unlockedAchievements, achievementsDeclared[i].name, achievementsDeclared[i].description, callback);
+					}
+				}
+			},
+			getAchievementStreak: function(callback) {
+				var arr = [];
 
-				self.getAllAchievements(uuid).$loaded().then(function(achievementObj) {
-					achievementObj.forEach(function(data) {
-						arr.push(data.name);
-					});
+				achievementsDeclared.forEach(function(data, index, array) {
+					// store only the streaks numbers
+					if(data.streak) arr.push(data);
 
-					for (var i = 0; i < achievementsDeclared.length; i++) {
-						if(achievementsDeclared[i].clicks <= total) {
+					// return on last item
+					if(index === array.length - 1) return callback(arr);
+				});
+			},
+			setAchievementStreak: function(uuid, streak, unlockedAchievements, callback) {
+				var self = this;
+
+				this.getAchievementStreak(function(records) {
+					for (var i = 0; i < records.length; i++) {
+						if(records[i].streak === streak) {
 							// set achievement data
-							data['aName'] = achievementsDeclared[i].name;
-							data['achievement'] = achievementsDeclared[i].description;
-
-							if(arr.indexOf(achievementsDeclared[i].name) === -1) { // add when not in db
-								self.onUnlocked(uuid, data.aName, data.achievement, callback);
-							}
+							self.setAchievementData(uuid, unlockedAchievements, records[i].name, records[i].description, callback);
 						}
 					};
 				});

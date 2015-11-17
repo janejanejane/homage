@@ -163,10 +163,11 @@ app
 
       if(!$scope.savedClicks.clicks){
         HomageFactory.setClickCount(
-          $scope.savedClicks.$id, 
-          moment().format('MM-DD-YYYY'), 
-          1, 
-          function(record) {
+          $scope.savedClicks.$id, // uuid
+          moment().format('MM-DD-YYYY'), // date
+          1, // total clicks
+          $scope.data.achievementArray, // unlocked achievements
+          function(record) { // callback
             $scope.showAchievement(record);
           }
         );
@@ -178,19 +179,24 @@ app
 
         // add 1 to click count in db
         HomageFactory.setClickCount(
-          $scope.savedClicks.$id,
-          moment().format('MM-DD-YYYY'),
-          sum+1, 
-          function(record) {
+          $scope.savedClicks.$id, // uuid
+          moment().format('MM-DD-YYYY'), // date
+          sum+1, // total clicks
+          $scope.data.achievementArray, // unlocked achievements
+          function(record) { // callback
             $scope.showAchievement(record);
           }
         );
 
         // check if clicks are 50 (which is now 51 in db) for the longest streak achievement
         if(sum === 50) {
-          HomageFactory.setStreak($scope.data.uuid, function(record) {
-            $scope.showAchievement(record);
-          });
+          HomageFactory.setStreak(
+            $scope.data.uuid, // uuid
+            $scope.data.achievementArray, // unlocked achievements
+            function(record) { // callback
+              $scope.showAchievement(record);
+            }
+          );
         }
       }
 

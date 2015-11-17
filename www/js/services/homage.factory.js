@@ -36,14 +36,14 @@ app
           longest50streak: 0
         });
       },
-      setClickCount: function(uuid, dateString, value, callback){
+      setClickCount: function(uuid, dateString, value, unlockedAchievements, callback){
         var obj = ref.child(db+'/'+uuid+'/clicks/'+dateString);
         obj.set(value, function(){
           console.log('Done setting to database');
         });
-        this.setTotalCount(uuid, callback);
+        this.setTotalCount(uuid, unlockedAchievements, callback);
       },
-      setTotalCount: function(uuid, callback) {
+      setTotalCount: function(uuid, unlockedAchievements, callback) {
         var obj = ref.child(db+'/'+uuid+'/totalCount'),
             total = 0,
             self = this;
@@ -51,11 +51,11 @@ app
         obj.once('value', function(snapshot) {
           // check if totalCount contains data
           if(snapshot.exists()) {
-            obj.on('value', function(snap) { // get totalCount property and update
+            obj.once('value', function(snap) { // get totalCount property and update
               total = snap.val() + 1;
             });
             obj.set(total);
-            AchievementFactory.setAchievementClick(uuid, total, callback);
+            AchievementFactory.setAchievementClick(uuid, total, unlockedAchievements, callback);
           } else {
             self.getAllClicks(uuid, function(record) { // iterate through all records then update totalCount
               record.$loaded().then(function() {
@@ -63,13 +63,13 @@ app
                   total += record.clicks[i];
                 }
                 obj.set(total);
-                AchievementFactory.setAchievementClick(uuid, total, callback);
+                AchievementFactory.setAchievementClick(uuid, total, unlockedAchievements, callback);
               });
             });
           }
         });
       },
-      setStreak: function(uuid, callback) {
+      setStreak: function(uuid, unlockedAchievements, callback) {
         var obj = ref.child(db+'/'+uuid+'/longest50streak'),
             streak = 0,
             self = this;
@@ -84,16 +84,18 @@ app
               response.$loaded().then(function() {
                 // if yesterday has more than 50 clicks, there will be data
                 if(response.length === 1 && response[0].$value > 50) {
-                  obj.on('value', function(snap) { // get longest50streak property and update
+                  obj.once('value', function(snap) { // get longest50streak property and update
                     streak = snap.val() + 1;
                   });
 
-                  // set streak to incremented value
-                  obj.set(streak);
+                  // set streak to incremented value @line: 97
                 } else {
                   // set streak back to zero
-                  obj.set(0);
+                  streak = 0;
                 }
+
+                obj.set(streak);
+                AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
               });
             });
           } else {
@@ -128,7 +130,9 @@ app
                 }
 
                 // set longest50streak value
-                obj.set(_.max(streakData));
+                streak = _.max(streakData);
+                obj.set(streak);
+                AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
               });
             });
           }
