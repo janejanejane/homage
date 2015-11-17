@@ -28,6 +28,19 @@ app
 
 						// add to new array
 						scope.list.push(record);
+
+						// sort on last item
+						if(i === scope.achievementsDeclared.length -1) {
+							scope.list.sort(function(a, b) {
+								// if difference of (a - b) is greater than 0, 'a' has a larger index
+								return (getNumber(a.name) - getNumber(b.name));
+							});
+
+							function getNumber (str) {
+								// get the number part only
+								return +str.split("_")[0];
+							}
+						}
 					};
 				});
 
