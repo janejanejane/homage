@@ -31,7 +31,7 @@ app
 			getAchievementsDeclared: function() {
 				return $http.get('data/achievements.data.json');
 			},
-			setAchievementData: function(uuid, total, callback) {
+			setAchievementClick: function(uuid, total, callback) {
 				var data = {
 						'aName': null,
 						'achievement': null

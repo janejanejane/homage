@@ -54,6 +54,76 @@
 			"name": "5000_clicks",
 			"clicks": 5000,
 			"description": "5000 clicks!"
+		},
+		{
+			"name": "10000_clicks",
+			"clicks": 10000,
+			"description": "10000 clicks!"
+		},
+		{
+			"name": "15000_clicks",
+			"clicks": 15000,
+			"description": "15000 clicks!"
+		},
+		{
+			"name": "25000_clicks",
+			"clicks": 25000,
+			"description": "25000 clicks!"
+		},
+		{
+			"name": "45000_clicks",
+			"clicks": 45000,
+			"description": "45000 clicks!"
+		},
+		{
+			"name": "75000_clicks",
+			"clicks": 75000,
+			"description": "75000 clicks!"
+		},
+		{
+			"name": "100000_clicks",
+			"clicks": 100000,
+			"description": "100000 clicks!"
+		},
+		{
+			"name": "3_day_streak",
+			"streak": 3,
+			"description": "3 days straight over 50!"
+		},
+		{
+			"name": "5_day_streak",
+			"streak": 5,
+			"description": "5 days straight over 50!"
+		},
+		{
+			"name": "7_day_streak",
+			"streak": 7,
+			"description": "7 days straight over 50!"
+		},
+		{
+			"name": "10_day_streak",
+			"streak": 10,
+			"description": "10 days straight over 50!"
+		},
+		{
+			"name": "15_day_streak",
+			"streak": 15,
+			"description": "15 days straight over 50!"
+		},
+		{
+			"name": "25_day_streak",
+			"streak": 25,
+			"description": "25 days straight over 50!"
+		},
+		{
+			"name": "50_day_streak",
+			"streak": 50,
+			"description": "50 days straight over 50!"
+		},
+		{
+			"name": "100_day_streak",
+			"streak": 100,
+			"description": "100 days straight over 50!"
 		}
 	]
 }

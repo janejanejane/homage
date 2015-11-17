@@ -175,6 +175,8 @@ app
         if($scope.savedClicks.clicks[moment().format('MM-DD-YYYY')]){
           sum = $scope.savedClicks.clicks[moment().format('MM-DD-YYYY')];
         }
+
+        // add 1 to click count in db
         HomageFactory.setClickCount(
           $scope.savedClicks.$id,
           moment().format('MM-DD-YYYY'),
@@ -183,6 +185,13 @@ app
             $scope.showAchievement(record);
           }
         );
+
+        // check if clicks are 50 (which is now 51 in db) for the longest streak achievement
+        if(sum === 50) {
+          HomageFactory.setStreak($scope.data.uuid, function(record) {
+            $scope.showAchievement(record);
+          });
+        }
       }
 
       if($scope.data.choice === 'month') {
