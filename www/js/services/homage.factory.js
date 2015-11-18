@@ -66,31 +66,42 @@ app
       },
       setStreak: function(uuid, unlockedAchievements, callback) {
         var obj = ref.child(db+'/'+uuid+'/longest50streak'),
-            streak = 0,
+            streak = 1,
             self = this;
 
         obj.once('value', function(snapshot) {
           // check if longest50streak contains data
           if(snapshot.exists()) {
-            // get click record from yesterday
-            var yesterday = moment().subtract(1, 'day');
-
-            self.getClicks(uuid, yesterday, yesterday, function(response) {
-              response.$loaded().then(function() {
-                // if yesterday has more than 50 clicks, there will be data
-                if(response.length === 1 && response[0].$value > 50) {
-                  obj.once('value', function(snap) { // get longest50streak property and update
-                    streak = snap.val() + 1;
-                  });
-
-                  // set streak to incremented value @line: 97
+            // get the clicks stored for the user
+            self.getAllClicks(uuid, function(record) {
+              record.$loaded().then(function() {
+                // first click record for the current user
+                if(_.size(record.clicks) < 2) {
+                  obj.set(streak);
+                  AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
                 } else {
-                  // set streak back to zero
-                  streak = 0;
-                }
+                  // get click record from yesterday
+                  var yesterday = moment().subtract(1, 'day');
 
-                obj.set(streak);
-                AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
+                  self.getClicks(uuid, yesterday, yesterday, function(response) {
+                    response.$loaded().then(function() {
+                      // if yesterday has more than 50 clicks, there will be data
+                      if(response.length === 1 && response[0].$value > 50) {
+                        obj.once('value', function(snap) { // get longest50streak property and update
+                          streak = snap.val() + 1;
+                        });
+
+                        // set streak to incremented value @line: 99
+                      } else {
+                        // set streak back to zero
+                        streak = 0;
+                      }
+
+                      obj.set(streak);
+                      AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
+                    });
+                  });
+                }
               });
             });
           } else {
