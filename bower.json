@@ -10,8 +10,8 @@
     "firebase": "~2.2.9",
     "moment": "~2.10.6",
     "ngCordova": "~0.1.20-alpha",
-    "restangular": "~1.5.1",
-    "angular-material": "~0.11.4"
+    "angular-material": "~0.11.4",
+    "lodash": "~3.10.1"
   },
   "resolutions": {
     "angular": "1.4.3",

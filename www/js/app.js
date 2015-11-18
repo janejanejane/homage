@@ -3,8 +3,7 @@ var app = angular.module('homage', [
   'ionic',
   'ngMaterial',
   'ngCordova',
-  'firebase',
-  'restangular'
+  'firebase'
   ])
 
 // https://github.com/angular/material/issues/1406

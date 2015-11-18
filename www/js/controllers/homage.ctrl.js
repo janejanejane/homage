@@ -30,9 +30,7 @@ app
       AchievementFactory,
       AvatarFactory) {
 
-    $scope.shout = null;
     $scope.savedClicks = null;
-    $scope.currentWeek = 0;
     $scope.data = {
       uuid: '',
       popupEnabled: true,
@@ -48,9 +46,8 @@ app
       avatarNames: []
     }
 
+    var isAvailable = null;
     var controller = {
-      index: 0,
-      isAvailable: null,
       popupUsername: '',
       init: function() {
         // Setup the loader
@@ -64,7 +61,6 @@ app
 
         // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
         if( ionic.Platform.isAndroid() ){
-          console.log('hello?');
           $scope.data.uuid = "testUUID"; // for browser mobile emulation
           if(isAvailable) $scope.data.uuid = $cordovaDevice.getUUID();
           controller.setup($scope.data.uuid);

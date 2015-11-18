@@ -1,14 +1,9 @@
 app
-  .factory('HomageFactory', ['$firebaseArray', '$firebaseObject', '$http', 'CONSTANTS', 'Restangular', 'AchievementFactory', function($firebaseArray, $firebaseObject, $http, CONSTANTS, Restangular, AchievementFactory) {
+  .factory('HomageFactory', ['$firebaseArray', '$firebaseObject', '$http', 'CONSTANTS', 'AchievementFactory', function($firebaseArray, $firebaseObject, $http, CONSTANTS, AchievementFactory) {
     var ref = new Firebase(CONSTANTS.FIREBASE_URL),
         db = CONSTANTS.FIREBASE_DB;
 
-    Restangular.baseUrl = CONSTANTS.FIREBASE_URL;
-
     return {
-      getAllResponses: function() { // used in $scope.shout to show some response, returns a promise
-        return $http.get('data/responses.data.json');
-      },
       getAllClicks: function(userId, callback) { // get all the data on clicks of current user
         var self = this;
         var clickObj = $firebaseObject(ref.child(db+'/'+userId));
