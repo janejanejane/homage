@@ -12,7 +12,7 @@ app
 				var width = elm.parent().prop('offsetWidth'),
 					height = elm.parent().prop('offsetHeight'),
 					circles = [],
-					total = 50,
+					total = 30,
 					ocRadius = 5;
 
 				// container for the star blast
@@ -29,7 +29,7 @@ app
 					.style("fill", "white");
 
 				// angle range for the stars
-				var circleAngle = d3.scale.linear().range([0,total]).domain([0,ocRadius]);
+				var circleAngle = d3.scale.linear().range([0,total*2]).domain([0,ocRadius]);
 
 				scope.$watch('currentLevel', function(newVal, oldVal) {
 					// only show stars on level up
@@ -50,7 +50,7 @@ app
 							.attr("height", height - 90);
 
 						// move star group
-						group.attr("transform", "translate(0, 20)");
+						group.attr("transform", "translate(7, 7)");
 
 						// set location and radius of inner circle
 						center.attr("r", 1)
@@ -64,7 +64,7 @@ app
 						// get all existing stars
 						var outside = group.selectAll(".blast")
 							.data(circles, function(d, i) {
-								return "" + d + i;
+								return newVal + "-" + d + i;
 							});
 
 						// add new stars if not already drawn
@@ -76,7 +76,7 @@ app
 
 						// blast transition
 						outside.transition()
-							.duration(5000)
+							.duration(3000)
 							.each(function(d, i) {
 								var self = d3.select(this);
 
@@ -87,8 +87,8 @@ app
 										// (x + r cos(2kπ/n), y + r sin(2kπ/n))
 										// where: 	n is the number of elements
 										// 			k is the element currently positioning (between 1 and n inclusive).
-										var x = 2 * width * Math.cos(2 * Math.PI * i / total),
-											y = 2 * height * Math.sin(2 * Math.PI * i / total);
+										var x = (width / 2) + ((width) * Math.cos(2 * Math.PI * i / total)),
+											y = (height / 3) + ((width) * Math.sin(2 * Math.PI * i / total));
 
 										return "translate("+ x +","+ y +")";
 									});
@@ -129,7 +129,7 @@ app
 								return coordinates.join(",");
 							})
 							.attr("transform", function(d, i) {
-								return "rotate("+ circleAngle(i) +", 0, 100)";
+								return "rotate("+ circleAngle(i) +", 0, 115)";
 							});
 					}
 				});
