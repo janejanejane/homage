@@ -1,6 +1,11 @@
+#app-body {
+	background-image: url('../img/circle-02-sm.png');
+	background-color: #A3DBF7;
+}
+
 #chart-div {
 	position: relative;
-	min-height: 350px;
+	min-height: 300px;
 	display: block;
 	border: 1px solid #AAAAAA;
 	margin: 20px 0px;
