@@ -106,7 +106,7 @@ app
 					// select existing svg
 					svg = d3.select(elm[0]).select("svg")
 						.attr("width", width - 20)
-						.attr("height", height + 20)
+						.attr("height", Math.abs(height + 20)) // ensure that height is always positive
 						.style("display", null);
 
 					// update values of the chart axes

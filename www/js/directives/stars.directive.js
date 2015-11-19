@@ -47,7 +47,7 @@ app
 						// select existing container for the star blast
 						svg = d3.select("#stars-svg")
 							.attr("width", width - 20)
-							.attr("height", height - 90);
+							.attr("height", Math.abs(height - 90)); // ensure that height is always positive
 
 						// move star group
 						group.attr("transform", "translate(7, 7)");
