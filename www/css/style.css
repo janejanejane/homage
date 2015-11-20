@@ -174,18 +174,17 @@
 	left: 10px;
 	width: 30px;
 	height: 30px;
-}
-
-.avatar-list {
-	height: 120px;
-}
-
-.avatar-list > img {
 	width: 100px;
 	height: 100px;
 	border-radius: 100px;
 }
 
+.achievement-list,
+.avatar-list {
+	height: 120px;
+}
+
+.achievement-desc,
 .avatar-desc {
 	position: absolute;
 	left: 150px;
