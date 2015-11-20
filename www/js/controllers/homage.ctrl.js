@@ -14,6 +14,7 @@ app
     'HomageFactory', 
     'AchievementFactory',
     'AvatarFactory',
+    'TimerFactory',
     function(
       $scope, 
       $filter,
@@ -28,9 +29,22 @@ app
       CONSTANTS, 
       HomageFactory, 
       AchievementFactory,
-      AvatarFactory) {
+      AvatarFactory,
+      TimerFactory) {
 
+    // current user data from database
     $scope.savedClicks = null;
+
+    // current user changes not sent to database
+    $scope.temp = {
+      totalClicks: 0,
+      todayClicks: 0,
+      longestStreak: 0,
+      achievements: [],
+      chartClicks: []
+    };
+
+    // info used in UI
     $scope.data = {
       uuid: '',
       popupEnabled: true,
@@ -50,15 +64,6 @@ app
     var controller = {
       popupUsername: '',
       init: function() {
-        // Setup the loader
-        $ionicLoading.show({
-          content: 'Loading',
-          animation: 'fade-in',
-          showBackdrop: true,
-          maxWidth: 200,
-          showDelay: 0
-        });
-
         // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
         if( ionic.Platform.isAndroid() ){
           $scope.data.uuid = "testUUID"; // for browser mobile emulation
@@ -90,6 +95,15 @@ app
           }
 
           popupUsername.then(function(input){
+            // Setup the loader
+            $ionicLoading.show({
+              content: 'Loading',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+            });
+
             controller.setup(input);
             $scope.data.popupEnabled = false;
           });
@@ -104,6 +118,10 @@ app
               //create a new clicks
               HomageFactory.createNewUser(user);
             }
+
+            // copy total count from db
+            $scope.temp.totalClicks = $scope.savedClicks.totalCount || 0;
+            console.log('original totalClicks', $scope.temp.totalClicks);
           });
         });
 
@@ -125,7 +143,25 @@ app
         // get binding to achievements array
         $scope.data.achievementArray = AchievementFactory.getAllAchievements(user);
 
-        $scope.updateClicksArray();
+        // default to 1 month data
+        HomageFactory.getClicks($scope.data.uuid, moment().subtract(31, 'day'), moment(), function(clickObj) { // wait for the device uuid to prevent null result
+          // get binding to clicks array
+          clickObj.$loaded().then(function(data){
+            $scope.data.clickArray = data;
+
+            // copy data
+            $scope.temp.chartClicks = $scope.reduceArray();
+            console.log($scope.temp.chartClicks);
+
+            // hide loader
+            $ionicLoading.hide();
+          });
+        });
+
+        TimerFactory.startTime(function() {
+          console.log('test');
+          // $scope.sendUpdate();
+        });
       }
     };
 
@@ -157,50 +193,19 @@ app
     // updates the click logged for current user
     $scope.buttonClick = function() {
 
-      if(!$scope.savedClicks.clicks){
-        HomageFactory.setClickCount(
-          $scope.savedClicks.$id, // uuid
-          moment().format('MM-DD-YYYY'), // date
-          1, // total clicks
-          $scope.data.achievementArray, // unlocked achievements
-          function(record) { // callback
-            $scope.showAchievement(record);
-          }
-        );
-      }else{
-        var sum = 0;
-        if($scope.savedClicks.clicks[moment().format('MM-DD-YYYY')]){
-          sum = $scope.savedClicks.clicks[moment().format('MM-DD-YYYY')];
-        }
+      // increase click for today
+      $scope.temp.todayClicks += 1;
+      console.log($scope.temp.todayClicks);
 
-        // add 1 to click count in db
-        HomageFactory.setClickCount(
-          $scope.savedClicks.$id, // uuid
-          moment().format('MM-DD-YYYY'), // date
-          sum+1, // total clicks
-          $scope.data.achievementArray, // unlocked achievements
-          function(record) { // callback
-            $scope.showAchievement(record);
-          }
-        );
+      // increase total click for today
+      $scope.temp.totalClicks += 1;
+      console.log($scope.temp.totalClicks);
+      console.log('db total', $scope.savedClicks.totalCount);
 
-        // check if clicks are 50 (which is now 51 in db) for the longest streak achievement
-        if(sum === 50) {
-          HomageFactory.setStreak(
-            $scope.data.uuid, // uuid
-            $scope.data.achievementArray, // unlocked achievements
-            function(record) { // callback
-              $scope.showAchievement(record);
-            }
-          );
-        }
-      }
+      // increase click for today used in chart
+      $scope.temp.chartClicks[_.size($scope.savedClicks.clicks) - 1].$value += 1;
+      console.log($scope.temp.chartClicks);
 
-      if($scope.data.choice === 'month') {
-        $scope.updateClicksArray(moment().subtract(31, 'day'), moment());
-      } else {
-        $scope.updateClicksArray();
-      }
     };
 
     // back button in achievements and avatars list
@@ -209,29 +214,22 @@ app
       $ionicScrollDelegate.scrollTop();
     };
 
+    // .flatten gets array values only
+    // .takeRightWhile reduces the array starting from last value
+    $scope.reduceArray = function() {
+      return _.takeRightWhile(_.flatten($scope.data.clickArray), function(i) {
+        // get all data from 7 days before current date
+        return moment(i.$id).diff(moment().subtract($scope.data.maxDays, 'day'), 'days') > 0;
+      });
+    }
+
     // updates clicks array used in UI
     $scope.updateClicksArray = function(start, end){
-      var startDate = start,
-          endDate = end,
-          found = null;
-
-      if(!start) {
-        startDate = moment().subtract($scope.data.maxDays - 1, 'day');
+      if(!start && !end) {
+        $scope.temp.chartClicks = $scope.reduceArray();
+      } else {
+        $scope.temp.chartClicks = _.flatten($scope.data.clickArray);
       }
-
-      if(!end) {
-        endDate = moment();
-      }
-
-      HomageFactory.getClicks($scope.data.uuid, startDate, endDate, function(clickObj) { // wait for the device uuid to prevent null result
-        // get binding to clicks array
-        clickObj.$loaded().then(function(data){
-          $scope.data.clickArray = data;
-
-          // hide loader
-          $ionicLoading.hide();
-        });
-      });
     };
 
     // handles the ionic slide boxes change
@@ -253,5 +251,46 @@ app
           .position('bottom')
           .hideDelay(1000)
       );
+    }
+
+    $scope.sendUpdate = function() {
+      if(!$scope.savedClicks.clicks){
+        HomageFactory.setClickCount(
+          $scope.savedClicks.$id, // uuid
+          moment().format('MM-DD-YYYY'), // date
+          $scope.temp.todayClicks, // total clicks
+          $scope.data.achievementArray, // unlocked achievements
+          function(record) { // callback
+            $scope.showAchievement(record);
+          }
+        );
+      }else{
+        var sum = 0;
+        if($scope.savedClicks.clicks[moment().format('MM-DD-YYYY')]){
+          sum = $scope.savedClicks.clicks[moment().format('MM-DD-YYYY')];
+        }
+
+        // add 1 to click count in db
+        HomageFactory.setClickCount(
+          $scope.savedClicks.$id, // uuid
+          moment().format('MM-DD-YYYY'), // date
+          sum + $scope.temp.todayClicks, // total clicks
+          $scope.data.achievementArray, // unlocked achievements
+          function(record) { // callback
+            $scope.showAchievement(record);
+          }
+        );
+
+        // check if clicks are 50 (which is now 51 in db) for the longest streak achievement
+        if(sum === 50) {
+          HomageFactory.setStreak(
+            $scope.data.uuid, // uuid
+            $scope.data.achievementArray, // unlocked achievements
+            function(record) { // callback
+              $scope.showAchievement(record);
+            }
+          );
+        }
+      }
     }
   }]);

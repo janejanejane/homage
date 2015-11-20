@@ -41,6 +41,7 @@
     <script src="js/services/homage.factory.js"></script>
     <script src="js/services/achievement.factory.js"></script>
     <script src="js/services/avatar.factory.js"></script>
+    <script src="js/services/timer.factory.js"></script>
   </head>
   <body ng-app="homage">
 
@@ -66,10 +67,10 @@
                   <div id="count-img">
                     <click-div avatar-loc="data.avatarLoc"
                                 current-level="data.currentLevel"
-                                total-clicks="data.clickCount.$value || 0"
+                                total-clicks="temp.totalClicks || 0"
                                 button-click="buttonClick()"></click-div>
                     <level-bar id="levelbar-div" 
-                                total-clicks="data.clickCount.$value" 
+                                total-clicks="temp.totalClicks" 
                                 current-level="data.currentLevel"></level-bar>
                   </div>
                 </div>
@@ -81,7 +82,7 @@
                 <ion-radio ng-model="data.choice" ng-value="'month'">1 month</ion-radio>
                 <clicks-chart class="padding" id="chart-div" 
                               choice="data.choice" max-days="data.maxDays" 
-                              click-array="data.clickArray" update-array="updateClicksArray(start, end)">
+                              click-array="temp.chartClicks" update-array="updateClicksArray(start, end)">
                   <div class="row row-center responsive-sm" id="no-data-div">
                     <div class="col text-center">
                       <h1 ng-show="!data.clickArray.length">
