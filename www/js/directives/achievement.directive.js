@@ -56,8 +56,8 @@ app
 				'<div class="list">'+
 					'<div ng-repeat="i in list track by $index">'+
 						'<div class="achievement-list">'+
-							'<img class="item-image" ng-src="{{!i.unlocked && \'img/fff.png\' || \'img/30x30.jpg\'}}">'+
-							'<h6>{{i.unlocked && i.description || \'???\'}}</h6>'+
+							'<img class="item-image" ng-src="{{!i.unlocked && \'img/fff.png\' || \'img/100x100.jpg\'}}">'+
+							'<h3 class="achievement-desc">{{i.unlocked && i.description || \'???\'}}</h3>'+
 						'</div>'+
 					'</div>'+
 				'</div>'
