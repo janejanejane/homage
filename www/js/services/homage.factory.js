@@ -36,7 +36,7 @@ app
         obj.set(value, function(){
           console.log('Done setting to database');
         });
-        this.setTotalCount(uuid, unlockedAchievements, callback);
+        // this.setTotalCount(uuid, unlockedAchievements, callback);
       },
       setTotalCount: function(uuid, unlockedAchievements, callback) {
         var obj = ref.child(db+'/'+uuid+'/totalCount'),

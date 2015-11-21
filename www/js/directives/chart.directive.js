@@ -121,9 +121,6 @@ app
 					}).y(function(d) { 
 						return y(d.$value);
 					});
-				};
-
-				function drawChart(val) {
 
 					if(scope.choice === 'month') {
 						// month data minDate: 30 days before tomorrow's date (maxDate)
@@ -134,12 +131,8 @@ app
 						xAxis.ticks(d3.time.day, 1)
 					}
 
-					// length of the axes
-					// y-axis default max is 4
+					// length of the x-axis
 					x.domain([minDate, maxDate]);
-					y.domain([0, d3.max(val, function(d) {
-						return (d.$value < 5) ? 4 : d.$value;
-					})]);
 
 					// move the chart group and decrease scale to fit svg container
 					group.attr("transform", "translate(25,10)scale(0.9)");
@@ -168,6 +161,14 @@ app
 							.text("Count")
 							.attr("id", "count-label");
 					}
+				};
+
+				function drawChart(val) {
+
+					// length of y-axis: default max is 4
+					y.domain([0, d3.max(val, function(d) {
+						return (d.$value < 5) ? 4 : d.$value;
+					})]);
 
 					// update line of chart
 					clicksLine.datum(val)
@@ -260,6 +261,14 @@ app
 					} else {
 						// hide svg
 						d3.select("#chart-svg").style("display", "none");
+					}
+				});
+
+
+				scope.$watch('clickArray[clickArray.length-1].$value', function(val) {
+					if(val) {
+						// update line values and circle places
+						drawChart(scope.clickArray);
 					}
 				});
 

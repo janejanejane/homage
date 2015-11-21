@@ -61,6 +61,7 @@ app
     }
 
     var isAvailable = null;
+    var today = moment().format('MM-DD-YYYY');
     var controller = {
       popupUsername: '',
       init: function() {
@@ -149,12 +150,36 @@ app
           clickObj.$loaded().then(function(data){
             $scope.data.clickArray = data;
 
-            // copy data
-            $scope.temp.chartClicks = $scope.reduceArray();
-            console.log($scope.temp.chartClicks);
+            var currentDate = _.filter(data, function(val) {
+              return val.$id === today;
+            });
+
+            // no clicks for today
+            if(!currentDate.length) {
+              HomageFactory.setClickCount(
+                $scope.data.uuid, // uuid
+                today, // date
+                0, // total clicks
+                $scope.data.achievementArray, // unlocked achievements
+                function(record) { // callback
+                  $scope.showAchievement(record);
+                }
+              );
+            } else {
+              // copy data
+              $scope.temp.chartClicks = $scope.reduceArray();
+            }
 
             // hide loader
             $ionicLoading.hide();
+          });
+
+          clickObj.$watch(function(object) {
+            // date today is added to array (from @line 158)
+            if(object.key === today) { // last item in array
+              // copy data
+              $scope.temp.chartClicks = $scope.reduceArray();
+            }
           });
         });
 
@@ -203,7 +228,7 @@ app
       console.log('db total', $scope.savedClicks.totalCount);
 
       // increase click for today used in chart
-      $scope.temp.chartClicks[_.size($scope.savedClicks.clicks) - 1].$value += 1;
+      $scope.temp.chartClicks[_.size($scope.temp.chartClicks) - 1].$value += 1;
       console.log($scope.temp.chartClicks);
 
     };
@@ -219,7 +244,7 @@ app
     $scope.reduceArray = function() {
       return _.takeRightWhile(_.flatten($scope.data.clickArray), function(i) {
         // get all data from 7 days before current date
-        return moment(i.$id).diff(moment().subtract($scope.data.maxDays, 'day'), 'days') > 0;
+        return moment(i.$id).diff(moment().subtract($scope.data.maxDays, 'day'), 'days') > -1;
       });
     }
 
@@ -257,7 +282,7 @@ app
       if(!$scope.savedClicks.clicks){
         HomageFactory.setClickCount(
           $scope.savedClicks.$id, // uuid
-          moment().format('MM-DD-YYYY'), // date
+          today, // date
           $scope.temp.todayClicks, // total clicks
           $scope.data.achievementArray, // unlocked achievements
           function(record) { // callback
@@ -266,14 +291,14 @@ app
         );
       }else{
         var sum = 0;
-        if($scope.savedClicks.clicks[moment().format('MM-DD-YYYY')]){
-          sum = $scope.savedClicks.clicks[moment().format('MM-DD-YYYY')];
+        if($scope.savedClicks.clicks[today]){
+          sum = $scope.savedClicks.clicks[today];
         }
 
         // add 1 to click count in db
         HomageFactory.setClickCount(
           $scope.savedClicks.$id, // uuid
-          moment().format('MM-DD-YYYY'), // date
+          today, // date
           sum + $scope.temp.todayClicks, // total clicks
           $scope.data.achievementArray, // unlocked achievements
           function(record) { // callback
