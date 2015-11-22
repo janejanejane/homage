@@ -122,6 +122,9 @@ app
 						return y(d.$value);
 					});
 
+				};
+
+				function drawChart(val) {
 					if(scope.choice === 'month') {
 						// month data minDate: 30 days before tomorrow's date (maxDate)
 						minDate = moment().subtract(32, 'day');
@@ -133,6 +136,11 @@ app
 
 					// length of the x-axis
 					x.domain([minDate, maxDate]);
+
+					// length of y-axis: default max is 4
+					y.domain([0, d3.max(val, function(d) {
+						return (d.$value < 5) ? 4 : d.$value;
+					})]);
 
 					// move the chart group and decrease scale to fit svg container
 					group.attr("transform", "translate(25,10)scale(0.9)");
@@ -161,14 +169,6 @@ app
 							.text("Count")
 							.attr("id", "count-label");
 					}
-				};
-
-				function drawChart(val) {
-
-					// length of y-axis: default max is 4
-					y.domain([0, d3.max(val, function(d) {
-						return (d.$value < 5) ? 4 : d.$value;
-					})]);
 
 					// update line of chart
 					clicksLine.datum(val)
@@ -220,7 +220,7 @@ app
 										return (v) ? v.$value : null;
 									}),
 								cpos = x(new Date(d.$id)),
-								ypos = (d.$value < secondMax) ? (-45) : 35,
+								ypos = (d.$value === 0 || d.$value < secondMax) ? (-45) : 35,
 								// if circle position is near left side, add 10 (shift to right)
 								// if difference of svg width and circle position is less 100, minus 100 (shift to left)
 								xpos = (cpos < 50) ? cpos + 10 : ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
@@ -267,18 +267,19 @@ app
 
 				scope.$watch('clickArray[clickArray.length-1].$value', function(val) {
 					if(val) {
+						init();
 						// update line values and circle places
 						drawChart(scope.clickArray);
 					}
 				});
 
 				scope.$watch('choice', function(val) {
-					if(val === 'month') {
-						scope.updateArray({start: moment().subtract(31, 'day'), end: moment()});
-					} else {
-						scope.updateArray();
-					}
-				}, true);
+					scope.updateArray({value: val});
+
+					init();
+					// update line values and circle places
+					drawChart(scope.clickArray);
+				});
 
 				// bind draw action on screen resize then call angular digest
 				angular.element($window).bind('resize', function() {
