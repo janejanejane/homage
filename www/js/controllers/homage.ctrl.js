@@ -39,6 +39,8 @@ app
     $scope.temp = {
       totalClicks: 0,
       todayClicks: 0,
+      todayUpdated: false,
+      totalUpdated: false,
       longestStreak: 0,
       achievements: [],
       chartClicks: []
@@ -119,16 +121,16 @@ app
               //create a new clicks
               HomageFactory.createNewUser(user);
             }
-
-            // copy total count from db
-            $scope.temp.totalClicks = $scope.savedClicks.totalCount || 0;
-            console.log('original totalClicks', $scope.temp.totalClicks);
           });
         });
 
         // get overall clicks logged
         HomageFactory.getTotalCount(user, function(totalObj) {
-          totalObj.$bindTo($scope, 'data.clickCount');
+          totalObj.$bindTo($scope, 'data.clickCount').then(function() {
+            // copy total count from db
+            $scope.temp.totalClicks = totalObj.$value || 0;
+            console.log('original totalClicks', $scope.temp.totalClicks);
+          });
         });
 
         // get json data for all achievements
@@ -160,15 +162,19 @@ app
                 $scope.data.uuid, // uuid
                 today, // date
                 0, // total clicks
-                $scope.data.achievementArray, // unlocked achievements
-                function(record) { // callback
-                  $scope.showAchievement(record);
+                function(status) { 
+                  // initialize clicks for today
+                  $scope.temp.todayClicks = $scope.extractTodayCount();
                 }
               );
             } else {
               // copy data
               $scope.temp.chartClicks = $scope.reduceArray();
             }
+
+            // initialize clicks for today
+            $scope.temp.todayClicks = $scope.extractTodayCount();
+            console.log('$scope.temp.todayClicks', $scope.temp.todayClicks);
 
             // hide loader
             $ionicLoading.hide();
@@ -177,6 +183,7 @@ app
           clickObj.$watch(function(object) {
             // date today is added to array (from @line 158)
             if(object.key === today) { // last item in array
+              console.log('updated???');
               // copy data
               $scope.temp.chartClicks = $scope.reduceArray();
             }
@@ -185,7 +192,10 @@ app
 
         TimerFactory.startTime(function() {
           console.log('test');
-          // $scope.sendUpdate();
+          if(!$scope.temp.todayUpdated && !$scope.temp.totalUpdated) {
+            console.log('TimerFactory update?');
+            $scope.sendUpdate();
+          }
         });
       }
     };
@@ -220,10 +230,12 @@ app
 
       // increase click for today
       $scope.temp.todayClicks += 1;
+      $scope.temp.todayUpdated = false;
       console.log($scope.temp.todayClicks);
 
       // increase total click for today
       $scope.temp.totalClicks += 1;
+      $scope.temp.totalUpdated = false;
       console.log($scope.temp.totalClicks);
       console.log('db total', $scope.savedClicks.totalCount);
 
@@ -244,13 +256,28 @@ app
     $scope.reduceArray = function() {
       return _.takeRightWhile(_.flatten($scope.data.clickArray), function(i) {
         // get all data from 7 days before current date
-        return moment(i.$id).diff(moment().subtract($scope.data.maxDays, 'day'), 'days') > -1;
+        return moment(i.$id).diff(moment().subtract($scope.data.maxDays, 'day'), 'days') > 0;
       });
     }
 
+    $scope.extractTodayCount = function() {
+      // .first returns first object in the array
+      // .flatten returns a single array that is not nested
+      // .filter gets the object value for today
+      var dataToday = _.filter($scope.data.clickArray, function(i) {
+        return i.$id === today;
+      });
+
+      if(!dataToday.length) 
+        return 0;
+
+      return _.first(_.flatten(dataToday)).$value;
+    }
+
     // updates clicks array used in UI
-    $scope.updateClicksArray = function(start, end){
-      if(!start && !end) {
+    $scope.updateClicksArray = function(value){
+      console.log(value);
+      if(value === 'days') {
         $scope.temp.chartClicks = $scope.reduceArray();
       } else {
         $scope.temp.chartClicks = _.flatten($scope.data.clickArray);
@@ -279,43 +306,36 @@ app
     }
 
     $scope.sendUpdate = function() {
-      if(!$scope.savedClicks.clicks){
-        HomageFactory.setClickCount(
-          $scope.savedClicks.$id, // uuid
-          today, // date
-          $scope.temp.todayClicks, // total clicks
+      // update click count in db
+      HomageFactory.setClickCount(
+        $scope.data.uuid, // uuid
+        today, // date
+        $scope.temp.todayClicks, // total clicks
+        function(status) { // callback
+          if(status) {
+            $scope.temp.todayUpdated = true;
+          }
+        }
+      );
+
+      HomageFactory.setTotalCount(
+        $scope.data.uuid, // uuid
+        $scope.temp.totalClicks, // total clicks
+        function(status) { // callback
+          if(status) {
+            $scope.temp.totalUpdated = true;
+          }
+        });
+
+      // check if clicks are 51 for the longest streak achievement
+      if($scope.temp.todayClicks === 51) {
+        HomageFactory.setStreak(
+          $scope.data.uuid, // uuid
           $scope.data.achievementArray, // unlocked achievements
           function(record) { // callback
             $scope.showAchievement(record);
           }
         );
-      }else{
-        var sum = 0;
-        if($scope.savedClicks.clicks[today]){
-          sum = $scope.savedClicks.clicks[today];
-        }
-
-        // add 1 to click count in db
-        HomageFactory.setClickCount(
-          $scope.savedClicks.$id, // uuid
-          today, // date
-          sum + $scope.temp.todayClicks, // total clicks
-          $scope.data.achievementArray, // unlocked achievements
-          function(record) { // callback
-            $scope.showAchievement(record);
-          }
-        );
-
-        // check if clicks are 50 (which is now 51 in db) for the longest streak achievement
-        if(sum === 50) {
-          HomageFactory.setStreak(
-            $scope.data.uuid, // uuid
-            $scope.data.achievementArray, // unlocked achievements
-            function(record) { // callback
-              $scope.showAchievement(record);
-            }
-          );
-        }
       }
     }
   }]);

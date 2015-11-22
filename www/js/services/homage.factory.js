@@ -31,14 +31,13 @@ app
           longest50streak: 0
         });
       },
-      setClickCount: function(uuid, dateString, value, unlockedAchievements, callback){
+      setClickCount: function(uuid, dateString, value, callback){
         var obj = ref.child(db+'/'+uuid+'/clicks/'+dateString);
         obj.set(value, function(){
-          console.log('Done setting to database');
+          callback(true);
         });
-        // this.setTotalCount(uuid, unlockedAchievements, callback);
       },
-      setTotalCount: function(uuid, unlockedAchievements, callback) {
+      setTotalCount: function(uuid, value, callback) {
         var obj = ref.child(db+'/'+uuid+'/totalCount'),
             total = 0,
             self = this;
@@ -46,19 +45,20 @@ app
         obj.once('value', function(snapshot) {
           // check if totalCount contains data
           if(snapshot.exists()) {
-            obj.once('value', function(snap) { // get totalCount property and update
-              total = snap.val() + 1;
+            obj.set(value, function() {
+              callback(true);
             });
-            obj.set(total);
-            AchievementFactory.setAchievementClick(uuid, total, unlockedAchievements, callback);
+            // AchievementFactory.setAchievementClick(uuid, total, unlockedAchievements, callback);
           } else {
             self.getAllClicks(uuid, function(record) { // iterate through all records then update totalCount
               record.$loaded().then(function() {
                 for(var i in record.clicks) {
                   total += record.clicks[i];
                 }
-                obj.set(total);
-                AchievementFactory.setAchievementClick(uuid, total, unlockedAchievements, callback);
+                obj.set(total, function() {
+                  callback(true);
+                });
+                // AchievementFactory.setAchievementClick(uuid, total, unlockedAchievements, callback);
               });
             });
           }
