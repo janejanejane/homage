@@ -20,9 +20,11 @@ app
 					// set unlocked avatar to true for currentLevel !=0
 					if(scope.list) {
 						for (var i = 0; i <= val; i++) {
-							scope.list[i].unlocked = false;
-							if(i <= val) {
-								scope.list[i].unlocked = true;
+							if(scope.list[i]) {
+								scope.list[i].unlocked = false;
+								if(i <= val) {
+									scope.list[i].unlocked = true;
+								}
 							}
 						};
 					}

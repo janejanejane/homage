@@ -48,7 +48,6 @@ app
             obj.set(value, function() {
               callback(true);
             });
-            // AchievementFactory.setAchievementClick(uuid, total, unlockedAchievements, callback);
           } else {
             self.getAllClicks(uuid, function(record) { // iterate through all records then update totalCount
               record.$loaded().then(function() {
@@ -58,13 +57,12 @@ app
                 obj.set(total, function() {
                   callback(true);
                 });
-                // AchievementFactory.setAchievementClick(uuid, total, unlockedAchievements, callback);
               });
             });
           }
         });
       },
-      setStreak: function(uuid, unlockedAchievements, callback) {
+      setStreak: function(uuid, callback) {
         var obj = ref.child(db+'/'+uuid+'/longest50streak'),
             streak = 1,
             self = this;
@@ -77,8 +75,9 @@ app
               record.$loaded().then(function() {
                 // first click record for the current user
                 if(_.size(record.clicks) < 2) {
-                  obj.set(streak);
-                  AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
+                  obj.set(streak, function() {
+                    callback(true);
+                  });
                 } else {
                   // get click record from yesterday
                   var yesterday = moment().subtract(1, 'day');
@@ -97,8 +96,9 @@ app
                         streak = 0;
                       }
 
-                      obj.set(streak);
-                      AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
+                      obj.set(streak, function() {
+                        callback(true);
+                      });
                     });
                   });
                 }
@@ -137,8 +137,10 @@ app
 
                 // set longest50streak value
                 streak = _.max(streakData);
-                obj.set(streak);
-                AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
+                obj.set(streak, function() {
+                  callback(true);
+                });
+                // AchievementFactory.setAchievementStreak(uuid, streak, unlockedAchievements, callback);
               });
             });
           }

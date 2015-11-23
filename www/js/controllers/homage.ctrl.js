@@ -39,8 +39,9 @@ app
     $scope.temp = {
       totalClicks: 0,
       todayClicks: 0,
-      todayUpdated: false,
-      totalUpdated: false,
+      todayUpdated: true,
+      totalUpdated: true,
+      streakUpdated: true,
       longestStreak: 0,
       achievements: [],
       chartClicks: []
@@ -146,8 +147,13 @@ app
         // get binding to achievements array
         $scope.data.achievementArray = AchievementFactory.getAllAchievements(user);
 
+        $scope.data.achievementArray.$loaded().then(function(achievements) {
+          console.log('passes here?? achievementArray.$loaded()');
+          $scope.temp.achievements = _.flatten(achievements);
+        });
+
         // default to 1 month data
-        HomageFactory.getClicks($scope.data.uuid, moment().subtract(31, 'day'), moment(), function(clickObj) { // wait for the device uuid to prevent null result
+        HomageFactory.getClicks($scope.data.uuid, moment().subtract(31, 'day'), moment(), function(clickObj) {
           // get binding to clicks array
           clickObj.$loaded().then(function(data){
             $scope.data.clickArray = data;
@@ -180,9 +186,9 @@ app
             $ionicLoading.hide();
           });
 
-          clickObj.$watch(function(object) {
+          clickObj.$watch(function() {
             // date today is added to array (from @line 158)
-            if(object.key === today) { // last item in array
+            if(_.last(clickObj).$id === today) { // last item in array
               console.log('updated???');
               // copy data
               $scope.temp.chartClicks = $scope.reduceArray();
@@ -195,6 +201,10 @@ app
           if(!$scope.temp.todayUpdated && !$scope.temp.totalUpdated) {
             console.log('TimerFactory update?');
             $scope.sendUpdate();
+          }
+
+          if(!$scope.temp.streakUpdated) {
+           $scope.sendUpdate();
           }
         });
       }
@@ -243,6 +253,21 @@ app
       $scope.temp.chartClicks[_.size($scope.temp.chartClicks) - 1].$value += 1;
       console.log($scope.temp.chartClicks);
 
+      AchievementFactory.setAchievement(
+        'clicks',
+        $scope.temp.totalClicks, // total clicks
+        $scope.temp.achievements, // unlocked achievements
+        setAchievementDone // function callback
+      );
+
+      if($scope.temp.totalClicks === 51) {
+        AchievementFactory.setAchievement(
+          'streak',
+          $scope.temp.totalClicks, // total clicks
+          $scope.temp.achievements, // unlocked achievements
+          setAchievementDone // function callback
+        );
+      }
     };
 
     // back button in achievements and avatars list
@@ -256,7 +281,7 @@ app
     $scope.reduceArray = function() {
       return _.takeRightWhile(_.flatten($scope.data.clickArray), function(i) {
         // get all data from 7 days before current date
-        return moment(i.$id).diff(moment().subtract($scope.data.maxDays, 'day'), 'days') > 0;
+        return moment(i.$id, 'MM-DD-YYYY').diff(moment().subtract($scope.data.maxDays, 'day'), 'days') > 0;
       });
     }
 
@@ -292,10 +317,10 @@ app
     // displays toast for achievement at the bottom of the screen
     $scope.showAchievement = function(record) {
       var toast = $mdToast.simple();
-      if(!record.id) {
+      if(!record) {
         toast.content('Error in AchievementFactory').theme('assertive');
       } else {
-        toast.content(record.achievement).theme('energized');
+        toast.content(record.description).theme('energized');
       }
 
       $mdToast.show(
@@ -306,6 +331,12 @@ app
     }
 
     $scope.sendUpdate = function() {
+      var unsetAchievements = _.filter($scope.temp.achievements, function(record) {
+        return record.recent;
+      });
+
+      console.log(unsetAchievements);
+
       // update click count in db
       HomageFactory.setClickCount(
         $scope.data.uuid, // uuid
@@ -314,6 +345,8 @@ app
         function(status) { // callback
           if(status) {
             $scope.temp.todayUpdated = true;
+            console.log($scope.data.clickArray[today]);
+            $scope.temp.todayClicks = $scope.extractTodayCount();
           }
         }
       );
@@ -324,18 +357,57 @@ app
         function(status) { // callback
           if(status) {
             $scope.temp.totalUpdated = true;
+            console.log($scope.data.clickCount);
+            $scope.temp.totalClicks = $scope.data.clickCount.$value;
           }
         });
+
+      if(!!unsetAchievements.length) { // has elements
+        // add to database
+        AchievementFactory.onUnlocked(
+          $scope.data.uuid, 
+          unsetAchievements, 
+          $scope.data.achievementArray, 
+          function(data) {
+            if(data.id) {
+              $scope.temp.achievements = $scope.data.achievementArray; 
+            }
+          }
+        );
+      }
 
       // check if clicks are 51 for the longest streak achievement
       if($scope.temp.todayClicks === 51) {
         HomageFactory.setStreak(
           $scope.data.uuid, // uuid
-          $scope.data.achievementArray, // unlocked achievements
           function(record) { // callback
-            $scope.showAchievement(record);
+            if(status) {
+              $scope.temp.streakUpdated = true;
+            }
           }
         );
+
+        if(!!unsetAchievements.length) { // has elements
+          // add to database
+          AchievementFactory.onUnlocked(
+            $scope.data.uuid, 
+            unsetAchievements, 
+            $scope.data.achievementArray, 
+            function(data) {
+              if(data.id) {
+                $scope.temp.achievements = $scope.data.achievementArray; 
+              }
+            }
+          );
+        }
+      }
+    }
+
+    function setAchievementDone(response) {
+      if(response) {
+        $scope.showAchievement(response);
+        $scope.temp.achievements.push(response);
+        console.log(response, '????', $scope.temp.achievements);
       }
     }
   }]);

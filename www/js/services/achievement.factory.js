@@ -6,62 +6,67 @@ app
 			achievementsDeclared = [];
 
 		var AchievementFactory = {
-			onUnlocked: function(uuid, aName, achievement, unlockedAchievements, callback) {
-				var aObj = {
-						name: aName,
-						description: achievement
-					};
+			onUnlocked: function(uuid, data, unlockedAchievements, callback) {
 
-				if(aName && achievement) {
-					unlockedAchievements.$add(aObj).then(function(ref) {
-						console.log('AchievementFactory>>', aObj);
-						callback({
-							id: ref.key(),
-							achievement: achievement
+				data.forEach(function(record) {
+					if(record.name && record.description && record.recent) {
+						delete record.recent; // do not include in database
+						unlockedAchievements.$add(record).then(function(ref) {
+							console.log('AchievementFactory>>', record);
+							callback({
+								id: ref.key()
+							});
 						});
-					});
-				}
+					}
+				});
 			},
 			getAllAchievements: function(uuid) {
 				var obj = ref.child(db+'/'+uuid+'/achievements');
 				return $firebaseArray(obj);
 			},
-			setAchievementData: function(uuid, arr, aName, achievement, callback) {
+			setAchievementData: function(arr, aName, callback) {
 				// add when not in db
 				if(_.pluck(arr, 'name').indexOf(aName) === -1) {
-					this.onUnlocked(uuid, aName, achievement, arr, callback);
+					callback(true);
 				}
 			},
 			getAchievementsDeclared: function() {
 				return $http.get('data/achievements.data.json');
 			},
-			setAchievementClick: function(uuid, total, unlockedAchievements, callback) {
-				for (var i = 0; i < achievementsDeclared.length; i++) {
-					if(achievementsDeclared[i].clicks <= total) {
-						// set achievement data
-						this.setAchievementData(uuid, unlockedAchievements, achievementsDeclared[i].name, achievementsDeclared[i].description, callback);
-					}
-				}
-			},
-			getAchievementStreak: function(callback) {
+			getAchievement: function(property, callback) {
 				var arr = [];
 
 				achievementsDeclared.forEach(function(data, index, array) {
 					// store only the streaks numbers
-					if(data.streak) arr.push(data);
+					if(data[property]) arr.push(data);
 
 					// return on last item
 					if(index === array.length - 1) return callback(arr);
 				});
 			},
-			setAchievementStreak: function(uuid, streak, unlockedAchievements, callback) {
+			setAchievement: function(property, value, unlockedAchievements, callback) {
 				var self = this;
 
-				this.getAchievementStreak(function(records) {
+				this.getAchievement(property, function(records) {
 					for (var i = 0; i < records.length; i++) {
-						if(records[i].streak === streak) {
+						if(records[i][property] === value) {
+							var name = records[i].name,
+								desc = records[i].description;
+
 							// set achievement data
-							self.setAchievementData(uuid, unlockedAchievements, records[i].name, records[i].description, callback);
+							self.setAchievementData(
+								unlockedAchievements, 
+								name, 
+								function(status) {
+									if(status) {
+										callback({
+											name: name,
+											description: desc,
+											recent: true
+										})
+									}
+								}
+							);
 						}
 					};
 				});
