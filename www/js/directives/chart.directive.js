@@ -220,7 +220,7 @@ app
 										return (v) ? v.$value : null;
 									}),
 								cpos = x(new Date(d.$id)),
-								ypos = (d.$value <= secondMax) ? (-45) : 35,
+								ypos = (d.$value === 0 || d.$value < secondMax) ? (-45) : 35,
 								// if circle position is near left side, add 10 (shift to right)
 								// if difference of svg width and circle position is less 100, minus 100 (shift to left)
 								xpos = (cpos < 50) ? cpos + 10 : ((+svg.attr("width") - cpos) < 100) ? (cpos - 100) : (cpos - 50);
