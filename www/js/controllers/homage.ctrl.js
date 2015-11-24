@@ -124,7 +124,7 @@ app
             }
 
             // get current longest streak
-            $scope.temp.longestStreak = clickObj.longest50streak;
+            $scope.temp.longestStreak = clickObj.longest50streak || 0;
             console.log('$scope.temp.longestStreak', $scope.temp.longestStreak, clickObj);
           });
         });
@@ -202,13 +202,16 @@ app
 
         TimerFactory.startTime(function() {
           console.log('test');
-          if(!$scope.temp.todayUpdated && !$scope.temp.totalUpdated) {
-            console.log('TimerFactory update?');
+          if(($scope.extractTodayCount() !== $scope.temp.todayClicks) ||
+              ($scope.data.clickCount.$value !== $scope.temp.totalClicks) ||
+              (!$scope.temp.todayUpdated && !$scope.temp.totalUpdated)) {
+            console.log('TimerFactory update !$scope.temp.todayUpdated && !$scope.temp.totalUpdated?');
             $scope.sendUpdate();
           }
 
           if(!$scope.temp.streakUpdated) {
-           $scope.sendUpdate();
+            console.log('TimerFactory update !$scope.temp.streakUpdated?');
+            $scope.sendUpdate();
           }
         });
       }
@@ -266,7 +269,15 @@ app
 
       if($scope.temp.todayClicks === 51) {
         console.log('inside 51');
-        $scope.temp.longestStreak += 1;
+        // set longest streak correctly
+        // check if previous click also is greater than 50
+        var allClicksCount = _.size($scope.data.clickArray);
+        if(allClicksCount > 1 && $scope.data.clickArray[allClicksCount - 2].$value >= 51) {
+          $scope.temp.longestStreak += 1;
+        } else {
+          $scope.temp.longestStreak = 1;
+        }
+
         AchievementFactory.setAchievement(
           'streak',
           $scope.temp.longestStreak, // longest clicks
@@ -306,8 +317,10 @@ app
     }
 
     $scope.recalculateClicks = function() {
-      return _.reduce($scope.data.clickArray, function(prev, cur) {
-        return prev + cur.$value;
+      // .values will convert the object - { 10-07-2015: 9, 10-14-2015: 26 } to an array - [9, 26]
+      // .reduce returns a single value accumulated from adding all elements
+      return _.reduce(_.values($scope.savedClicks.clicks), function(prev, cur) {
+        return prev + cur;
       }, 0);
     }
 
@@ -369,7 +382,7 @@ app
         function(status) { // callback
           if(status) {
             $scope.temp.totalUpdated = true;
-            console.log($scope.data.clickCount);
+            console.log($scope.recalculateClicks(), '<<<recalculateClicks');
             $scope.temp.totalClicks = $scope.recalculateClicks();
           }
         });

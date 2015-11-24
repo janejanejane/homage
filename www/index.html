@@ -49,10 +49,10 @@
       <ion-content>
         <div class="padding" ng-controller="HomageCtrl">
           <div ng-class="{curtain: data.popupEnabled}"></div>
-          <stars-div ng-show="data.clickArray.length" id="levelup-stars" current-level="data.currentLevel"></stars-div>
+          <stars-div ng-show="temp.totalClicks" id="levelup-stars" current-level="data.currentLevel"></stars-div>
           <ion-slide-box on-slide-changed="slideHasChanged($index)">
             <ion-slide>
-              <div ng-class="{hide:!!data.clickCount.$value}" class="row row-center responsive-sm click-arrow-div">
+              <div ng-class="{hide:!!temp.totalClicks}" class="row row-center responsive-sm click-arrow-div">
                 <div class="col text-center">
                   <div id="intro-click">
                     <div class="arrow-body">
