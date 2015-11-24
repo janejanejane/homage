@@ -64,7 +64,7 @@ app
       },
       setStreak: function(uuid, callback) {
         var obj = ref.child(db+'/'+uuid+'/longest50streak'),
-            streak = 1,
+            streak = 1, // default longest streak is current day
             self = this;
 
         obj.once('value', function(snapshot) {
@@ -90,10 +90,7 @@ app
                           streak = snap.val() + 1;
                         });
 
-                        // set streak to incremented value @line: 99
-                      } else {
-                        // set streak back to zero
-                        streak = 0;
+                        // set streak to incremented value @line: 96
                       }
 
                       obj.set(streak, function() {

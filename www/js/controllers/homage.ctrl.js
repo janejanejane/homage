@@ -122,6 +122,10 @@ app
               //create a new clicks
               HomageFactory.createNewUser(user);
             }
+
+            // get current longest streak
+            $scope.temp.longestStreak = clickObj.longest50streak;
+            console.log('$scope.temp.longestStreak', $scope.temp.longestStreak, clickObj);
           });
         });
 
@@ -260,10 +264,12 @@ app
         setAchievementDone // function callback
       );
 
-      if($scope.temp.totalClicks === 51) {
+      if($scope.temp.todayClicks === 51) {
+        console.log('inside 51');
+        $scope.temp.longestStreak += 1;
         AchievementFactory.setAchievement(
           'streak',
-          $scope.temp.totalClicks, // total clicks
+          $scope.temp.longestStreak, // longest clicks
           $scope.temp.achievements, // unlocked achievements
           setAchievementDone // function callback
         );
@@ -297,6 +303,12 @@ app
         return 0;
 
       return _.first(_.flatten(dataToday)).$value;
+    }
+
+    $scope.recalculateClicks = function() {
+      return _.reduce($scope.data.clickArray, function(prev, cur) {
+        return prev + cur.$value;
+      }, 0);
     }
 
     // updates clicks array used in UI
@@ -358,7 +370,7 @@ app
           if(status) {
             $scope.temp.totalUpdated = true;
             console.log($scope.data.clickCount);
-            $scope.temp.totalClicks = $scope.data.clickCount.$value;
+            $scope.temp.totalClicks = $scope.recalculateClicks();
           }
         });
 
@@ -377,7 +389,8 @@ app
       }
 
       // check if clicks are 51 for the longest streak achievement
-      if($scope.temp.todayClicks === 51) {
+      if($scope.temp.longestStreak !== $scope.savedClicks.longest50streak) {
+        console.log('inside streak sendUpdate');
         HomageFactory.setStreak(
           $scope.data.uuid, // uuid
           function(record) { // callback
