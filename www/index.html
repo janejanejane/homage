@@ -1,131 +1,140 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-eval' 'unsafe-inline'">
-    <title></title>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-eval' 'unsafe-inline'">
+        <title></title>
 
-    <link href="lib/angular-material/angular-material.css" rel="stylesheet">
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+        <link href="lib/angular-material/angular-material.css" rel="stylesheet">
+        <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
 
-    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
-    <link href="css/ionic.app.css" rel="stylesheet">
-    -->
+        <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+        <link href="css/ionic.app.css" rel="stylesheet">
+        -->
 
-    <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
-    <script src="lib/angular-aria/angular-aria.js"></script>
-    <script src="lib/angular-animate/angular-animate.js"></script>
-    <script src="lib/angular-material/angular-material.js"></script>
-    <script src="lib/firebase/firebase.js"></script>
-    <script src="lib/angularfire/dist/angularfire.min.js"></script>
-    <script src="lib/lodash/lodash.min.js"></script>
-    <script src="lib/moment/min/moment.min.js"></script>
-    <script src="lib/d3/d3.min.js"></script>
+        <!-- ionic/angularjs js -->
+        <script src="lib/ionic/js/ionic.bundle.js"></script>
+        <script src="lib/angular-aria/angular-aria.js"></script>
+        <script src="lib/angular-animate/angular-animate.js"></script>
+        <script src="lib/angular-material/angular-material.js"></script>
+        <script src="lib/firebase/firebase.js"></script>
+        <script src="lib/angularfire/dist/angularfire.min.js"></script>
+        <script src="lib/lodash/lodash.min.js"></script>
+        <script src="lib/moment/min/moment.min.js"></script>
+        <script src="lib/d3/d3.min.js"></script>
 
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
-    <script src="cordova.js"></script>
+        <!-- cordova script (this will be a 404 during development) -->
+        <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+        <script src="cordova.js"></script>
 
-    <!-- your app's js -->
-    <script src="js/app.js"></script>
-    <script src="js/controllers/homage.ctrl.js"></script>
-    <script src="js/directives/click.directive.js"></script>
-    <script src="js/directives/progress.directive.js"></script>
-    <script src="js/directives/achievement.directive.js"></script>
-    <script src="js/directives/avatar.directive.js"></script>
-    <script src="js/directives/chart.directive.js"></script>
-    <script src="js/directives/stars.directive.js"></script>
-    <script src="js/services/homage.factory.js"></script>
-    <script src="js/services/achievement.factory.js"></script>
-    <script src="js/services/avatar.factory.js"></script>
-    <script src="js/services/timer.factory.js"></script>
-  </head>
-  <body ng-app="homage">
+        <!-- your app's js -->
+        <script src="js/app.js"></script>
+        <script src="js/controllers/homage.ctrl.js"></script>
+        <script src="js/directives/click.directive.js"></script>
+        <script src="js/directives/progress.directive.js"></script>
+        <script src="js/directives/achievement.directive.js"></script>
+        <script src="js/directives/avatar.directive.js"></script>
+        <script src="js/directives/chart.directive.js"></script>
+        <script src="js/directives/stars.directive.js"></script>
+        <script src="js/services/homage.factory.js"></script>
+        <script src="js/services/achievement.factory.js"></script>
+        <script src="js/services/avatar.factory.js"></script>
+        <script src="js/services/timer.factory.js"></script>
+    </head>
+    <body ng-app="homage">
 
-    <ion-pane id="app-body">
-      <ion-content>
-        <div class="padding" ng-controller="HomageCtrl">
-          <div ng-class="{curtain: data.popupEnabled}"></div>
-          <stars-div ng-show="temp.totalClicks" id="levelup-stars" current-level="data.currentLevel"></stars-div>
-          <ion-slide-box on-slide-changed="slideHasChanged($index)">
-            <ion-slide>
-              <div ng-class="{hide:!!temp.totalClicks}" class="row row-center responsive-sm click-arrow-div">
-                <div class="col text-center">
-                  <div id="intro-click">
-                    <div class="arrow-body">
-                      <h1>Click</h1>
-                    </div>
-                    <div class="arrow-head-down"></div>
-                  </div>
+        <ion-pane id="app-body">
+            <ion-content>
+                <div class="padding" ng-controller="HomageCtrl">
+                    <div ng-class="{curtain: data.popupEnabled}"></div>
+                    <stars-div ng-show="temp.totalClicks" id="levelup-stars" current-level="data.currentLevel"></stars-div>
+                    <ion-slide-box on-slide-changed="slideHasChanged($index)">
+                        <ion-slide>
+                            <div ng-class="{hide:!!temp.totalClicks}" class="row row-center responsive-sm click-arrow-div">
+                                <div class="col text-center">
+                                    <div id="intro-click">
+                                        <div class="arrow-body">
+                                            <h1>Click</h1>
+                                        </div>
+                                        <div class="arrow-head-down"></div>
+                                      </div>
+                                </div>
+                            </div>
+                            <div class="box row row-center responsive-sm">
+                                <div class="col text-center top-adjust">
+                                    <div id="count-img">
+                                        <click-div avatar-loc="data.avatarLoc"
+                                            current-level="data.currentLevel"
+                                            total-clicks="temp.totalClicks || 0"
+                                            button-click="buttonClick()">
+                                        </click-div>
+                                        <level-bar id="levelbar-div" 
+                                            total-clicks="temp.totalClicks" 
+                                            current-level="data.currentLevel">
+                                        </level-bar>
+                                    </div>
+                                </div>
+                            </div>
+                        </ion-slide>
+                        <ion-slide>
+                            <div class="box">
+                                <ion-radio ng-model="data.choice" ng-value="'days'">7 days</ion-radio>
+                                <ion-radio ng-model="data.choice" ng-value="'month'">1 month</ion-radio>
+                                <clicks-chart class="padding" id="chart-div" 
+                                  choice="data.choice" max-days="data.maxDays" 
+                                  click-array="temp.chartClicks" update-array="updateClicksArray(value)">
+                                    <div class="row row-center responsive-sm" id="no-data-div">
+                                        <div class="col text-center">
+                                            <h1 ng-show="!data.clickArray.length">
+                                                No data yet.
+                                                <i class="icon ion-sad-outline"></i>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </clicks-chart>
+                            </div>
+                        </ion-slide>
+                        <ion-slide>
+                            <div class="row">
+                                <div class="col text-center">
+                                    <h1 class="list-close positive" ng-show="data.selectedList" ng-click="backClick()">
+                                        <i class="ion-arrow-left-a"></i>
+                                    </h1>
+                                </div>
+                            </div>
+                            <ion-scroll id="achievements-scroll">
+                                <div class="box">
+                                    <div class="row row-center responsive-sm">
+                                        <div class="col text-center">
+                                            <div class="button-choice" ng-show="data.selectedList === ''">
+                                                <button class="button button-block button-royal" ng-click="data.selectedList = 'achievement'">
+                                                    Achievements
+                                                </button>
+                                                <button class="button button-block button-assertive" ng-click="data.selectedList = 'avatar'">
+                                                    Avatars
+                                                </button>
+                                            </div>
+                                            <div id="group-img">
+                                                <achievement-list ng-show="data.selectedList === 'achievement'" 
+                                                    achievements-declared="data.achievementsDeclared" 
+                                                    achievement-array="temp.achievements">
+                                                </achievement-list>
+                                                <avatar-list ng-show="data.selectedList === 'avatar'" 
+                                                    current-level="data.currentLevel" 
+                                                    avatar-loc="data.avatarLoc" 
+                                                    avatar-names="data.avatarNames">
+                                                </avatar-list>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ion-scroll>
+                        </ion-slide>
+                    </ion-slide-box>
                 </div>
-              </div>
-              <div class="box row row-center responsive-sm">
-                <div class="col text-center top-adjust">
-                  <div id="count-img">
-                    <click-div avatar-loc="data.avatarLoc"
-                                current-level="data.currentLevel"
-                                total-clicks="temp.totalClicks || 0"
-                                button-click="buttonClick()"></click-div>
-                    <level-bar id="levelbar-div" 
-                                total-clicks="temp.totalClicks" 
-                                current-level="data.currentLevel"></level-bar>
-                  </div>
-                </div>
-              </div>
-            </ion-slide>
-            <ion-slide>
-              <div class="box">
-                <ion-radio ng-model="data.choice" ng-value="'days'">7 days</ion-radio>
-                <ion-radio ng-model="data.choice" ng-value="'month'">1 month</ion-radio>
-                <clicks-chart class="padding" id="chart-div" 
-                              choice="data.choice" max-days="data.maxDays" 
-                              click-array="temp.chartClicks" update-array="updateClicksArray(value)">
-                  <div class="row row-center responsive-sm" id="no-data-div">
-                    <div class="col text-center">
-                      <h1 ng-show="!data.clickArray.length">
-                        No data yet.
-                        <i class="icon ion-sad-outline"></i>
-                      </h1>
-                    </div>
-                  </div>
-                </clicks-chart>
-              </div>
-            </ion-slide>
-            <ion-slide>
-              <div class="row">
-                <div class="col text-center">
-                  <h1 class="list-close positive" ng-show="data.selectedList" ng-click="backClick()">
-                    <i class="ion-arrow-left-a"></i>
-                  </h1>
-                </div>
-              </div>
-              <ion-scroll id="achievements-scroll">
-                <div class="box">
-                  <div class="row row-center responsive-sm">
-                    <div class="col text-center">
-                      <div class="button-choice" ng-show="data.selectedList === ''">
-                        <button class="button button-block button-royal" ng-click="data.selectedList = 'achievement'">
-                          Achievements
-                        </button>
-                        <button class="button button-block button-assertive" ng-click="data.selectedList = 'avatar'">
-                          Avatars
-                        </button>
-                      </div>
-                      <div id="group-img">
-                        <achievement-list ng-show="data.selectedList === 'achievement'" achievements-declared="data.achievementsDeclared" achievement-array="temp.achievements"></achievement-list>
-                        <avatar-list ng-show="data.selectedList === 'avatar'" current-level="data.currentLevel" avatar-loc="data.avatarLoc" avatar-names="data.avatarNames"></avatar-list>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </ion-scroll>
-            </ion-slide>
-          </ion-slide-box>
-        </div>
-      </ion-content>
-    </ion-pane>
-  </body>
+            </ion-content>
+        </ion-pane>
+    </body>
 </html>

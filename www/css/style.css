@@ -8,13 +8,13 @@
 	min-height: 300px;
 	display: block;
 	border: 1px solid #AAAAAA;
-	margin: 20px 0px;
+	margin: 20px 0;
 	background-color: #FFFFFF;
 }
 #no-data-div > div {
-	margin: 0px;
-	padding: 0px;
-	min-height: 0px;
+	margin: 0;
+	padding: 0;
+	min-height: 0;
 }
 
 #levelbar-div {
@@ -36,7 +36,7 @@
 	z-index: 1;
 }
 
-#count-img img.held {
+#count-img .held {
 	-webkit-filter: grayscale(1);
 }
 
@@ -44,7 +44,7 @@
 	bottom: 10px;
 }
 
-#achievements-scroll > div.scroll > div.box {
+#achievements-scroll > .scroll > div.box {
 	height: 85vh;
 }
 
@@ -57,6 +57,7 @@
 	position: relative;
 	display: inline-block;
 	padding: 10px;
+	-moz-animation:bounce 1s infinite;
 	-webkit-animation:bounce 1s infinite;
 			animation:bounce 1s infinite;
 }
@@ -81,9 +82,9 @@
 }
 
 .click-arrow-div {
-	height: 0px;
-	padding: 0px;
-	margin: 0px;
+	height: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .curtain {
@@ -92,8 +93,8 @@
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 }
 
 .curtain.close {
@@ -172,8 +173,6 @@
 .avatar-list > img {
 	position: absolute;
 	left: 10px;
-	width: 30px;
-	height: 30px;
 	width: 100px;
 	height: 100px;
 	border-radius: 100px;
@@ -191,17 +190,19 @@
 }
 
 /* override mdtoast */
-md-toast.md-assertive-theme {
+.md-assertive-theme {
 	font-size: xx-large;
 	background-color: #EF473A;
+	-moz-animation:bounce 1s infinite;
 	-webkit-animation:bounce 1s infinite;
 			animation:bounce 1s infinite;
 }
 
-md-toast.md-energized-theme {
+.md-energized-theme {
 	font-size: xx-large;
 	color: #444444;
 	background-color: #FFC900;
+	-moz-animation:bounce 1s infinite;
 	-webkit-animation:bounce 1s infinite;
 			animation:bounce 1s infinite;
 }

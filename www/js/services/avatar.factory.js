@@ -1,14 +1,11 @@
-app
-	.factory('AvatarFactory', ['$firebaseArray', '$http', 'CONSTANTS', function($firebaseArray, $http, CONSTANTS) {
+app.factory('AvatarFactory', ['$http', function ($http) {
+    'use strict';
 
-		var ref = new Firebase(CONSTANTS.FIREBASE_URL),
-			db = CONSTANTS.FIREBASE_DB;
+    var AvatarFactory = {
+        getAvatarNames: function () {
+            return $http.get('data/avatars.data.json');
+        }
+    };
 
-		var AvatarFactory = {
-			getAvatarNames: function() {
-				return $http.get('data/avatars.data.json');
-			}
-		};
-
-		return AvatarFactory;
-	}]);
+    return AvatarFactory;
+}]);

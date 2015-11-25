@@ -1,138 +1,139 @@
-app
-	.directive('starsDiv', [function() {
-		return {
-			restrict: 'E',
-			replace: true,
-			scope: {
-				currentLevel: '='
-			},
-			link: function(scope, elm, attrs) {
-				console.log('scope.currentLevel', scope.currentLevel);
+app.directive('starsDiv', [function() {
+    'use strict';
 
-				var width = elm.parent().prop('offsetWidth'),
-					height = elm.parent().prop('offsetHeight'),
-					circles = [],
-					total = 30,
-					ocRadius = 5;
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            currentLevel: '='
+        },
+        link: function (scope, elm) {
+            console.log('scope.currentLevel', scope.currentLevel);
 
-				// container for the star blast
-				var svg = d3.select(elm[0])
-					.append("svg")
-					.attr("id", "stars-svg");
+            var width = elm.parent().prop('offsetWidth'),
+                height = elm.parent().prop('offsetHeight'),
+                circles = [],
+                total = 30,
+                ocRadius = 5;
 
-				// star group for easy location transformation
-				var group = svg.append("g");
+            // container for the star blast
+            var svg = d3.select(elm[0])
+                .append("svg")
+                .attr("id", "stars-svg");
 
-				// inner circle as guide for the outer star blast
-				var center = svg.append("circle")
-					.style("stroke", "white")
-					.style("fill", "white");
+            // star group for easy location transformation
+            var group = svg.append("g");
 
-				// angle range for the stars
-				var circleAngle = d3.scale.linear().range([0,total*2]).domain([0,ocRadius]);
+            // inner circle as guide for the outer star blast
+            var center = svg.append("circle")
+                .style("stroke", "white")
+                .style("fill", "white");
 
-				scope.$watch('currentLevel', function(newVal, oldVal) {
-					// only show stars on level up
-					if((oldVal === 0 && newVal === 1) || (oldVal !== 0 && newVal > oldVal)) {
+            // angle range for the stars
+            var circleAngle = d3.scale.linear().range([0, total * 2]).domain([0, ocRadius]);
 
-						// update container size
-						width = elm.parent().prop('offsetWidth');
-						height = elm.parent().prop('offsetHeight');
+            scope.$watch('currentLevel', function (newVal, oldVal) {
+                // only show stars on level up
+                if ((oldVal === 0 && newVal === 1) || (oldVal !== 0 && newVal > oldVal)) {
 
-						circles = [];
-						for (var i = 0; i < total; i++) {
-							circles.push(Math.round(Math.random() * 100));
-						};
+                    // update container size
+                    width = elm.parent().prop('offsetWidth');
+                    height = elm.parent().prop('offsetHeight');
 
-						// select existing container for the star blast
-						svg = d3.select("#stars-svg")
-							.attr("width", width - 20)
-							.attr("height", Math.abs(height - 90)); // ensure that height is always positive
+                    circles = [];
+                    for (var i = 0; i < total; i++) {
+                        circles.push(Math.round(Math.random() * 100));
+                    };
 
-						// move star group
-						group.attr("transform", "translate(7, 7)");
+                    // select existing container for the star blast
+                    svg = d3.select("#stars-svg")
+                        .attr("width", width - 20)
+                        .attr("height", Math.abs(height - 90)); // ensure that height is always positive
 
-						// set location and radius of inner circle
-						center.attr("r", 1)
-							.attr("cx", function() {
-								return ((width - 20) / 2);
-							})
-							.attr("cy", function() {
-								return (height / 3);
-							});
+                    // move star group
+                    group.attr("transform", "translate(7, 7)");
 
-						// get all existing stars
-						var outside = group.selectAll(".blast")
-							.data(circles, function(d, i) {
-								return newVal + "-" + d + i;
-							});
+                    // set location and radius of inner circle
+                    center.attr("r", 1)
+                        .attr("cx", function () {
+                            return ((width - 20) / 2);
+                        })
+                        .attr("cy", function () {
+                            return (height / 3);
+                        });
 
-						// add new stars if not already drawn
-						outside.enter().append("g")
-							.attr("class", "blast");
+                    // get all existing stars
+                    var outside = group.selectAll(".blast")
+                        .data(circles, function (d, i) {
+                            return newVal + "-" + d + i;
+                        });
 
-						// // adjust location of stars similar to inner circle
-						outside.attr("transform", "translate("+ ((width - 20) / 2) +", 100)");
+                    // add new stars if not already drawn
+                    outside.enter().append("g")
+                        .attr("class", "blast");
 
-						// blast transition
-						outside.transition()
-							.duration(3000)
-							.each(function(d, i) {
-								var self = d3.select(this);
+                    // // adjust location of stars similar to inner circle
+                    outside.attr("transform", "translate("+ ((width - 20) / 2) +", 100)");
 
-								self.transition()
-									.attr("transform", function(d) {
-										// @link: http://stackoverflow.com/a/10152452/476584
-										// centre at (x, y), distance r, element is at:
-										// (x + r cos(2kπ/n), y + r sin(2kπ/n))
-										// where: 	n is the number of elements
-										// 			k is the element currently positioning (between 1 and n inclusive).
-										var x = (width / 2) + ((width) * Math.cos(2 * Math.PI * i / total)),
-											y = (height / 3) + ((width) * Math.sin(2 * Math.PI * i / total));
+                    // blast transition
+                    outside.transition()
+                        .duration(3000)
+                        .each(function(d, i) {
+                            var self = d3.select(this);
 
-										return "translate("+ x +","+ y +")";
-									});
-							});
+                            self.transition()
+                                .attr("transform", function (d) {
+                                    // @link: http://stackoverflow.com/a/10152452/476584
+                                    // centre at (x, y), distance r, element is at:
+                                    // (x + r cos(2kπ/n), y + r sin(2kπ/n))
+                                    // where:   n is the number of elements
+                                    //          k is the element currently positioning (between 1 and n inclusive).
+                                    var x = (width / 2) + ((width) * Math.cos(2 * Math.PI * i / total)),
+                                        y = (height / 3) + ((width) * Math.sin(2 * Math.PI * i / total));
 
-						// remove old data
-						outside.exit().transition()
-							.delay(20000).remove();
+                                    return "translate("+ x +","+ y +")";
+                                });
+                        });
 
-						// draw stars
-						outside.append("polygon")
-							.style("stroke", "orange")
-							.style("fill", "yellow")
-							.attr("points", function() {
-								// @link: https://dillieodigital.wordpress.com/2013/01/16/quick-tip-how-to-draw-a-star-with-svg-and-javascript/
+                    // remove old data
+                    outside.exit().transition()
+                        .delay(20000).remove();
 
-								var starSides = 5,
-									bigCircle = 10, // assumed radius for a big circle
-									smallCircle = 5, // assumed radius for a small circle
-									angle = Math.PI / starSides,
-									radius = 0,
-									xVal = 0,
-									yVal = 0,
-									coordinates = [];
+                    // draw stars
+                    outside.append("polygon")
+                        .style("stroke", "orange")
+                        .style("fill", "yellow")
+                        .attr("points", function () {
+                            // @link: https://dillieodigital.wordpress.com/2013/01/16/quick-tip-how-to-draw-a-star-with-svg-and-javascript/
 
-								for (var i = 0; i < 2 * starSides; i++) {
-									// starts at the bigCircle point then iterates to smallCircle point, and so on to form path for star
-									radius = (i % 2) == 0 ? bigCircle : smallCircle;
+                            var starSides = 5,
+                                bigCircle = 10, // assumed radius for a big circle
+                                smallCircle = 5, // assumed radius for a small circle
+                                angle = Math.PI / starSides,
+                                radius = 0,
+                                xVal = 0,
+                                yVal = 0,
+                                coordinates = [];
 
-									// same as above @line 62
-									xVal = ocRadius + Math.cos(i * angle) * radius;
-									yVal = ocRadius + Math.sin(i * angle) * radius;
+                            for (var i = 0; i < 2 * starSides; i++) {
+                                // starts at the bigCircle point then iterates to smallCircle point, and so on to form path for star
+                                radius = (i % 2) == 0 ? bigCircle : smallCircle;
 
-									// store x, y values for the pentagon path
-									coordinates.push(xVal + "," + yVal);
-								}
+                                // same as above @line 62
+                                xVal = ocRadius + Math.cos(i * angle) * radius;
+                                yVal = ocRadius + Math.sin(i * angle) * radius;
 
-								return coordinates.join(",");
-							})
-							.attr("transform", function(d, i) {
-								return "rotate("+ circleAngle(i) +", 0, 115)";
-							});
-					}
-				});
-			}	
-		}
-	}]);
+                                // store x, y values for the pentagon path
+                                coordinates.push(xVal + "," + yVal);
+                            }
+
+                            return coordinates.join(",");
+                        })
+                        .attr("transform", function (d, i) {
+                            return "rotate("+ circleAngle(i) +", 0, 115)";
+                        });
+                }
+            });
+        }
+    }
+}]);
