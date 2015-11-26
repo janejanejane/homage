@@ -13,165 +13,10 @@
         homage.isAvailable = null;
         homage.today = moment().format('MM-DD-YYYY');
         homage.popupUsername = '';
+        homage.setAchievementDone = setAchievementDone;
         homage.controller = {
-            init: function () {
-                // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
-                if (ionic.Platform.isAndroid()) {
-                    $scope.data.uuid = 'testUUID'; // for browser mobile emulation
-                    if (homage.isAvailable) {
-                        $scope.data.uuid = $cordovaDevice.getUUID();
-                    }
-                    homagecontroller.setup($scope.data.uuid);
-                    $scope.data.popupEnabled = false;
-                } else {
-                    if (!window.cordova) {
-                        homage.popupUsername = $ionicPopup.show({
-                            template: '<input type="text" ng-model="data.uuid">',
-                            title: 'Enter user name',
-                            scope: $scope,
-                            buttons: [
-                                {text: 'Cancel'},
-                                {
-                                    text: '<b>Save</b>',
-                                    type: 'button-positive',
-                                    onTap: function (e) {
-                                        if (!$scope.data.uuid) {
-                                            //don't allow the user to close unless there is input
-                                            e.preventDefault();
-                                        } else {
-                                            return $scope.data.uuid;
-                                        }
-                                    }
-                                }
-                            ]
-                        });
-                    }
-
-                    homage.popupUsername.then(function (input) {
-                        // Setup the loader
-                        $ionicLoading.show({
-                            content: 'Loading',
-                            animation: 'fade-in',
-                            showBackdrop: true,
-                            maxWidth: 200,
-                            showDelay: 0
-                        });
-
-                        homage.controller.setup(input);
-                        $scope.data.popupEnabled = false;
-                    });
-                }
-            },
-            setup: function (user) {
-                HomageFactory.getAllClicks(user, function (clickObj) { // wait for the device uuid to prevent null result
-
-                    clickObj.$bindTo($scope, 'savedClicks').then(function () {
-                        //if there is no click yet for this user
-                        if ($scope.savedClicks.$value === null) {
-                            //create a new clicks
-                            HomageFactory.createNewUser(user);
-                        }
-
-                        // get current longest streak
-                        $scope.temp.longestStreak = clickObj.longest50streak || 0;
-                        console.log('$scope.temp.longestStreak', $scope.temp.longestStreak, clickObj);
-                    });
-                });
-
-                // get overall clicks logged
-                HomageFactory.getTotalCount(user, function (totalObj) {
-                    totalObj.$bindTo($scope, 'data.clickCount').then(function () {
-                        // copy total count from db
-                        $scope.temp.totalClicks = totalObj.$value || 0;
-                        console.log('original totalClicks', $scope.temp.totalClicks);
-                    });
-                });
-
-                // get json data for all achievements
-                AchievementFactory.getAchievementsDeclared().then(function (response) {
-                    $scope.data.achievementsDeclared = response.data.achievements;
-                });
-
-                // get json data of the avatar names
-                AvatarFactory.getAvatarNames().then(function (response) {
-                    $scope.data.avatarNames = response.data.avatars;
-                });
-
-                // get binding to achievements array
-                homage.achievementArray = AchievementFactory.getAllAchievements(user);
-
-                homage.achievementArray.$loaded().then(function (achievements) {
-                    console.log('homage.achievementArray.$loaded()');
-                    $scope.temp.achievements = _.flatten(achievements);
-                });
-
-                // default to 1 month data
-                HomageFactory.getClicks($scope.data.uuid, moment().subtract(31, 'day'), moment(), function (clickObj) {
-                    // get binding to clicks array
-                    clickObj.$loaded().then(function (data) {
-                        var currentDate = _.filter(data, function (val) {
-                            return val.$id === homage.today;
-                        });
-
-                        homage.clickArray = data;
-
-                        // no clicks for today
-                        if (!currentDate.length) {
-                            HomageFactory.setClickCount(
-                                $scope.data.uuid, // uuid
-                                homage.today, // date
-                                0, // total clicks
-                                function () {
-                                    // initialize clicks for today
-                                    $scope.temp.todayClicks = $scope.extractTodayCount();
-                                }
-                            );
-                        } else {
-                            // copy data
-                            $scope.temp.chartClicks = $scope.reduceArray();
-                        }
-
-                        // initialize clicks for today
-                        $scope.temp.todayClicks = $scope.extractTodayCount();
-                        console.log('$scope.temp.todayClicks', $scope.temp.todayClicks);
-
-                        // hide loader
-                        $ionicLoading.hide();
-                    });
-
-                    clickObj.$watch(function () {
-                        // date today is added to array (from @line 158)
-                        if (_.last(clickObj).$id === homage.today) { // last item in array
-                            console.log('updated???');
-                            // copy data
-                            $scope.temp.chartClicks = $scope.reduceArray();
-                        }
-                    });
-                });
-
-                TimerFactory.startTime(function () {
-                    console.log('test');
-                    if (($scope.extractTodayCount() !== $scope.temp.todayClicks) ||
-                            ($scope.data.clickCount.$value !== $scope.temp.totalClicks) ||
-                            (!$scope.temp.todayUpdated && !$scope.temp.totalUpdated)) {
-                        console.log('TimerFactory update !$scope.temp.todayUpdated && !$scope.temp.totalUpdated?');
-                        $scope.sendUpdate();
-                    }
-
-                    if (!$scope.temp.streakUpdated) {
-                        console.log('TimerFactory update !$scope.temp.streakUpdated?');
-                        $scope.sendUpdate();
-                    }
-                });
-            }
-        };
-
-        homage.setAchievementDone = function (response) {
-            if (response) {
-                $scope.showAchievement(response);
-                $scope.temp.achievements.push(response);
-                console.log(response, '????', $scope.temp.achievements);
-            }
+            init: init,
+            setup: setup
         };
 
         // current user data from database
@@ -203,8 +48,205 @@
             avatarNames: []
         };
 
+        // updates the click logged for current user
+        $scope.buttonClick = buttonClick;
+
+        // send all activity to db
+        $scope.sendUpdate = sendUpdate;
+
+        // displays toast for achievement at the bottom of the screen
+        $scope.showAchievement = showAchievement;
+
+        // handles the ionic slide boxes change
+        $scope.slideHasChanged = slideHasChanged;
+
+        // updates clicks array used in UI
+        $scope.updateClicksArray = updateClicksArray;
+
+        // calculate all of the clicks from db and in current
+        $scope.recalculateClicks = recalculateClicks;
+
+        // extract the count for today from db object
+        $scope.extractTodayCount = extractTodayCount;
+
+        // gets clicks within range of 7 days ago from today
+        $scope.reduceArray = reduceArray;
+
+        // back button in achievements and avatars list
+        $scope.backClick = backClick;
+
         // checks if app is ready
-        $ionicPlatform.ready(function () {
+        $ionicPlatform.ready(platFormReady);
+
+        function init() {
+            // @link: http://forum.ionicframework.com/t/problem-to-use-ngcordova-device-is-not-defined/11979/2
+            if (ionic.Platform.isAndroid()) {
+                $scope.data.uuid = 'testUUID'; // for browser mobile emulation
+                if (homage.isAvailable) {
+                    $scope.data.uuid = $cordovaDevice.getUUID();
+                }
+                homage.controller.setup($scope.data.uuid);
+                $scope.data.popupEnabled = false;
+            } else {
+                if (!window.cordova) {
+                    homage.popupUsername = $ionicPopup.show({
+                        // waits until achievements array data are all in place
+                        template: '<input type="text" ng-model="data.uuid">',
+                        title: 'Enter user name',
+                        // waits until achievements array data are all in place
+                        scope: $scope,
+                        buttons: [
+                            {text: 'Cancel'},
+                            {
+                                text: '<b>Save</b>',
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    if (!$scope.data.uuid) {
+                                        //don't allow the user to close unless there is input
+                                        e.preventDefault();
+                                    } else {
+                                        return $scope.data.uuid;
+                                    }
+                                }
+                            }
+                        ]
+                    });
+                }
+
+                homage.popupUsername.then(function (input) {
+                    // Setup the loader
+                    $ionicLoading.show({
+                        content: 'Loading',
+                        animation: 'fade-in',
+                        showBackdrop: true,
+                        maxWidth: 200,
+                        showDelay: 0
+                    });
+
+                    homage.controller.setup(input);
+                    $scope.data.popupEnabled = false;
+                });
+            }
+        }
+
+        function setup(user) {
+            HomageFactory.getAllClicks(user, function (clickObj) { // wait for the device uuid to prevent null result
+
+                clickObj.$bindTo($scope, 'savedClicks').then(function () {
+                    //if there is no click yet for this user
+                    if ($scope.savedClicks.$value === null) {
+                        //create a new clicks
+                        HomageFactory.createNewUser(user);
+                    }
+
+                    // get current longest streak
+                    $scope.temp.longestStreak = clickObj.longest50streak || 0;
+                    console.log('$scope.temp.longestStreak', $scope.temp.longestStreak, clickObj);
+                });
+            });
+
+            // get overall clicks logged
+            HomageFactory.getTotalCount(user, function (totalObj) {
+                totalObj.$bindTo($scope, 'data.clickCount').then(function () {
+                    // copy total count from db
+                    $scope.temp.totalClicks = totalObj.$value || 0;
+                    console.log('original totalClicks', $scope.temp.totalClicks);
+                });
+            });
+
+            // get json data for all achievements
+            AchievementFactory.getAchievementsDeclared().then(function (response) {
+                $scope.data.achievementsDeclared = response.data.achievements;
+            });
+
+            // get json data of the avatar names
+            AvatarFactory.getAvatarNames().then(function (response) {
+                $scope.data.avatarNames = response.data.avatars;
+            });
+
+            // get binding to achievements array
+            homage.achievementArray = AchievementFactory.getAllAchievements(user);
+
+            // waits until achievements array data are all in place
+            homage.achievementArray.$loaded().then(function (achievements) {
+                console.log('homage.achievementArray.$loaded()');
+                $scope.temp.achievements = _.flatten(achievements);
+            });
+
+            // default to 1 month data
+            HomageFactory.getClicks($scope.data.uuid, moment().subtract(31, 'day'), moment(), function (clickObj) {
+                // get binding to clicks array
+                clickObj.$loaded().then(function (data) {
+                    var currentDate = _.filter(data, function (val) {
+                        return val.$id === homage.today;
+                    });
+
+                    homage.clickArray = data;
+
+                    // no clicks for today
+                    if (!currentDate.length) {
+                        HomageFactory.setClickCount(
+                            $scope.data.uuid, // uuid
+                            homage.today, // date
+                            0, // total clicks
+                            function () {
+                                // initialize clicks for today
+                                $scope.temp.todayClicks = $scope.extractTodayCount();
+                            }
+                        );
+                    } else {
+                        // copy data
+                        $scope.temp.chartClicks = $scope.reduceArray();
+                    }
+
+                    // initialize clicks for today
+                    $scope.temp.todayClicks = $scope.extractTodayCount();
+                    console.log('$scope.temp.todayClicks', $scope.temp.todayClicks);
+
+                    // hide loader
+                    $ionicLoading.hide();
+                });
+
+                clickObj.$watch(function () {
+                    // date today is added to array (from @line 158)
+                    if (_.last(clickObj).$id === homage.today) { // last item in array
+                        console.log('updated???');
+                        // copy data
+                        $scope.temp.chartClicks = $scope.reduceArray();
+                    }
+                });
+            });
+
+            // I AM ALWAYS RUNNING!
+            // updates db values
+            TimerFactory.startTime(function () {
+                console.log('test');
+                if (($scope.extractTodayCount() !== $scope.temp.todayClicks) ||
+                        ($scope.data.clickCount.$value !== $scope.temp.totalClicks) ||
+                        (!$scope.temp.todayUpdated && !$scope.temp.totalUpdated)) {
+                    console.log('TimerFactory update !$scope.temp.todayUpdated && !$scope.temp.totalUpdated?');
+                    $scope.sendUpdate();
+                }
+
+                if (!$scope.temp.streakUpdated) {
+                    console.log('TimerFactory update !$scope.temp.streakUpdated?');
+                    $scope.sendUpdate();
+                }
+            });
+        }
+
+        // updates the local achievement array to be pushed to db later
+        // call toast service
+        function setAchievementDone(response) {
+            if (response) {
+                $scope.showAchievement(response);
+                $scope.temp.achievements.push(response);
+                console.log(response, '????', $scope.temp.achievements);
+            }
+        }
+
+        // called by the ionicPlatform if it is ready
+        function platFormReady() {
             // checks if the app is used in a device
             homage.isAvailable = ionic.Platform.device().available;
 
@@ -225,10 +267,11 @@
             } else {
                 homage.controller.init();
             }
-        });
+        }
 
-        // updates the click logged for current user
-        $scope.buttonClick = function () {
+        // clicks are handled here
+        // also knows if there is an achievement
+        function buttonClick() {
             var allClicksCount; // used in if($scope.temp.todayClicks === 51)
 
             // increase click for today
@@ -272,24 +315,27 @@
                 );
                 console.log('inside 51');
             }
-        };
+        }
 
-        // back button in achievements and avatars list
-        $scope.backClick = function () {
+        // called in achievement and avatar directives to return default view of lists to the top
+        function backClick() {
             $scope.data.selectedList = '';
             $ionicScrollDelegate.scrollTop();
         };
 
-        // .flatten gets array values only
-        // .takeRightWhile reduces the array starting from last value
-        $scope.reduceArray = function () {
+        // always returns 7 days worth of click data
+        function reduceArray() {
+            // .flatten gets array values only
+            // .takeRightWhile reduces the array starting from last value
             return _.takeRightWhile(_.flatten(homage.clickArray), function (i) {
                 // get all data from 7 days before current date
                 return moment(i.$id, 'MM-DD-YYYY').diff(moment().subtract($scope.data.maxDays, 'day'), 'days') > 0;
             });
         };
 
-        $scope.extractTodayCount = function () {
+        // returns the value of clicks
+        // waits until achievements array data are all in placemade today
+        function extractTodayCount() {
             // .first returns first object in the array
             // .flatten returns a single array that is not nested
             // .filter gets the object value for today
@@ -304,7 +350,8 @@
             return _.first(_.flatten(dataToday)).$value;
         };
 
-        $scope.recalculateClicks = function () {
+        // called to ensure that the total click is REALLY the sum of all clicks so far
+        function recalculateClicks() {
             // .values will convert the object - { 10-07-2015: 9, 10-14-2015: 26 } to an array - [9, 26]
             // .reduce returns a single value accumulated from adding all elements
             return _.reduce(_.values($scope.savedClicks.clicks), function (prev, cur) {
@@ -312,8 +359,8 @@
             }, 0);
         };
 
-        // updates clicks array used in UI
-        $scope.updateClicksArray = function (value) {
+        // called to update array values when choice is changed
+        function updateClicksArray(value) {
             console.log(value);
             if (value === 'days') {
                 $scope.temp.chartClicks = $scope.reduceArray();
@@ -322,13 +369,13 @@
             }
         };
 
-        // handles the ionic slide boxes change
-        $scope.slideHasChanged = function (index) {
+        // ionic slide action override
+        function slideHasChanged(index) {
             $ionicSlideBoxDelegate.slide(index, 500);
         };
 
-        // displays toast for achievement at the bottom of the screen
-        $scope.showAchievement = function (record) {
+        // calls Angular Material toast service when there is an achievement
+        function showAchievement(record) {
             var toast = $mdToast.simple();
             if (!record) {
                 toast.content('Error in AchievementFactory').theme('assertive');
@@ -343,7 +390,8 @@
             );
         };
 
-        $scope.sendUpdate = function () {
+        // called every 10 seconds by the TimerFactory if conditions are met
+        function sendUpdate() {
             var unsetAchievements = _.filter($scope.temp.achievements, function (record) {
                 return record.recent;
             });
