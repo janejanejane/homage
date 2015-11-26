@@ -1,26 +1,26 @@
 
-var app = angular.module('homage', ['ionic', 'ngMaterial', 'ngCordova', 'firebase']);
+angular.module('homage', ['ionic', 'ngMaterial', 'ngCordova', 'firebase'])
 
 // https://github.com/angular/material/issues/1406
 // did not resolve: https://github.com/angular/material/issues/2365
-app.config(function ($mdGestureProvider, $mdThemingProvider) {
+.config(function ($mdGestureProvider, $mdThemingProvider) {
     'use strict';
 
     $mdGestureProvider.skipClickHijack();
     $mdThemingProvider.theme('assertive');
     $mdThemingProvider.theme('energized');
 }).run(function ($ionicPlatform) {
-// .run(function($ionicPlatform, $ionicPopup, TimerFactory) {
+    // .run(function($ionicPlatform, $ionicPopup, TimerFactory) {
     'use strict';
 
     $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins.Keyboard) {
-              cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         }
         if (window.StatusBar) {
-              StatusBar.styleDefault();
+            StatusBar.styleDefault();
         }
     });
 

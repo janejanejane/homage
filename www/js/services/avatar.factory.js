@@ -1,11 +1,17 @@
-app.factory('AvatarFactory', ['$http', function ($http) {
-    'use strict';
+(function () {
+    angular
+      .module('homage')
+      .factory('AvatarFactory', ['$http', AvatarFactory]);
 
-    var AvatarFactory = {
-        getAvatarNames: function () {
-            return $http.get('data/avatars.data.json');
-        }
-    };
+    function AvatarFactory($http) {
+      'use strict';
 
-    return AvatarFactory;
-}]);
+      var AvatarFactory = {
+          getAvatarNames: function () {
+              return $http.get('data/avatars.data.json');
+          }
+      };
+
+      return AvatarFactory;
+  }
+})();

@@ -190,7 +190,7 @@
 }
 
 /* override mdtoast */
-.md-assertive-theme {
+md-toast.md-assertive-theme {
 	font-size: xx-large;
 	background-color: #EF473A;
 	-moz-animation:bounce 1s infinite;
@@ -198,7 +198,7 @@
 			animation:bounce 1s infinite;
 }
 
-.md-energized-theme {
+md-toast.md-energized-theme {
 	font-size: xx-large;
 	color: #444444;
 	background-color: #FFC900;
