@@ -1,7 +1,7 @@
-(function () {
+(function() {
     angular
-        .module('homage')
-        .directive('avatarList', [AvatarList]);
+        .module( 'homage' )
+        .directive( 'avatarList', [ AvatarList ]);
 
     function AvatarList() {
           'use strict';
@@ -14,39 +14,39 @@
                   avatarLoc: '=',
                   avatarNames: '='
               },
-              link: function (scope, elm, attrs) {
-                  scope.$watch('currentLevel', function (val) {
-                      var i = 0; // used in for loop
+              link: function( scope, elm, attrs ) {
+                  scope.$watch( 'currentLevel', function( val ) {
+                      var i = 0;
 
                       // set unlocked avatar to false for currentLevel = 0
-                      if (val === 0 && !!scope.list) {
-                          scope.list.forEach(function (val, index) {
-                              scope.list[index].unlocked = false;
+                      if ( val === 0 && !!scope.list ) {
+                          scope.list.forEach(function( val, index ) {
+                              scope.list[ index ].unlocked = false;
                           });
                       }
 
                       // set unlocked avatar to true for currentLevel !=0
-                      if (scope.list) {
-                          for (; i <= val; i++) {
-                              if (scope.list[i]) {
-                                  scope.list[i].unlocked = false;
-                                  if (i <= val) {
-                                      scope.list[i].unlocked = true;
+                      if ( scope.list ) {
+                          for ( ; i <= val; i++ ) {
+                              if ( scope.list[ i ] ) {
+                                  scope.list[ i ].unlocked = false;
+                                  if ( i <= val ) {
+                                      scope.list[ i ].unlocked = true;
                                   }
                               }
                           };
                       }
                   });
 
-                  scope.$watch('avatarNames', function (val) {
+                  scope.$watch( 'avatarNames', function( val ) {
                       var i = 0;
 
                       scope.list = [];
                       // there are 84 avatars
-                      for (; i < val.length; i++) {
+                      for ( ; i < val.length; i++ ) {
                           scope.list.push({
                               unlocked: (i <= scope.currentLevel),
-                              name: (val[i]) ? val[i].name : ''
+                              name: ( val[ i ] ) ? val[ i ].name : ''
                           });
                       }
                   });
@@ -55,7 +55,8 @@
                   '<div class="list">' +
                       '<div ng-repeat="i in list track by $index" ng-if="$index > 0">' +
                           '<div class="avatar-list">' +
-                              '<img class="item-image" ng-src="{{(i.unlocked) ? (\'img/\'+avatarLoc+\'-\'+(($index < 10) ? \'0\' + $index : $index)+\'.png\') : \'img/\'+avatarLoc+\'-00.png\'}}" >' +
+                              '<img class="item-image" ' +
+                                'ng-src="{{(i.unlocked) ? (\'img/\'+avatarLoc+\'-\'+(($index < 10) ? \'0\' + $index : $index)+\'.png\') : \'img/\'+avatarLoc+\'-00.png\'}}" >' +
                               '<div class="avatar-desc">' +
                                   '<h3 ng-if="i.unlocked">{{i.name}} is awake!</h3>' +
                                   '<h3 ng-if="!i.unlocked">???</h3>' +
@@ -63,6 +64,6 @@
                           '</div>' +
                       '</div>' +
                   '</div>'
-          }
+          };
       }
 })();

@@ -1,3 +1,10 @@
 {
-	"preset": "crockford"
+    "preset": "idiomatic",
+    "validateQuoteMarks": "'",
+    "validateLineBreaks": null,
+    "requireDotNotation": { "allExcept": [ "snake_case" ] },
+    "maximumLineLength" : {
+      "value": 100,
+      "allExcept": ["comments"]
+    }
 }
