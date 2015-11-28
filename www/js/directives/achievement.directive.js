@@ -17,19 +17,16 @@
                   var record = null;
 
                   scope.$watchCollection( 'achievementArray', function( val ) {
-                      // used in for loops
-                      var i = 0,
-                          j = 0;
 
                       scope.list = [];
-                      for ( ; i < scope.achievementsDeclared.length; i++ ) {
+                      for ( var i = 0; i < scope.achievementsDeclared.length; i++ ) {
                           // copy details
                           record = scope.achievementsDeclared[ i ];
 
                           // set to false on first load
                           record.unlocked = false;
 
-                          for ( ; j < val.length; j++ ) {
+                          for ( var j = 0; j < val.length; j++ ) {
                               if ( scope.achievementsDeclared[ i ].name === val[ j ].name ) {
                                   record.unlocked = true;
                               }

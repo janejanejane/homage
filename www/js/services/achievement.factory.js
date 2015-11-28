@@ -61,11 +61,10 @@
                     var self = this;
 
                     this.getAchievement( property, function( records ) {
-                        var i = 0,
-                            name = '',
+                        var name = '',
                             desc = '';
 
-                        for ( ; i < records.length; i++ ) {
+                        for ( var i = 0; i < records.length; i++ ) {
                             if ( records[ i ][ property ] === value ) {
                                 name = records[ i ].name,
                                 desc = records[ i ].description;

@@ -16,7 +16,6 @@
               },
               link: function( scope, elm, attrs ) {
                   scope.$watch( 'currentLevel', function( val ) {
-                      var i = 0;
 
                       // set unlocked avatar to false for currentLevel = 0
                       if ( val === 0 && !!scope.list ) {
@@ -27,7 +26,7 @@
 
                       // set unlocked avatar to true for currentLevel !=0
                       if ( scope.list ) {
-                          for ( ; i <= val; i++ ) {
+                          for ( var i = 0; i <= val; i++ ) {
                               if ( scope.list[ i ] ) {
                                   scope.list[ i ].unlocked = false;
                                   if ( i <= val ) {
@@ -39,11 +38,10 @@
                   });
 
                   scope.$watch( 'avatarNames', function( val ) {
-                      var i = 0;
 
                       scope.list = [];
                       // there are 84 avatars
-                      for ( ; i < val.length; i++ ) {
+                      for ( var i = 0; i < val.length; i++ ) {
                           scope.list.push({
                               unlocked: (i <= scope.currentLevel),
                               name: ( val[ i ] ) ? val[ i ].name : ''

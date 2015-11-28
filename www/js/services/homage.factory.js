@@ -67,9 +67,8 @@
                         // iterate through all records then update totalCount
                         self.getAllClicks( uuid, function( record ) {
                             record.$loaded().then(function() {
-                                var i;
 
-                                for ( i in record.clicks ) {
+                                for ( var i in record.clicks ) {
                                     total += record.clicks[ i ];
                                 }
                                 obj.set( total, function() {
@@ -139,7 +138,7 @@
                                     }
                                 });
 
-                                for ( i = 0; i < keys.length; i++ ) {
+                                for ( var i = 0; i < keys.length; i++ ) {
                                     // proceed to check when there is plus 1 to current index
                                     if ( keys[ i + 1 ] ) {
                                         // check if current index date value (keys[i]) plus 1 day is equal to the next date value (keys[i+1])

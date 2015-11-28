@@ -36,8 +36,7 @@
                     circleAngle = d3.scale.linear().range([ 0, total * 2 ]).domain([ 0, ocRadius ]);
 
                 scope.$watch( 'currentLevel', function( newVal, oldVal ) {
-                    var i = 0,
-                        outside;
+                    var outside;
 
                     // only show stars on level up
                     if ( ( oldVal === 0 && newVal === 1 ) || ( oldVal !== 0 && newVal > oldVal ) ) {
@@ -49,7 +48,7 @@
 
                         circles = [];
 
-                        for ( ; i < total; i++ ) {
+                        for ( var i = 0; i < total; i++ ) {
                             circles.push( Math.round( Math.random() * 100 ) );
                         };
 
@@ -126,9 +125,7 @@
                                     yVal = 0,
                                     coordinates = [];
 
-                                // reassign to zero
-                                i = 0;
-                                for ( ; i < 2 * starSides; i++ ) {
+                                for ( var i = 0; i < 2 * starSides; i++ ) {
                                     // starts at the bigCircle point then iterates to smallCircle point, and so on to form path for star
                                     radius = (i % 2) == 0 ? bigCircle : smallCircle;
 
