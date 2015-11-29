@@ -18,7 +18,7 @@
         <script src="lib/ionic/js/ionic.bundle.js"></script>
         <script src="lib/angular-aria/angular-aria.js"></script>
         <script src="lib/angular-animate/angular-animate.js"></script>
-        <script src="lib/angular-material/angular-material.js"></script>
+        <!-- <script src="lib/angular-material/angular-material.js"></script> -->
         <script src="lib/firebase/firebase.js"></script>
         <script src="lib/angularfire/dist/angularfire.min.js"></script>
         <script src="lib/lodash/lodash.min.js"></script>
@@ -38,6 +38,7 @@
         <script src="js/directives/avatar.directive.js"></script>
         <script src="js/directives/chart.directive.js"></script>
         <script src="js/directives/stars.directive.js"></script>
+        <script src="js/directives/achievetoast.directive.js"></script>
         <script src="js/services/homage.factory.js"></script>
         <script src="js/services/achievement.factory.js"></script>
         <script src="js/services/avatar.factory.js"></script>
@@ -70,8 +71,8 @@
                                             total-clicks="temp.totalClicks || 0"
                                             button-click="buttonClick()">
                                         </click-div>
-                                        <level-bar id="levelbar-div" 
-                                            total-clicks="temp.totalClicks" 
+                                        <level-bar id="levelbar-div"
+                                            total-clicks="temp.totalClicks"
                                             current-level="data.currentLevel">
                                         </level-bar>
                                     </div>
@@ -82,8 +83,8 @@
                             <div class="box">
                                 <ion-radio ng-model="data.choice" ng-value="'days'">7 days</ion-radio>
                                 <ion-radio ng-model="data.choice" ng-value="'month'">1 month</ion-radio>
-                                <clicks-chart class="padding" id="chart-div" 
-                                  choice="data.choice" max-days="data.maxDays" 
+                                <clicks-chart class="padding" id="chart-div"
+                                  choice="data.choice" max-days="data.maxDays"
                                   click-array="temp.chartClicks" update-array="updateClicksArray(value)">
                                     <div class="row row-center responsive-sm" id="no-data-div">
                                         <div class="col text-center">
@@ -117,13 +118,13 @@
                                                 </button>
                                             </div>
                                             <div id="group-img">
-                                                <achievement-list ng-show="data.selectedList === 'achievement'" 
-                                                    achievements-declared="data.achievementsDeclared" 
+                                                <achievement-list ng-show="data.selectedList === 'achievement'"
+                                                    achievements-declared="data.achievementsDeclared"
                                                     achievement-array="temp.achievements">
                                                 </achievement-list>
-                                                <avatar-list ng-show="data.selectedList === 'avatar'" 
-                                                    current-level="data.currentLevel" 
-                                                    avatar-loc="data.avatarLoc" 
+                                                <avatar-list ng-show="data.selectedList === 'avatar'"
+                                                    current-level="data.currentLevel"
+                                                    avatar-loc="data.avatarLoc"
                                                     avatar-names="data.avatarNames">
                                                 </avatar-list>
                                             </div>
@@ -133,6 +134,7 @@
                             </ion-scroll>
                         </ion-slide>
                     </ion-slide-box>
+                    <achieve-toast class="toasts-wrapper" achievement-array="temp.achievements"></achieve-toast>
                 </div>
             </ion-content>
         </ion-pane>

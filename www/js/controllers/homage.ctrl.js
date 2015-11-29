@@ -56,8 +56,8 @@
         // send all activity to db
         $scope.sendUpdate = sendUpdate;
 
-        // displays toast for achievement at the bottom of the screen
-        $scope.showAchievement = showAchievement;
+        // // displays toast for achievement at the bottom of the screen
+        // $scope.showAchievement = showAchievement;
 
         // handles the ionic slide boxes change
         $scope.slideHasChanged = slideHasChanged;
@@ -245,7 +245,7 @@
         // call toast service
         function setAchievementDone( response ) {
             if ( response ) {
-                $scope.showAchievement( response );
+                // $scope.showAchievement( response );
                 $scope.temp.achievements.push( response );
                 console.log( response, '????', $scope.temp.achievements );
             }
@@ -388,21 +388,21 @@
             $ionicSlideBoxDelegate.slide( index, 500 );
         };
 
-        // calls Angular Material toast service when there is an achievement
-        function showAchievement( record ) {
-            var toast = $mdToast.simple();
-            if ( !record ) {
-                toast.content( 'Error in AchievementFactory' ).theme( 'assertive' );
-            } else {
-                toast.content( record.description ).theme( 'energized' );
-            }
-
-            $mdToast.show(
-                toast
-                    .position( 'bottom' )
-                    .hideDelay( 1000 )
-            );
-        };
+        // // calls Angular Material toast service when there is an achievement
+        // function showAchievement( record ) {
+        //     var toast = $mdToast.simple();
+        //     if ( !record ) {
+        //         toast.content( 'Error in AchievementFactory' ).theme( 'assertive' );
+        //     } else {
+        //         toast.content( record.description ).theme( 'energized' );
+        //     }
+        //
+        //     $mdToast.show(
+        //         toast
+        //             .position( 'bottom' )
+        //             .hideDelay( 0 )
+        //     );
+        // };
 
         // called every 10 seconds by the TimerFactory if conditions are met
         function sendUpdate() {
