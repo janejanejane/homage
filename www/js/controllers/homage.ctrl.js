@@ -3,9 +3,9 @@
         .module( 'homage' )
         .controller( 'HomageCtrl', HomageCtrl );
 
-    HomageCtrl.$inject = [ '$scope', '$mdToast', '$ionicPlatform', '$ionicLoading', '$ionicSlideBoxDelegate', '$ionicScrollDelegate', '$ionicPopup', '$cordovaNetwork', '$cordovaDevice', 'CONSTANTS', 'HomageFactory', 'AchievementFactory', 'AvatarFactory', 'TimerFactory' ];
+    HomageCtrl.$inject = [ '$scope', '$ionicPlatform', '$ionicLoading', '$ionicSlideBoxDelegate', '$ionicScrollDelegate', '$ionicPopup', '$cordovaNetwork', '$cordovaDevice', 'CONSTANTS', 'HomageFactory', 'AchievementFactory', 'AvatarFactory', 'TimerFactory' ];
 
-    function HomageCtrl( $scope, $mdToast, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory, AvatarFactory, TimerFactory ) {
+    function HomageCtrl( $scope, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory, AvatarFactory, TimerFactory ) {
         'use strict';
 
         var homage = this;
@@ -33,6 +33,7 @@
             streakUpdated: true,
             longestStreak: 0,
             achievements: [],
+            notifs: [],
             chartClicks: []
         };
 
@@ -247,6 +248,7 @@
             if ( response ) {
                 // $scope.showAchievement( response );
                 $scope.temp.achievements.push( response );
+                $scope.temp.notifs.push( response );
                 console.log( response, '????', $scope.temp.achievements );
             }
         }
