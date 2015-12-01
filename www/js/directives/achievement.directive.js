@@ -16,6 +16,11 @@
               link: function( scope ) {
                   var record = null;
 
+                  function getNumber( str ) {
+                      // get the number part only
+                      return +str.split( '_' )[ 0 ];
+                  }
+
                   scope.$watchCollection( 'achievementArray', function( val ) {
 
                       scope.list = [];
@@ -41,11 +46,6 @@
                                   // if difference of (a - b) is greater than 0, 'a' has a larger index
                                   return ( getNumber( a.name ) - getNumber( b.name ));
                               });
-
-                              function getNumber( str ) {
-                                  // get the number part only
-                                  return +str.split( '_' )[ 0 ];
-                              }
                           }
                       }
                   });

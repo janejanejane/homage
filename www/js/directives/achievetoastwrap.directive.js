@@ -1,9 +1,9 @@
 (function() {
     angular
         .module( 'homage' )
-        .directive( 'achieveToast', [ AchieveToast ]);
+        .directive( 'achieveToastWrap', [ AchieveToastWrap ]);
 
-    function AchieveToast() {
+    function AchieveToastWrap() {
           'use strict';
 
           return {
@@ -24,8 +24,9 @@
               },
               template:
                   '<div>' +
-                      '<div class="achievement-toast" ng-repeat="i in recentAchievements track by $index">' +
-                          '<span>{{i.description}}</span>' +
+                      '<div ng-repeat="i in recentAchievements track by $index">' +
+                          '<achieve-toast-single toast-entry="i">' +
+                          '</achieve-toast-single>' +
                       '</div>' +
                   '</div>'
           };
