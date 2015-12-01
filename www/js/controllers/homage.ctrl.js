@@ -249,7 +249,7 @@
                 // $scope.showAchievement( response );
                 $scope.temp.achievements.push( response );
                 $scope.temp.notifs.push( response );
-                console.log( response, '????', $scope.temp.achievements );
+                console.log( response, '????', $scope.temp.notifs );
             }
         }
 
@@ -408,9 +408,13 @@
 
         // called every 10 seconds by the TimerFactory if conditions are met
         function sendUpdate() {
-            var unsetAchievements = _.filter( $scope.temp.achievements, function( record ) {
-                return record.recent;
-            });
+            // deep clone to avoid assign by reference coz .recent is deleted
+            // .recent is used to time the toast visibility
+            var unsetAchievements = _.cloneDeep(
+                _.filter( $scope.temp.achievements, function( record ) {
+                    return record.recent;
+                })
+            );
 
             console.log( unsetAchievements );
 
