@@ -15,17 +15,26 @@
 
               AchievementFactory = {
                 onUnlocked: function( uuid, data, unlockedAchievements, callback ) {
+                    var islogged = false;
 
                     data.forEach(function( record ) {
                         if ( record.name && record.description && record.recent ) {
                             // do not include in database
                             delete record.recent;
 
-                            unlockedAchievements.$add( record ).then(function( ref ) {
-                                callback({
-                                    id: ref.key()
+                            // check if the item has been logged in db before
+                            islogged = _.some( unlockedAchievements, function( object ) {
+                                          return ( object.name === record.name && object.$id );
+                                      });
+
+                            // only log achievement is it was not logged before
+                            if ( !islogged ) {
+                                unlockedAchievements.$add( record ).then(function( ref ) {
+                                    callback({
+                                        id: ref.key()
+                                    });
                                 });
-                            });
+                            }
                         }
                     });
                 },
