@@ -57,9 +57,6 @@
         // send all activity to db
         $scope.sendUpdate = sendUpdate;
 
-        // // displays toast for achievement at the bottom of the screen
-        // $scope.showAchievement = showAchievement;
-
         // handles the ionic slide boxes change
         $scope.slideHasChanged = slideHasChanged;
 
@@ -88,9 +85,10 @@
                 $scope.data.uuid = 'testUUID';
                 if ( homage.isAvailable ) {
                     $scope.data.uuid = $cordovaDevice.getUUID();
+                    showLoader();
+                    homage.controller.setup( $scope.data.uuid );
+                    $scope.data.popupEnabled = false;
                 }
-                homage.controller.setup( $scope.data.uuid );
-                $scope.data.popupEnabled = false;
             } else {
                 if ( !window.cordova ) {
                     homage.popupUsername = $ionicPopup.show({
@@ -118,19 +116,22 @@
                 }
 
                 homage.popupUsername.then(function( input ) {
-                    // Setup the loader
-                    $ionicLoading.show({
-                        content: 'Loading',
-                        animation: 'fade-in',
-                        showBackdrop: true,
-                        maxWidth: 200,
-                        showDelay: 0
-                    });
-
+                    showLoader();
                     homage.controller.setup( input );
                     $scope.data.popupEnabled = false;
                 });
             }
+        }
+
+        function showLoader() {
+          // Setup the loader
+          $ionicLoading.show({
+              content: 'Loading',
+              animation: 'fade-in',
+              showBackdrop: true,
+              maxWidth: 200,
+              showDelay: 0
+          });
         }
 
         function setup( user ) {
@@ -210,8 +211,10 @@
                     $scope.temp.todayClicks = $scope.extractTodayCount();
                     console.log( '$scope.temp.todayClicks', $scope.temp.todayClicks );
 
-                    // hide loader
-                    $ionicLoading.hide();
+                    if ( !!$scope.temp.todayClicks ) {
+                        // hide loader
+                        $ionicLoading.hide();
+                    }
                 });
 
                 clickObj.$watch(function() {

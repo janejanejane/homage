@@ -147,10 +147,12 @@
 
 .box {
 	height: 97vh;
+	position: relative;
 }
 
 .top-adjust {
 	top: 20%;
+	right: 0;
 	position: absolute;
 }
 
