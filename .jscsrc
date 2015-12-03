@@ -4,7 +4,7 @@
     "validateLineBreaks": null,
     "requireDotNotation": { "allExcept": [ "snake_case" ] },
     "maximumLineLength" : {
-      "value": 100,
+      "value": 200,
       "allExcept": ["comments"]
     }
 }
