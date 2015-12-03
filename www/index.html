@@ -84,7 +84,8 @@
                                 <ion-radio ng-model="data.choice" ng-value="'month'">1 month</ion-radio>
                                 <clicks-chart class="padding" id="chart-div"
                                   choice="data.choice" max-days="data.maxDays"
-                                  click-array="temp.chartClicks" update-array="updateClicksArray(value)">
+                                  click-array="temp.chartClicks" total-clicks="temp.totalClicks"
+                                  update-array="updateClicksArray(value)">
                                     <div class="row row-center responsive-sm" id="no-data-div">
                                         <div class="col text-center">
                                             <h1 ng-show="!temp.chartClicks.length">

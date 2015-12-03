@@ -11,6 +11,11 @@
 	margin: 20px 0;
 	background-color: #FFFFFF;
 }
+
+#total-clicks-label {
+	font-size: 8px;
+}
+
 #no-data-div > div {
 	margin: 0;
 	padding: 0;

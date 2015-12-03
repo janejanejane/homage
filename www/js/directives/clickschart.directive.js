@@ -15,6 +15,7 @@
                 choice: '=',
                 maxDays: '=',
                 clickArray: '=',
+                totalClicks: '=',
                 updateArray: '&'
             },
             link: function( scope, elm ) {
@@ -45,10 +46,16 @@
 
                     // container of the chart
                     svg = d3.select( elm[ 0 ] ).append( 'svg' ).attr( 'id', 'chart-svg' ),
-                    group = svg.append( 'g' ),
+                    group = svg.append( 'g' );
+
+                    // display total clicks on chart
+                    group.append( 'text' )
+                        .attr( 'dy', '-0.5em' )
+                        .style( 'text-anchor', 'end' )
+                        .attr( 'id', 'total-clicks-label' );
 
                     // axes of the chart
-                    xGroup = group.append( 'g' ).attr( 'class', 'x axis' ),
+                var xGroup = group.append( 'g' ).attr( 'class', 'x axis' ),
                     yGroup = group.append( 'g' ).attr( 'class', 'y axis' ),
 
                     // the line of the chart
@@ -178,6 +185,11 @@
                             .text( 'Count' )
                             .attr( 'id', 'count-label' );
                     }
+
+                    // append 'Total Clicks' text to chart
+                    d3.select( '#total-clicks-label' )
+                        .attr( 'dx', width - 20 )
+                        .text( 'Total Clicks:' + scope.totalClicks );
 
                     // update line of chart
                     clicksLine.datum( val )
