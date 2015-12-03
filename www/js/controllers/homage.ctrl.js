@@ -390,22 +390,6 @@
             $ionicSlideBoxDelegate.slide( index, 500 );
         };
 
-        // // calls Angular Material toast service when there is an achievement
-        // function showAchievement( record ) {
-        //     var toast = $mdToast.simple();
-        //     if ( !record ) {
-        //         toast.content( 'Error in AchievementFactory' ).theme( 'assertive' );
-        //     } else {
-        //         toast.content( record.description ).theme( 'energized' );
-        //     }
-        //
-        //     $mdToast.show(
-        //         toast
-        //             .position( 'bottom' )
-        //             .hideDelay( 0 )
-        //     );
-        // };
-
         // called every 10 seconds by the TimerFactory if conditions are met
         function sendUpdate() {
             // deep clone to avoid assign by reference coz .recent is deleted
