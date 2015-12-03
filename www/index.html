@@ -30,12 +30,12 @@
         <!-- your app's js -->
         <script src="js/app.js"></script>
         <script src="js/controllers/homage.ctrl.js"></script>
-        <script src="js/directives/click.directive.js"></script>
-        <script src="js/directives/progress.directive.js"></script>
-        <script src="js/directives/achievement.directive.js"></script>
-        <script src="js/directives/avatar.directive.js"></script>
-        <script src="js/directives/chart.directive.js"></script>
-        <script src="js/directives/stars.directive.js"></script>
+        <script src="js/directives/clickdiv.directive.js"></script>
+        <script src="js/directives/clickprogress.directive.js"></script>
+        <script src="js/directives/achievementlist.directive.js"></script>
+        <script src="js/directives/avatarlist.directive.js"></script>
+        <script src="js/directives/clickschart.directive.js"></script>
+        <script src="js/directives/starsdiv.directive.js"></script>
         <script src="js/directives/achievetoastwrap.directive.js"></script>
         <script src="js/directives/achievetoastsingle.directive.js"></script>
         <script src="js/services/homage.factory.js"></script>
@@ -70,10 +70,10 @@
                                             total-clicks="temp.totalClicks || 0"
                                             button-click="buttonClick()">
                                         </click-div>
-                                        <level-bar id="levelbar-div"
+                                        <click-progress id="levelbar-div"
                                             total-clicks="temp.totalClicks"
                                             current-level="data.currentLevel">
-                                        </level-bar>
+                                        </click-progress>
                                     </div>
                                 </div>
                             </div>

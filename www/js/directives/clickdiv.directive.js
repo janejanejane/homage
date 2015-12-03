@@ -42,7 +42,7 @@
                         'on-release="onRelease()"' +
                         'ng-class="{held: touchDown}"' +
                         'ng-src="{{currentImg}}" >' +
-                    '<h1>{{totalClicks}}</h1>' +
+                    '<h1>Lvl {{currentLevel}}</h1>' +
                 '</div>'
         };
     }

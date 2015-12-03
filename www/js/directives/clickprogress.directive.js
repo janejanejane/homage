@@ -1,11 +1,11 @@
 (function() {
     angular
         .module( 'homage' )
-        .directive( 'levelBar', LevelBar );
+        .directive( 'clickProgress', ClickProgress );
 
-    LevelBar.$inject = [ '$window' ];
+    ClickProgress.$inject = [ '$window' ];
 
-    function LevelBar( $window ) {
+    function ClickProgress( $window ) {
         'use strict';
 
         return {
