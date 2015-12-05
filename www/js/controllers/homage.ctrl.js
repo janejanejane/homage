@@ -211,10 +211,8 @@
                     $scope.temp.todayClicks = $scope.extractTodayCount();
                     console.log( '$scope.temp.todayClicks', $scope.temp.todayClicks );
 
-                    if ( !!$scope.temp.todayClicks ) {
-                        // hide loader
-                        $ionicLoading.hide();
-                    }
+                    // hide loader
+                    $ionicLoading.hide();
                 });
 
                 clickObj.$watch(function() {
