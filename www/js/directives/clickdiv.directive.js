@@ -33,7 +33,20 @@
                                                                       : scope.currentLevel);
 
                     scope.currentImg = 'img/' + scope.avatarLoc + '-' + imageFilename + '.png';
+
+                    scope.clicksToGo();
                 });
+
+                scope.clicksToGo = function() {
+                    // Math.floor(Math.pow(Math.E,Math.log(scope.totalClicks)))
+                    var nextLevel = Math.floor( Math.log( scope.totalClicks ) / Math.LN2 ) + 1;
+
+                    if ( nextLevel > 0 ) {
+                        console.log( Math.floor(Math.pow(Math.E,Math.log(scope.totalClicks))) );
+                    }
+
+                    return nextLevel;
+                };
             },
             template:
                 '<div>' +
@@ -43,6 +56,7 @@
                         'ng-class="{held: touchDown}"' +
                         'ng-src="{{currentImg}}" >' +
                     '<h1>Lvl {{currentLevel}}</h1>' +
+                    '<h6>{{}} _ clicks to go!</h6>' +
                 '</div>'
         };
     }
