@@ -9,11 +9,11 @@
     function AchievementFactory( $firebaseArray, $http, CONSTANTS ) {
           'use strict';
 
-          var ref = new Firebase( CONSTANTS.FIREBASE_URL ),
-              db = CONSTANTS.FIREBASE_DB,
-              achievementsDeclared = [],
+          var ref = new Firebase( CONSTANTS.FIREBASE_URL );
+          var db = CONSTANTS.FIREBASE_DB;
+          var achievementsDeclared = [];
 
-              AchievementFactory = {
+          var AchievementFactory = {
                 onUnlocked: function( uuid, data, unlockedAchievements, callback ) {
                     var islogged = false;
 
@@ -70,8 +70,8 @@
                     var self = this;
 
                     this.getAchievement( property, function( records ) {
-                        var name = '',
-                            desc = '';
+                        var name = '';
+                        var desc = '';
 
                         for ( var i = 0; i < records.length; i++ ) {
                             if ( records[ i ][ property ] === value ) {

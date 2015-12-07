@@ -20,33 +20,33 @@
             },
             link: function( scope, elm ) {
 
-                var width = elm[ 0 ].offsetWidth,
-                    height = elm[ 0 ].offsetHeight,
+                var width = elm[ 0 ].offsetWidth;
+                var height = elm[ 0 ].offsetHeight;
 
                     // used in display details for circle click
-                    format = d3.time.format( '%b %d, %Y' ),
+                var format = d3.time.format( '%b %d, %Y' );
 
                     // used in x, y domains
-                    minDate,
-                    maxDate,
+                var minDate;
+                var maxDate;
 
                     // axes properties
-                    x = d3.time.scale(),
-                    y = d3.scale.linear(),
-                    xAxis = d3.svg.axis()
+                var x = d3.time.scale();
+                var y = d3.scale.linear();
+                var xAxis = d3.svg.axis()
                         .orient( 'bottom' )
                         .ticks( d3.time.day, 1 )
-                        .tickFormat( d3.time.format( '%b %d' ) ),
-                    yAxis = d3.svg.axis()
+                        .tickFormat( d3.time.format( '%b %d' ) );
+                var yAxis = d3.svg.axis()
                         .orient( 'left' )
-                        .ticks( 5 ),
+                        .ticks( 5 );
 
                     // line chart initialization
-                    line = d3.svg.line(),
+                var line = d3.svg.line();
 
                     // container of the chart
-                    svg = d3.select( elm[ 0 ] ).append( 'svg' ).attr( 'id', 'chart-svg' ),
-                    group = svg.append( 'g' );
+                var svg = d3.select( elm[ 0 ] ).append( 'svg' ).attr( 'id', 'chart-svg' );
+                var group = svg.append( 'g' );
 
                     // display total clicks on chart
                     group.append( 'text' )
@@ -55,32 +55,32 @@
                         .attr( 'id', 'total-clicks-label' );
 
                     // axes of the chart
-                var xGroup = group.append( 'g' ).attr( 'class', 'x axis' ),
-                    yGroup = group.append( 'g' ).attr( 'class', 'y axis' ),
+                var xGroup = group.append( 'g' ).attr( 'class', 'x axis' );
+                var yGroup = group.append( 'g' ).attr( 'class', 'y axis' );
 
                     // the line of the chart
-                    clicksLine = group.append( 'path' ).attr( 'class', 'line' ),
+                var clicksLine = group.append( 'path' ).attr( 'class', 'line' );
 
                     // the nodes of the line chart
-                    circles = group.append( 'g' ).attr( 'class', 'circle-group' ),
+                var circles = group.append( 'g' ).attr( 'class', 'circle-group' );
 
                     // allowance for clicking the node
-                    hovers = group.append( 'g' ).attr( 'class', 'circle-hover' ),
+                var hovers = group.append( 'g' ).attr( 'class', 'circle-hover' );
 
                     // group for the text display of a circle
-                    tooltip = group.append( 'g' ).style( 'display', 'none' ),
+                var tooltip = group.append( 'g' ).style( 'display', 'none' );
 
                     // container for the text display
-                    tooltipRect = tooltip.append( 'rect' )
+                var tooltipRect = tooltip.append( 'rect' )
                         .attr( 'height', 50 )
-                        .attr( 'width', 150 ),
+                        .attr( 'width', 150 );
 
                     // text element containing details of the click circle
-                    text = tooltip.append( 'text' )
+                var text = tooltip.append( 'text' )
                         .style( 'fill', 'red' )
-                        .attr( 'class', 'tooltip-text' ),
+                        .attr( 'class', 'tooltip-text' );
 
-                    disablePreviousClick = function() {
+                var disablePreviousClick = function() {
                         // hide the circle click details
                         d3.selectAll( '.hover-circle' )
                             .style( 'opacity', 0 )
@@ -89,9 +89,9 @@
                             .ease( 'linear' );
 
                         tooltip.style( 'display', 'none' );
-                    },
+                    };
 
-                    displayDetails = function( item ) {
+                var displayDetails = function( item ) {
                       // hide the previous circle click then display current circle click details
                       d3.select( item )
                           .style( 'opacity', 1 )
@@ -137,8 +137,8 @@
                 }
 
                 function drawChart( val ) {
-                    var circlesData,
-                        hoversData;
+                    var circlesData;
+                    var hoversData;
 
                     if ( scope.choice === 'month' ) {
                         // month data minDate: 30 days before tomorrow's date (maxDate)
@@ -231,21 +231,21 @@
                         .on( 'click', function( d ) {
                             var maxVal = d3.max( val, function( v ) {
                                     return v.$value;
-                                }),
+                                });
                                 // get second largest value
-                                secondMax = d3.max( val.map(function( v ) {
+                            var secondMax = d3.max( val.map(function( v ) {
                                         // do not include maxVal in new array
                                         return (( v.$value < maxVal ) ? v : null);
                                     }),
                                     function( v ) {
                                         return ((v) ? v.$value : null);
                                     }
-                                ),
-                                cpos = x( new Date( d.$id ) ),
-                                ypos = ( d.$value === 0 || d.$value < secondMax ) ? (-45) : 35,
+                                );
+                            var cpos = x( new Date( d.$id ) );
+                            var ypos = ( d.$value === 0 || d.$value < secondMax ) ? (-45) : 35;
                                 // if circle position is near left side, add 10 (shift to right)
                                 // if difference of svg width and circle position is less 100, minus 100 (shift to left)
-                                xpos = ( cpos < 50 ) ? cpos + 10
+                            var xpos = ( cpos < 50 ) ? cpos + 10
                                                      : ( ( +svg.attr( 'width' ) - cpos ) < 100) ? ( cpos - 100 )
                                                                                                 : ( cpos - 50 );
 

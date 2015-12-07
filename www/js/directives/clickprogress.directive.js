@@ -16,40 +16,40 @@
             },
             replace: true,
             link: function( scope, elm ) {
-                var width = elm[ 0 ].offsetWidth,
-                    height = 250,
-                    twoPi = 2 * Math.PI,
+                var width = elm[ 0 ].offsetWidth;
+                var height = 250;
+                var twoPi = 2 * Math.PI;
 
-                    svg = d3.select( elm[ 0 ] )
+                var svg = d3.select( elm[ 0 ] )
                         .append( 'svg' )
-                        .attr( 'class', 'progress-level' ),
+                        .attr( 'class', 'progress-level' );
 
-                    group = svg.append( 'g' )
-                        .attr( 'transform', 'translate(' + (width / 2) + ', ' + (height / 2) + ')' ),
+                var group = svg.append( 'g' )
+                        .attr( 'transform', 'translate(' + (width / 2) + ', ' + (height / 2) + ')' );
 
-                    arc = d3.svg.arc()
+                var arc = d3.svg.arc()
                         .startAngle( 0 )
                         .innerRadius( 0 )
-                        .outerRadius( 120 ),
+                        .outerRadius( 120 );
 
                     // progress background
-                    base = group.append( 'g' )
-                        .attr( 'id', 'progress-bar' ),
+                var base = group.append( 'g' )
+                        .attr( 'id', 'progress-bar' );
 
-                    progressCircle = base.append( 'path' )
+                var progressCircle = base.append( 'path' )
                         .datum({ endAngle: twoPi })
                         .attr( 'd', arc )
-                        .attr( 'id', 'progress-bg' ),
+                        .attr( 'id', 'progress-bg' );
 
                     // draw the progress
-                    progress = base.append( 'path' )
+                var progress = base.append( 'path' )
                         .datum({ endAngle: 0 })
                         .attr( 'fill', '#990100' )
                         .attr( 'd', arc )
-                        .attr( 'id', 'progress-color' ),
+                        .attr( 'id', 'progress-color' );
 
                     // angle of progress
-                    x = d3.scale.linear();
+                var x = d3.scale.linear();
 
                 function drawProgress( val ) {
                     width = 300;

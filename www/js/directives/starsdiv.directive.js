@@ -13,27 +13,27 @@
                 currentLevel: '='
             },
             link: function( scope, elm ) {
-                var width = elm.parent().prop( 'offsetWidth' ),
-                    height = elm.parent().prop( 'offsetHeight' ),
-                    circles = [],
-                    total = 30,
-                    ocRadius = 5,
+                var width = elm.parent().prop( 'offsetWidth' );
+                var height = elm.parent().prop( 'offsetHeight' );
+                var circles = [];
+                var total = 30;
+                var ocRadius = 5;
 
                     // container for the star blast
-                    svg = d3.select( elm[ 0 ] )
+                var svg = d3.select( elm[ 0 ] )
                         .append( 'svg' )
-                        .attr( 'id', 'stars-svg' ),
+                        .attr( 'id', 'stars-svg' );
 
                     // star group for easy location transformation
-                    group = svg.append( 'g' ),
+                var group = svg.append( 'g' );
 
                     // inner circle as guide for the outer star blast
-                    center = svg.append( 'circle' )
+                var center = svg.append( 'circle' )
                         .style( 'stroke', 'white' )
-                        .style( 'fill', 'white' ),
+                        .style( 'fill', 'white' );
 
                     // angle range for the stars
-                    circleAngle = d3.scale.linear().range([ 0, total * 2 ]).domain([ 0, ocRadius ]);
+                var circleAngle = d3.scale.linear().range([ 0, total * 2 ]).domain([ 0, ocRadius ]);
 
                 scope.$watch( 'currentLevel', function( newVal, oldVal ) {
                     var outside;
@@ -96,8 +96,8 @@
                                         // (x + r cos(2kπ/n), y + r sin(2kπ/n))
                                         // where:   n is the number of elements
                                         //          k is the element currently positioning (between 1 and n inclusive).
-                                        var x = (width / 2) + (( width ) * Math.cos( 2 * Math.PI * i / total )),
-                                            y = (height / 3) + (( width ) * Math.sin( 2 * Math.PI * i / total ));
+                                        var x = (width / 2) + (( width ) * Math.cos( 2 * Math.PI * i / total ));
+                                        var y = (height / 3) + (( width ) * Math.sin( 2 * Math.PI * i / total ));
 
                                         return 'translate(' + x + ',' + y + ')';
                                     });
@@ -114,16 +114,16 @@
                             .attr( 'points', function() {
                                 // @link: https://dillieodigital.wordpress.com/2013/01/16/quick-tip-how-to-draw-a-star-with-svg-and-javascript/
 
-                                var starSides = 5,
+                                var starSides = 5;
                                     // assumed radius for a big circle
-                                    bigCircle = 10,
+                                var bigCircle = 10;
                                     // assumed radius for a small circle
-                                    smallCircle = 5,
-                                    angle = Math.PI / starSides,
-                                    radius = 0,
-                                    xVal = 0,
-                                    yVal = 0,
-                                    coordinates = [];
+                                var smallCircle = 5;
+                                var angle = Math.PI / starSides;
+                                var radius = 0;
+                                var xVal = 0;
+                                var yVal = 0;
+                                var coordinates = [];
 
                                 for ( var i = 0; i < 2 * starSides; i++ ) {
                                     // starts at the bigCircle point then iterates to smallCircle point, and so on to form path for star

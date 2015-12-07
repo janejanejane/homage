@@ -8,14 +8,14 @@
     function HomageFactory( $firebaseArray, $firebaseObject, $http, CONSTANTS, AchievementFactory ) {
         'use strict';
 
-        var ref = new Firebase( CONSTANTS.FIREBASE_URL ),
-            db = CONSTANTS.FIREBASE_DB;
+        var ref = new Firebase( CONSTANTS.FIREBASE_URL );
+        var db = CONSTANTS.FIREBASE_DB;
 
         return {
             // get all the data on clicks of current user
             getAllClicks: function( userId, callback ) {
-                var self = this,
-                    clickObj = $firebaseObject( ref.child( db + '/' + userId ) );
+                var self = this;
+                var clickObj = $firebaseObject( ref.child( db + '/' + userId ) );
 
                 return callback( clickObj );
             },
@@ -30,8 +30,8 @@
                 var obj = ref.child( db + '/' + uuid + '/clicks' )
                               .orderByKey()
                               .startAt( start.format( 'MM-DD-YYYY' ).toString() )
-                              .endAt( end.format( 'MM-DD-YYYY' ).toString() ),
-                    clickArray = $firebaseArray( obj );
+                              .endAt( end.format( 'MM-DD-YYYY' ).toString() );
+                var clickArray = $firebaseArray( obj );
 
                 return callback( clickArray );
             },
@@ -53,9 +53,9 @@
                 });
             },
             setTotalCount: function( uuid, value, callback ) {
-                var obj = ref.child( db + '/' + uuid + '/totalCount' ),
-                    total = 0,
-                    self = this;
+                var obj = ref.child( db + '/' + uuid + '/totalCount' );
+                var total = 0;
+                var self = this;
 
                 obj.once( 'value', function( snapshot ) {
                     // check if totalCount contains data
@@ -80,10 +80,10 @@
                 });
             },
             setStreak: function( uuid, callback ) {
-                var obj = ref.child( db + '/' + uuid + '/longest50streak' ),
+                var obj = ref.child( db + '/' + uuid + '/longest50streak' );
                     // default longest streak is current day
-                    streak = 1,
-                    self = this;
+                var streak = 1;
+                var self = this;
 
                 obj.once( 'value', function( snapshot ) {
                     // check if longest50streak contains data
@@ -125,11 +125,11 @@
                         self.getAllClicks( uuid, function( record ) {
                             record.$loaded().then(function() {
                                 // initialize array to prevent undefined when setting property
-                                var array = [],
-                                    streak = 0,
-                                    streakData = [],
+                                var array = [];
+                                var streak = 0;
+                                var streakData = [];
                                     // extract keys only
-                                    keys = _.keys( array );
+                                var keys = _.keys( array );
 
                                 // get all dates with more than 50 clicks
                                 _.filter( record.clicks, function( val, key ) {

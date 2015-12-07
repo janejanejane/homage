@@ -8,8 +8,8 @@
     function TimerFactory( $interval ) {
         'use strict';
 
-        var timerObj = null,
-            TimerFactory = {
+        var timerObj = null;
+        var TimerFactory = {
                 startTime: function( fn ) {
                     // do function in 10 seconds
                     timerObj = $interval( fn, 10000 );
