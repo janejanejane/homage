@@ -3,9 +3,9 @@
         .module( 'homage' )
         .directive( 'clickProgress', ClickProgress );
 
-    ClickProgress.$inject = [ '$window' ];
+    ClickProgress.$inject = [ '$window', 'XPReqFactory' ];
 
-    function ClickProgress( $window ) {
+    function ClickProgress( $window, XPReqFactory ) {
         'use strict';
 
         return {
@@ -54,6 +54,7 @@
                 function drawProgress( val ) {
                     width = 300;
                     scope.currentLevel = Math.floor( Math.log( val ) / Math.LN2 );
+                    console.log( 'This is the ucrrecnt level: ', scope.currentLevel );
 
                     // update domain of values for progress angle
                     x.domain([ scope.currentLevel, scope.currentLevel + 1 ])
@@ -77,7 +78,8 @@
                         .ease( 'elastic' )
                         .duration( 750 )
                         .attrTween( 'd', function( d ) {
-                            var interpolate = d3.interpolate( d.endAngle, x( Math.log( val ) / Math.LN2 ) );
+//                            var interpolate = d3.interpolate( d.endAngle, x( Math.log( val ) / Math.LN2 ) );
+                            var interpolate = d3.interpolate( d.endAngle, x( XPReqFactory.getRequiredClicks( val ) ) );
                             return function( t ) {
                                 // set for progress end arc
                                 d.endAngle = interpolate( t );
