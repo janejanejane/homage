@@ -56,7 +56,7 @@
                         'ng-class="{held: touchDown}"' +
                         'ng-src="{{currentImg}}" >' +
                     '<h1>Lvl {{currentLevel}}</h1>' +
-                    '<h6 ng-show="currentLevel > 0">' +
+                    '<h6 ng-show="totalClicks > 0">' +
                         '<ng-pluralize count="clicksToGo"' +
                                         'when="{\'1\': \'{{clicksToGo}} more click to level up!\',' +
                                                '\'other\': \'{{clicksToGo}} clicks to level up!\'}">' +
