@@ -1,9 +1,11 @@
 (function() {
     angular
         .module( 'homage' )
-        .directive( 'clickDiv', [ ClickDiv ]);
+        .directive( 'clickDiv', ClickDiv );
 
-    function ClickDiv() {
+    ClickDiv.$inject = [ 'XPReqFactory' ];
+
+    function ClickDiv( XPReqFactory ) {
         'use strict';
 
         return {
@@ -13,6 +15,7 @@
                 avatarLoc: '=',
                 currentLevel: '=',
                 totalClicks: '=',
+                clicksToLevelUp: '=',
                 buttonClick: '&'
             },
             link: function( scope ) {
@@ -33,17 +36,16 @@
                                                                       : scope.currentLevel);
 
                     scope.currentImg = 'img/' + scope.avatarLoc + '-' + imageFilename + '.png';
+
+                    scope.clicksToGo = scope.clicksToLevelUp - scope.totalClicks;
                 });
 
                 scope.$watch( 'totalClicks', function( val ) {
-                    // Math.floor(Math.pow(Math.E,Math.log(val)))
-                    var nextLevel = Math.floor( Math.log( val ) / Math.LN2 ) + 1;
+                    scope.clicksToGo = scope.clicksToLevelUp - val;
 
-                    if ( nextLevel > 0 ) {
-                        console.log( Math.floor( Math.pow( Math.E, Math.log( val ) + 0.5 ) ) );
+                    if ( scope.clicksToGo === 0) {
+                        scope.clicksToGo = scope.clicksToLevelUp;
                     }
-
-                    return Math.floor( scope.clicksToGo );
                 });
             },
             template:
@@ -54,7 +56,12 @@
                         'ng-class="{held: touchDown}"' +
                         'ng-src="{{currentImg}}" >' +
                     '<h1>Lvl {{currentLevel}}</h1>' +
-                    '<h6 ng-show="currentLevel > 0">{{clicksToGo}} _ clicks to go!</h6>' +
+                    '<h6 ng-show="currentLevel > 0">' +
+                        '<ng-pluralize count="clicksToGo"' +
+                                        'when="{\'1\': \'{{clicksToGo}} more click to level up!\',' +
+                                               '\'other\': \'{{clicksToGo}} clicks to level up!\'}">' +
+                        '</ng-pluralize>' +
+                    '</h6>' +
                 '</div>'
         };
     }

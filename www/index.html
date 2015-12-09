@@ -69,11 +69,14 @@
                                         <click-div avatar-loc="data.avatarLoc"
                                             current-level="data.currentLevel"
                                             total-clicks="temp.totalClicks || 0"
+                                            clicks-to-level-up="data.clicksToLevelUp"
                                             button-click="buttonClick()">
                                         </click-div>
                                         <click-progress id="levelbar-div"
                                             total-clicks="temp.totalClicks"
-                                            current-level="data.currentLevel">
+                                            current-level="data.currentLevel"
+                                            clicks-to-level-up="data.clicksToLevelUp"
+                                            current-level-clicks="data.currentLevelClicks">
                                         </click-progress>
                                     </div>
                                 </div>

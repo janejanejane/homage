@@ -47,6 +47,8 @@
             maxDays: 7,
             clickCount: 0,
             currentLevel: 0,
+            clicksToLevelUp: 0,
+            currentLevelClicks: 0,
             achievementsDeclared: [],
             avatarNames: []
         };

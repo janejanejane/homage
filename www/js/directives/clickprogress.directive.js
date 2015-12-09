@@ -12,7 +12,9 @@
             restrict: 'E',
             scope: {
                 totalClicks: '=',
-                currentLevel: '='
+                currentLevel: '=',
+                clicksToLevelUp: '=',
+                currentLevelClicks: '='
             },
             replace: true,
             link: function( scope, elm ) {
@@ -53,11 +55,9 @@
 
                 function drawProgress( val ) {
                     width = 300;
-                    scope.currentLevel = Math.floor( Math.log( val ) / Math.LN2 );
-                    console.log( 'This is the ucrrecnt level: ', scope.currentLevel );
 
                     // update domain of values for progress angle
-                    x.domain([ scope.currentLevel, scope.currentLevel + 1 ])
+                    x.domain([ scope.currentLevelClicks, scope.clicksToLevelUp ])
                         .range([ 0, twoPi ]);
 
                     // select existing svg
@@ -78,8 +78,7 @@
                         .ease( 'elastic' )
                         .duration( 750 )
                         .attrTween( 'd', function( d ) {
-//                            var interpolate = d3.interpolate( d.endAngle, x( Math.log( val ) / Math.LN2 ) );
-                            var interpolate = d3.interpolate( d.endAngle, x( XPReqFactory.getRequiredClicks( val ) ) );
+                            var interpolate = d3.interpolate( d.endAngle, x( val ) );
                             return function( t ) {
                                 // set for progress end arc
                                 d.endAngle = interpolate( t );
@@ -93,10 +92,20 @@
                 scope.$watch( 'totalClicks', function( val ) {
                     if ( val ) {
                         drawProgress( val );
+                        scope.currentLevel = Math.floor( Math.log( val ) / Math.LN2 );
                     } else {
                         scope.currentLevel = 0;
                         d3.select( '#progress-color' ).style( 'display', 'none' );
                         d3.select( '#progress-bg' ).style( 'display', 'none' );
+                    }
+                });
+
+                scope.$watch( 'currentLevel', function( val ) {
+                    scope.clicksToLevelUp = XPReqFactory.getRequiredClicks( val + 1 );
+                    scope.currentLevelClicks = XPReqFactory.getRequiredClicks( val );
+
+                    if ( scope.totalClicks ) {
+                        drawProgress( scope.totalClicks );
                     }
                 });
 
