@@ -1,280 +1,280 @@
 #app-body {
-	background-image: url('../img/circle-02-sm.png');
-	background-color: #A3DBF7;
+    background-image: url('../img/circle-02-sm.png');
+    background-color: #A3DBF7;
 }
 
 #chart-div {
-	position: relative;
-	min-height: 300px;
-	display: block;
-	border: 1px solid #AAAAAA;
-	margin: 20px 0;
-	background-color: #FFFFFF;
+    position: relative;
+    min-height: 300px;
+    display: block;
+    border: 1px solid #AAAAAA;
+    margin: 20px 0;
+    background-color: #FFFFFF;
 }
 
 #total-clicks-label {
-	font-size: 8px;
+    font-size: 8px;
 }
 
 #no-data-div > div {
-	margin: 0;
-	padding: 0;
-	min-height: 0;
+    margin: 0;
+    padding: 0;
+    min-height: 0;
 }
 
 #levelbar-div {
-	position: absolute;
-	top: -20px;
-	left: 0;
-	z-index: -1;
-	margin: 0 auto;
-	width: 100%;
+    position: absolute;
+    top: -20px;
+    left: 0;
+    z-index: -1;
+    margin: 0 auto;
+    width: 100%;
 }
 
 #progress-bar {
-	fill: none;
+    fill: none;
 }
 
 #count-img img {
-	width: 200px;
-	height: 200px;
-	z-index: 1;
+    width: 200px;
+    height: 200px;
+    z-index: 1;
 }
 
 #count-img .held {
-	-webkit-filter: grayscale(1);
+    -webkit-filter: grayscale(1);
 }
 
 #achievements-scroll {
-	bottom: 10px;
+    bottom: 10px;
 }
 
 #achievements-scroll > .scroll > div.box {
-	height: 85vh;
+    height: 85vh;
 }
 
 #levelup-stars {
-	position: absolute;
+    position: absolute;
 }
 
 #intro-click {
-	bottom: 8px;
-	position: relative;
-	display: inline-block;
-	padding: 10px;
-	-moz-animation:bounce 1s infinite;
-	-webkit-animation:bounce 1s infinite;
-			animation:bounce 1s infinite;
+    bottom: 8px;
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    -moz-animation:bounce 1s infinite;
+    -webkit-animation:bounce 1s infinite;
+            animation:bounce 1s infinite;
 }
 
 #intro-click.hide {
-	display: none !important;
+    display: none !important;
 }
 
 #intro-click .arrow-body {
-	background-color: #FFA500;
-	display: inline-block;
-	padding: 5px;
-	margin-bottom: -10px;
+    background-color: #FFA500;
+    display: inline-block;
+    padding: 5px;
+    margin-bottom: -10px;
 }
 
 #intro-click .arrow-head-down {
-	width: 0;
-	height: 0;
-	border-left: 70px solid transparent;
-	border-right: 70px solid transparent;
-	border-top: 50px solid #FFA500;
+    width: 0;
+    height: 0;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    border-top: 50px solid #FFA500;
 }
 
 .click-arrow-div {
-	height: 0;
-	padding: 0;
-	margin: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .curtain {
-	background-color: #FFFFFF;
-	z-index: 1;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
+    background-color: #FFFFFF;
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 }
 
 .curtain.close {
-	display: none;
+    display: none;
 }
 
 .tooltip-text {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .axis path,
 .axis line {
-	fill: none;
-	stroke: #000;
-	shape-rendering: crispEdges;
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
 
 .axis text {
-	font-size: 10px;
+    font-size: 10px;
 }
 
 .line {
-	fill: none;
-	stroke: #4682B4;
-	stroke-width: 1.5px;
+    fill: none;
+    stroke: #4682B4;
+    stroke-width: 1.5px;
 }
 
 .click-circle {
-	fill: #4212E4;
+    fill: #4212E4;
 }
 
 .hover-circle {
-	fill: white;
-	opacity: 0;
-	stroke: #4244E4;
+    fill: white;
+    opacity: 0;
+    stroke: #4244E4;
 }
 
 .slider-slide {
-	padding: 2px;
+    padding: 2px;
 }
 
 .slider-pager {
-	bottom: 1px;
+    bottom: 1px;
 }
 
 .box {
-	height: 97vh;
-	position: relative;
+    height: 97vh;
+    position: relative;
 }
 
 .top-adjust {
-	top: 20%;
-	right: 0;
-	position: absolute;
+    top: 20%;
+    right: 0;
+    position: absolute;
 }
 
 .button-choice {
-	top: 30%;
-	position: absolute;
-	width: 50%;
-	left: 25%;
+    top: 30%;
+    position: absolute;
+    width: 50%;
+    left: 25%;
 }
 
 .list-close {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .achievement-list,
 .avatar-list {
-	display: block;
-	width: 100%;
-	padding: 10px;
-	border: solid 1px #EEEEEE;
-	background-color: #FFFFFF;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: solid 1px #EEEEEE;
+    background-color: #FFFFFF;
 }
 
 .achievement-list > img,
 .avatar-list > img {
-	position: absolute;
-	left: 10px;
-	width: 100px;
-	height: 100px;
-	border-radius: 100px;
+    position: absolute;
+    left: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
 }
 
 .achievement-list,
 .avatar-list {
-	height: 120px;
+    height: 120px;
 }
 
 .achievement-desc,
 .avatar-desc {
-	position: absolute;
-	left: 150px;
+    position: absolute;
+    left: 150px;
 }
 
 /* override mdtoast */
 /*md-toast.md-assertive-theme {
-	font-size: xx-large;
-	background-color: #EF473A;
-	-moz-animation:bounce 1s infinite;
-	-webkit-animation:bounce 1s infinite;
-			animation:bounce 1s infinite;
+    font-size: xx-large;
+    background-color: #EF473A;
+    -moz-animation:bounce 1s infinite;
+    -webkit-animation:bounce 1s infinite;
+            animation:bounce 1s infinite;
 }
 
 md-toast.md-energized-theme {
-	font-size: xx-large;
-	color: #444444;
-	background-color: #FFC900;
-	-moz-animation:bounce 1s infinite;
-	-webkit-animation:bounce 1s infinite;
-			animation:bounce 1s infinite;
+    font-size: xx-large;
+    color: #444444;
+    background-color: #FFC900;
+    -moz-animation:bounce 1s infinite;
+    -webkit-animation:bounce 1s infinite;
+            animation:bounce 1s infinite;
 }*/
 
 .toasts-wrapper {
-	position: absolute;
-	bottom: 8px;
+    position: absolute;
+    bottom: 8px;
 }
 
 .achievement-toast {
-	font-size: xx-large;
-	color: #444444;
-	background-color: #FFC900;
+    font-size: xx-large;
+    color: #444444;
+    background-color: #FFC900;
   padding-left: 24px;
   padding-right: 24px;
-	display: flex;
-	max-width: 100%;
-	align-items: center;
-	min-height: 48px;
-	height: 0px;
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+    min-height: 48px;
+    height: 0px;
   max-height: 168px;
-	z-index: 2;
-	vertical-align: bottom;
-	border-radius: 2px;
-	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-	margin-bottom: 5px;
-	opacity: 1;
-	transition: opacity .25s ease-in-out;
-	-moz-transition: opacity .25s ease-in-out;
-	-webkit-transition: opacity .25s ease-in-out;
+    z-index: 2;
+    vertical-align: bottom;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    margin-bottom: 5px;
+    opacity: 1;
+    transition: opacity .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out;
+    -webkit-transition: opacity .25s ease-in-out;
 }
 
 .remove-toast {
-	opacity: 0;
-	transition: opacity .25s ease-in-out;
-	-moz-transition: opacity .25s ease-in-out;
-	-webkit-transition: opacity .25s ease-in-out;
+    opacity: 0;
+    transition: opacity .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out;
+    -webkit-transition: opacity .25s ease-in-out;
 }
 
 @media (min-width: 600px) {
-	.toasts-wrapper {
-	    min-width: 288px;
-	}
+    .toasts-wrapper {
+        min-width: 288px;
+    }
 }
 
 @-webkit-keyframes bounce {
-	0% {
-		bottom:5px;
-	}
-	25%, 75% {
-		bottom:15px;
-	}
-	50% {
-		bottom:20px;
-	}
-	100% {
-		bottom:0;
-	}
+    0% {
+        bottom:5px;
+    }
+    25%, 75% {
+        bottom:15px;
+    }
+    50% {
+        bottom:20px;
+    }
+    100% {
+        bottom:0;
+    }
 }
 
 
 @media only screen
 and (min-width : 450px) {
-	.click-arrow-div {
-		position: absolute;
-		top: 70px;
-	}
+    .click-arrow-div {
+        position: absolute;
+        top: 70px;
+    }
 }
