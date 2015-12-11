@@ -3,9 +3,9 @@
         .module( 'homage' )
         .directive( 'clickProgress', ClickProgress );
 
-    ClickProgress.$inject = [ '$window', 'XPReqFactory' ];
+    ClickProgress.$inject = [ '$window', 'XPFactory' ];
 
-    function ClickProgress( $window, XPReqFactory ) {
+    function ClickProgress( $window, XPFactory ) {
         'use strict';
 
         return {
@@ -101,8 +101,8 @@
                 });
 
                 scope.$watch( 'currentLevel', function( val ) {
-                    scope.clicksToLevelUp = XPReqFactory.getRequiredClicks( val + 1 );
-                    scope.currentLevelClicks = XPReqFactory.getRequiredClicks( val );
+                    scope.clicksToLevelUp = XPFactory.getRequiredClicks( val + 1 );
+                    scope.currentLevelClicks = XPFactory.getRequiredClicks( val );
 
                     if ( scope.totalClicks ) {
                         drawProgress( scope.totalClicks );

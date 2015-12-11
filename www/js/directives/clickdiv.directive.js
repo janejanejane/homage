@@ -1,11 +1,9 @@
 (function() {
     angular
         .module( 'homage' )
-        .directive( 'clickDiv', ClickDiv );
+        .directive( 'clickDiv', [ ClickDiv ]);
 
-    ClickDiv.$inject = [ 'XPReqFactory' ];
-
-    function ClickDiv( XPReqFactory ) {
+    function ClickDiv() {
         'use strict';
 
         return {
