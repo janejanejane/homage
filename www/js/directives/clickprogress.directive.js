@@ -59,7 +59,7 @@
                     // update domain of values for progress angle
                     x.domain([ scope.currentLevelClicks, scope.clicksToLevelUp ])
                         .range([ 0, twoPi ]);
-
+console.log( 'scope.currentLevelClicks, scope.clicksToLevelUp, totalClicks, scope.currentLevel', scope.currentLevelClicks, scope.clicksToLevelUp, val, scope.currentLevel );
                     // select existing svg
                     svg = d3.select( elm[ 0 ] )
                         .select( 'svg' )
@@ -92,7 +92,7 @@
                 scope.$watch( 'totalClicks', function( val ) {
                     if ( val ) {
                         drawProgress( val );
-                        scope.currentLevel = Math.floor( Math.log( val ) / Math.LN2 );
+                        scope.currentLevel = XPFactory.getCurrentLevel( val ) | 0;
                     } else {
                         scope.currentLevel = 0;
                         d3.select( '#progress-color' ).style( 'display', 'none' );
@@ -101,8 +101,14 @@
                 });
 
                 scope.$watch( 'currentLevel', function( val ) {
-                    scope.clicksToLevelUp = XPFactory.getRequiredClicks( val + 1 );
-                    scope.currentLevelClicks = XPFactory.getRequiredClicks( val );
+
+                    if ( val > 0 ) {
+                        scope.clicksToLevelUp = XPFactory.getRequiredClicks( val + 1 );
+                        scope.currentLevelClicks = XPFactory.getRequiredClicks( val );
+                    } else {
+                        scope.clicksToLevelUp = XPFactory.getLevelOffset();
+                        scope.currentLevelClicks = 0;
+                    }
 
                     if ( scope.totalClicks ) {
                         drawProgress( scope.totalClicks );
