@@ -41,7 +41,7 @@
                 scope.$watch( 'totalClicks', function( val ) {
                     scope.clicksToGo = scope.clicksToLevelUp - val;
 
-                    if ( scope.clicksToGo === 0) {
+                    if ( scope.clicksToGo === 0 ) {
                         scope.clicksToGo = scope.clicksToLevelUp;
                     }
                 });

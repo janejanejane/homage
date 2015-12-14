@@ -92,7 +92,16 @@
                 scope.$watch( 'totalClicks', function( val ) {
                     if ( val ) {
                         drawProgress( val );
-                        scope.currentLevel = XPFactory.getCurrentLevel( val ) | 0;
+
+                        // when the required clicks have been used
+                        if ( scope.clicksToLevelUp === val ) {
+                            scope.currentLevel += 1;
+                        }
+
+                        // for first load, calculate correct level
+                        if ( scope.currentLevel === 0 ) {
+                            scope.currentLevel = XPFactory.getCurrentLevel( val ) | 0;
+                        }
                     } else {
                         scope.currentLevel = 0;
                         d3.select( '#progress-color' ).style( 'display', 'none' );
@@ -101,8 +110,25 @@
                 });
 
                 scope.$watch( 'currentLevel', function( val ) {
-                    scope.clicksToLevelUp = XPFactory.getRequiredClicks( val + 1 );
-                    scope.currentLevelClicks = XPFactory.getRequiredClicks( val );
+
+                    switch ( val ) {
+                        case ( 0 ) :
+                            scope.clicksToLevelUp = XPFactory.getLevelOffset();
+                            scope.currentLevelClicks = 0;
+                            break;
+
+                        case ( 1 ) :
+                            scope.clicksToLevelUp = XPFactory.getRequiredClicks( val + 1 );
+                            scope.currentLevelClicks = XPFactory.getLevelOffset();
+                            break;
+
+                        default :
+                            scope.clicksToLevelUp = XPFactory.getRequiredClicks( val + 1 );
+                            scope.currentLevelClicks = XPFactory.getRequiredClicks( val );
+                            break;
+                    }
+
+                    console.log( scope.clicksToLevelUp, scope.currentLevelClicks );
 
                     if ( scope.totalClicks ) {
                         drawProgress( scope.totalClicks );
