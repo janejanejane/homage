@@ -3,9 +3,9 @@
         .module( 'homage' )
         .controller( 'HomageCtrl', HomageCtrl );
 
-    HomageCtrl.$inject = [ '$scope', '$ionicPlatform', '$ionicLoading', '$ionicSlideBoxDelegate', '$ionicScrollDelegate', '$ionicPopup', '$cordovaNetwork', '$cordovaDevice', 'CONSTANTS', 'HomageFactory', 'AchievementFactory', 'AvatarFactory', 'TimerFactory' ];
+    HomageCtrl.$inject = [ '$scope', '$ionicPlatform', '$ionicLoading', '$ionicSlideBoxDelegate', '$ionicScrollDelegate', '$ionicPopup', '$cordovaNetwork', '$cordovaDevice', 'CONSTANTS', 'HomageFactory', 'AchievementFactory', 'AvatarFactory', 'AwardFactory', 'TimerFactory' ];
 
-    function HomageCtrl( $scope, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory, AvatarFactory, TimerFactory ) {
+    function HomageCtrl( $scope, $ionicPlatform, $ionicLoading, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicPopup, $cordovaNetwork, $cordovaDevice, CONSTANTS, HomageFactory, AchievementFactory, AvatarFactory, AwardFactory, TimerFactory ) {
         'use strict';
 
         var homage = this;
@@ -50,7 +50,8 @@
             clicksToLevelUp: 0,
             currentLevelClicks: 0,
             achievementsDeclared: [],
-            avatarNames: []
+            avatarNames: [],
+            awardImages: []
         };
 
         // updates the click logged for current user
@@ -169,6 +170,11 @@
             // get json data of the avatar names
             AvatarFactory.getAvatarNames().then(function( response ) {
                 $scope.data.avatarNames = response.data.avatars;
+            });
+
+            // get json data of achievement images
+            AwardFactory.getAwardsFileNames().then(function( response ) {
+                $scope.data.awardImages = response.data.awards;
             });
 
             // get binding to achievements array

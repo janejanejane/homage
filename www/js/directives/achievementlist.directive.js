@@ -11,6 +11,7 @@
               replace: true,
               scope: {
                   achievementsDeclared: '=',
+                  awardImages: '=',
                   achievementArray: '='
               },
               link: function( scope ) {
@@ -34,6 +35,7 @@
                           for ( var j = 0; j < val.length; j++ ) {
                               if ( scope.achievementsDeclared[ i ].name === val[ j ].name ) {
                                   record.unlocked = true;
+                                  record.image = 'img/awards/' + scope.awardImages[i].filename;
                               }
                           }
 
@@ -64,7 +66,7 @@
                       '<div ng-repeat="i in list track by $index">' +
                           '<div class="achievement-list">' +
                               '<img class="item-image" ' +
-                                    'ng-src="{{!i.unlocked && \'img/fff.png\' || \'img/100x100.jpg\'}}">' +
+                                    'ng-src="{{!i.unlocked && \'img/Tag.svg\' || i.image}}">' +
                               '<h3 class="achievement-desc">' +
                                   '{{i.unlocked && i.description || \'???\'}}' +
                               '</h3>' +
